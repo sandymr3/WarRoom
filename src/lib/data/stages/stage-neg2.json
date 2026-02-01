@@ -1,0 +1,450 @@
+{
+  "stage": {
+    "id": "STAGE_-2",
+    "number": -2,
+    "name": "IDEATING",
+    "title": "Problem / Solution Fit",
+    "goal": "Find a problem worth solving with people worth serving",
+    "subtitle": "Every great business starts with a problem worth solving",
+    "durationMinutes": 10,
+    "competencies": ["C1", "C2"],
+    "simulatedMonths": [0],
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "Welcome to the War Room, entrepreneur.",
+        "Before we build anything, we need to find a problem worth solving.",
+        "Your success depends on how deeply you understand the pain you're trying to eliminate.",
+        "Let's see if you have what it takes to sense real opportunities..."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C1", "C2"],
+      "minimumQuestions": 6,
+      "convergenceLogic": "AI ensures C1 and C2 fully assessed before stage completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q-2.1",
+      "type": "open_text",
+      "questionText": "What industry or market are you interested in?",
+      "narrativeIntro": "Let's start with the basics. Every entrepreneur needs a domain to operate in.",
+      "helpText": "Be as specific as possible. 'Healthcare' is too broad. 'Mental health apps for college students' is better.",
+      "assess": ["C1"],
+      "isRequired": true,
+      "minLength": 10,
+      "maxLength": 500,
+      "order": 1,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "vague_broad", "points": 0, "description": "Too broad: 'tech', 'helping people', 'business'" },
+          { "criteria": "broad_category", "points": 3, "description": "Broad category: 'healthcare', 'education', 'fintech'" },
+          { "criteria": "specific_niche", "points": 7, "description": "Specific niche: 'telemedicine for rural areas'" },
+          { "criteria": "specific_with_rationale", "points": 10, "description": "Specific with personal rationale or research backing" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate the specificity of the industry/market selection. Look for clear boundaries, target audience hints, and research backing.",
+        "redFlags": ["too broad", "vague", "trendy buzzwords without depth", "no clear boundaries"],
+        "greenFlags": ["specific niche", "clear target market", "research-based selection", "personal experience connection"],
+        "generateFollowUpIf": ["response_is_vague", "needs_clarification"]
+      },
+      "branches": {
+        "ifVague": {
+          "action": "probe",
+          "probeQuestion": {
+            "id": "Q-2.1-PROBE",
+            "type": "open_text",
+            "questionText": "That's quite broad. Can you narrow it down? Who specifically would you serve, and what's the specific problem area?",
+            "narrativeIntro": "I need you to think deeper. Broad markets mean broad competition and unfocused products.",
+            "assess": ["C1", "C4"],
+            "isRequired": true,
+            "minLength": 20,
+            "maxLength": 500
+          },
+          "assessesLearningAgility": true
+        },
+        "ifSpecific": {
+          "nextQuestionId": "Q-2.2"
+        }
+      },
+      "capturesContext": {
+        "field": "industry",
+        "usedIn": ["scenario_personalization", "later_questions"]
+      }
+    },
+
+    {
+      "id": "Q-2.2",
+      "type": "open_text",
+      "questionText": "Who SPECIFICALLY is your target customer?",
+      "narrativeIntro": "Now let's get specific about WHO you're serving. The riches are in the niches.",
+      "helpText": "Include demographics (age, income, location) AND psychographics (values, behaviors, pain points). Example: 'Busy working parents aged 28-40 in urban areas, household income >$80K, who value convenience over cost and struggle with meal planning.'",
+      "assess": ["C1"],
+      "isRequired": true,
+      "minLength": 30,
+      "maxLength": 800,
+      "order": 2,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "everyone", "points": 0, "description": "'Everyone', 'anyone who...', no specifics" },
+          { "criteria": "demographics_only", "points": 3, "description": "Basic demographics: 'women 25-35'" },
+          { "criteria": "demo_plus_psycho", "points": 7, "description": "Demographics + psychographics + behaviors" },
+          { "criteria": "detailed_persona", "points": 10, "description": "Detailed persona with context, pain points, and buying triggers" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate customer definition. Look for specificity, understanding of customer context, pain points, and buying behavior.",
+        "redFlags": ["everyone", "too broad", "no psychographics", "assumed without validation"],
+        "greenFlags": ["specific demographics", "psychographics included", "behavioral insights", "validated understanding"],
+        "generateFollowUpIf": ["too_broad", "missing_psychographics"]
+      },
+      "branches": {
+        "ifVague": {
+          "action": "challenge",
+          "challengeQuestion": {
+            "id": "Q-2.2-CHALLENGE",
+            "type": "open_text",
+            "questionText": "If you try to serve everyone, you serve no one well. Who has the MOST URGENT need for your solution? Be specific.",
+            "narrativeIntro": "Stop. This is one of the most common mistakes entrepreneurs make. Let me push you harder.",
+            "assess": ["C1", "C4"],
+            "isRequired": true
+          }
+        }
+      },
+      "capturesContext": {
+        "field": "customerSegment",
+        "usedIn": ["scenario_personalization", "later_questions"]
+      }
+    },
+
+    {
+      "id": "Q-2.3",
+      "type": "open_text",
+      "questionText": "What SPECIFIC problem are you solving?",
+      "narrativeIntro": "The foundation of every successful business is a problem people will PAY to solve.",
+      "helpText": "Frame using Quality, Time, OR Cost:\n• QUALITY: Is something broken/poor quality?\n• TIME: Is something too slow?\n• COST: Is something too expensive?\n\nThe best problems have clear, monetizable pain.",
+      "assess": ["C1"],
+      "isRequired": true,
+      "minLength": 30,
+      "maxLength": 800,
+      "order": 3,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "no_clear_problem", "points": 0, "description": "No clear problem identified, or solution-first thinking" },
+          { "criteria": "vague_problem", "points": 3, "description": "Vague problem without quantification" },
+          { "criteria": "qtc_framework", "points": 7, "description": "Uses Quality/Time/Cost framework clearly" },
+          { "criteria": "monetizable_pain", "points": 10, "description": "Monetizable pain with evidence of willingness to pay" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate problem definition. Check for QTC framework, specificity, monetizability, and evidence of real customer pain.",
+        "redFlags": ["solution-first thinking", "nice-to-have", "no clear pain", "assumed pain"],
+        "greenFlags": ["clear QTC framing", "quantified pain", "customer quotes/evidence", "monetizable"]
+      },
+      "compoundingConsequence": {
+        "ifWeak": {
+          "flags": ["WEAK_PROBLEM_DEFINITION"],
+          "futureImpact": {
+            "stage0": "Higher risk of building wrong product",
+            "stage1": "Sales difficulty - customers don't see urgency",
+            "stage2": "High churn - product doesn't solve real pain"
+          }
+        }
+      },
+      "capturesContext": {
+        "field": "problem",
+        "usedIn": ["scenario_personalization", "later_questions"]
+      }
+    },
+
+    {
+      "id": "Q-2.4",
+      "type": "multiple_choice",
+      "questionText": "How did you identify this problem?",
+      "narrativeIntro": "Understanding HOW you found this problem tells me a lot about your entrepreneurial instincts.",
+      "assess": ["C1", "C2"],
+      "isRequired": true,
+      "order": 4,
+      "options": [
+        {
+          "id": "A",
+          "text": "Personal experience - I faced this problem myself",
+          "points": 6,
+          "competencyLevel": "C1_L1",
+          "followUp": {
+            "id": "Q-2.4A-FOLLOW",
+            "type": "open_text",
+            "questionText": "Have you validated that others have the same problem? How?",
+            "assess": ["C1", "C2"],
+            "scoring": {
+              "maxPoints": 5,
+              "rubric": [
+                { "criteria": "no_validation", "points": 0 },
+                { "criteria": "informal_validation", "points": 3 },
+                { "criteria": "systematic_validation", "points": 5 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "B",
+          "text": "Interviewed/observed potential customers",
+          "points": 10,
+          "competencyLevel": "C1_L2",
+          "followUp": {
+            "id": "Q-2.4B-FOLLOW",
+            "type": "open_text",
+            "questionText": "How many customers did you interview? What surprised you most?",
+            "assess": ["C1", "C2"],
+            "scoring": {
+              "maxPoints": 5,
+              "rubric": [
+                { "criteria": "few_interviews", "points": 2, "description": "1-3 interviews" },
+                { "criteria": "moderate_interviews", "points": 4, "description": "4-10 interviews" },
+                { "criteria": "extensive_research", "points": 5, "description": "10+ interviews with clear learnings" }
+              ]
+            }
+          }
+        },
+        {
+          "id": "C",
+          "text": "Read reports/articles about the market",
+          "points": 4,
+          "competencyLevel": "C2_L1",
+          "followUp": {
+            "id": "Q-2.4C-FOLLOW",
+            "type": "open_text",
+            "questionText": "Have you talked to REAL customers yet? What's stopping you?",
+            "assess": ["C1", "C2", "C5"],
+            "isChallenge": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Saw it as a trend-based opportunity",
+          "points": 0,
+          "warning": "RED FLAG: Trend-chasing without validation is high-risk",
+          "competencyLevel": "C1_WEAK",
+          "followUp": {
+            "id": "Q-2.4D-FOLLOW",
+            "type": "open_text",
+            "questionText": "What EVIDENCE do you have that customers actually want this? Trends don't equal demand.",
+            "assess": ["C1", "C2"],
+            "isChallenge": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q-2.5",
+      "type": "multiple_choice",
+      "questionText": "Does a solution to this problem already exist?",
+      "narrativeIntro": "Competition isn't always bad. Let's see how you think about the competitive landscape.",
+      "assess": ["C1", "C2"],
+      "isRequired": true,
+      "order": 5,
+      "options": [
+        {
+          "id": "A",
+          "text": "Yes, competitors exist",
+          "points": 5,
+          "insight": "Good - competitors validate the market exists",
+          "nextQuestionId": "Q-2.6"
+        },
+        {
+          "id": "B",
+          "text": "No, it's completely new",
+          "points": 0,
+          "warning": "WARNING: No competitors often means no market. Be careful.",
+          "followUp": {
+            "id": "Q-2.5B-FOLLOW",
+            "type": "open_text",
+            "questionText": "If this is such a big problem, why hasn't anyone solved it yet? What do you know that they don't?",
+            "assess": ["C1", "C3"],
+            "isChallenge": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "I haven't researched this yet",
+          "points": -5,
+          "competencyLevel": "C1_WEAK",
+          "consequence": {
+            "type": "time_penalty",
+            "value": 2,
+            "unit": "weeks",
+            "reason": "You need to research competitors before building"
+          },
+          "triggersFlag": "NO_COMPETITOR_RESEARCH"
+        }
+      ]
+    },
+
+    {
+      "id": "Q-2.6",
+      "type": "open_text",
+      "questionText": "Who are your main competitors? How are you different and BETTER?",
+      "narrativeIntro": "Knowing your competition isn't enough. You need a defensible advantage.",
+      "assess": ["C1", "C3"],
+      "isRequired": true,
+      "minLength": 50,
+      "maxLength": 1000,
+      "order": 6,
+      "scoring": {
+        "maxPoints": 13,
+        "rubric": [
+          { "criteria": "names_competitors", "points": 3, "description": "Can name specific competitors" },
+          { "criteria": "clear_differentiation", "points": 4, "description": "Has clear differentiation" },
+          { "criteria": "meaningful_not_trivial", "points": 3, "description": "Differentiation is meaningful, not trivial" },
+          { "criteria": "understands_customer_choice", "points": 3, "description": "Understands why customers would choose them" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate competitive analysis. Check for named competitors, meaningful differentiation, defensibility, and customer choice understanding.",
+        "redFlags": ["no competitors named", "trivial differentiation", "price-only", "easy to copy"],
+        "greenFlags": ["specific competitors", "defensible moat", "customer-validated advantage"]
+      },
+      "branches": {
+        "ifWeakDifferentiation": {
+          "action": "challenge",
+          "challengeQuestion": {
+            "id": "Q-2.6-CHALLENGE",
+            "type": "open_text",
+            "questionText": "That differentiation sounds easy to copy. What's your DEFENSIBLE moat?",
+            "assess": ["C1", "C3"]
+          }
+        },
+        "ifPriceOnly": {
+          "action": "challenge",
+          "challengeQuestion": {
+            "id": "Q-2.6-PRICE",
+            "type": "open_text",
+            "questionText": "Price wars lead to thin margins. What else can you offer beyond lower prices?",
+            "assess": ["C1", "C6"]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "Q-2.7",
+      "type": "multiple_choice",
+      "questionText": "How much do you know about this industry?",
+      "narrativeIntro": "Domain expertise can be an advantage, but so can fresh perspectives. Let's see where you stand.",
+      "assess": ["C2"],
+      "isRequired": true,
+      "order": 7,
+      "options": [
+        {
+          "id": "A",
+          "text": "Expert - I've worked in this space for years",
+          "points": 8,
+          "competencyLevel": "C2_L1",
+          "followUp": {
+            "id": "Q-2.7A-FOLLOW",
+            "type": "open_text",
+            "questionText": "How do you stay open to new perspectives? Experts can have blind spots.",
+            "assess": ["C2", "C4"]
+          }
+        },
+        {
+          "id": "B",
+          "text": "Some knowledge, actively learning more",
+          "points": 10,
+          "competencyLevel": "C2_L2",
+          "insight": "BEST: Combines knowledge with learning mindset"
+        },
+        {
+          "id": "C",
+          "text": "New to this, but willing to learn quickly",
+          "points": 6,
+          "competencyLevel": "C2_L1"
+        },
+        {
+          "id": "D",
+          "text": "Not much knowledge, will figure it out as I go",
+          "points": 2,
+          "warning": "HIGH RISK: Building without domain knowledge often fails",
+          "competencyLevel": "C2_WEAK",
+          "triggersFlag": "LOW_DOMAIN_KNOWLEDGE"
+        }
+      ]
+    },
+
+    {
+      "id": "Q-2.8",
+      "type": "open_text",
+      "questionText": "What's ONE thing you RECENTLY LEARNED about this space that SURPRISED you?",
+      "narrativeIntro": "The best entrepreneurs are constantly learning. Show me you have genuine curiosity.",
+      "assess": ["C2"],
+      "isRequired": true,
+      "minLength": 30,
+      "maxLength": 600,
+      "order": 8,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "no_recent_learning", "points": 0, "description": "Can't name anything recent" },
+          { "criteria": "surface_insight", "points": 4, "description": "Surface-level observation" },
+          { "criteria": "meaningful_surprise", "points": 10, "description": "Genuine insight that changed their thinking" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate the quality of recent learning. Look for genuine curiosity, depth of insight, and how it affects their approach.",
+        "redFlags": ["nothing recent", "generic observations", "no actual learning"],
+        "greenFlags": ["specific recent learning", "changed their approach", "shows active research"]
+      },
+      "compoundingConsequence": {
+        "ifWeak": {
+          "triggersMistake": "M2",
+          "mistakeName": "No Domain Learning",
+          "immediateImpact": {
+            "decision_quality": "-25%",
+            "product_market_fit_risk": "+40%"
+          },
+          "compoundingImpact": "Builds wrong product, misses market needs, slow iteration"
+        }
+      }
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C1", "C2"],
+    "displayMetrics": [
+      { "label": "Problem Clarity", "derivedFrom": "Q-2.3_score" },
+      { "label": "Customer Understanding", "derivedFrom": "Q-2.2_score" },
+      { "label": "Market Awareness", "derivedFrom": "Q-2.5_score + Q-2.6_score" },
+      { "label": "Learning Mindset", "derivedFrom": "Q-2.7_score + Q-2.8_score" }
+    ],
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed competency",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns detected",
+        "recommendations": "What they should focus on"
+      }
+    }
+  },
+
+  "decisionPoint": {
+    "question": "Based on your problem definition, are you ready to move forward?",
+    "options": [
+      {
+        "text": "Yes, proceed to Vision stage",
+        "nextStage": -1
+      },
+      {
+        "text": "I need to refine my problem",
+        "action": "loop_back",
+        "timePenalty": { "weeks": 2 }
+      }
+    ]
+  }
+}

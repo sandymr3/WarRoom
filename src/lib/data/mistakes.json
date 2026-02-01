@@ -1,0 +1,327 @@
+{
+  "mistakes": [
+    {
+      "code": "M1",
+      "name": "Hiring Too Soon",
+      "category": "resource_management",
+      "typicalStage": 0,
+      "description": "Hiring full-time employees before product-market fit is validated",
+      "detection": {
+        "triggers": [
+          "Allocates >30% budget to hiring with $0 revenue",
+          "Hires full-time developer before validation",
+          "Team size > 3 before first paying customer"
+        ],
+        "questionPatterns": [
+          "budget_allocation.team > 30 AND state.revenue == 0",
+          "hiring_choice == 'full_time_developer'",
+          "team_expansion_before_pmf"
+        ]
+      },
+      "immediateImpact": {
+        "burnRate": "+50%",
+        "runway": "-3 months",
+        "flexibility": "-30%",
+        "cashReserve": "-40%"
+      },
+      "compoundingImpact": {
+        "description": "Forces layoffs later, damages culture, wastes capital",
+        "stageEffects": {
+          "1": {
+            "teamMorale": "-20%",
+            "pivotDifficulty": "+40%"
+          },
+          "2": {
+            "forcedLayoffs": true,
+            "cultureScore": "-30%",
+            "hiringQuality": "-25%"
+          }
+        }
+      },
+      "recoveryPath": "Pause hiring, focus on validation, convert to contractors if possible",
+      "severity": "high"
+    },
+    {
+      "code": "M2",
+      "name": "No Domain Learning",
+      "category": "discovery",
+      "typicalStage": -2,
+      "description": "Not researching industry, competitors, or customers before building",
+      "detection": {
+        "triggers": [
+          "Cannot name competitors",
+          "No customer interviews conducted",
+          "Trend-based opportunity without validation"
+        ],
+        "questionPatterns": [
+          "validation_method == 'trend_based'",
+          "customer_interviews == 0",
+          "competitor_research == false"
+        ]
+      },
+      "immediateImpact": {
+        "decisionQuality": "-25%",
+        "productMarketFitRisk": "+40%",
+        "iterationSpeed": "-30%"
+      },
+      "compoundingImpact": {
+        "description": "Builds wrong product, misses market needs, slow iteration",
+        "stageEffects": {
+          "0": {
+            "productFit": "-30%",
+            "featureRelevance": "-40%"
+          },
+          "1": {
+            "conversionRate": "-35%",
+            "customerComplaints": "+50%",
+            "pivotRequired": true
+          }
+        }
+      },
+      "recoveryPath": "Pause building, conduct 10+ customer interviews, research competitors",
+      "severity": "high"
+    },
+    {
+      "code": "M3",
+      "name": "High Resource Dependency",
+      "category": "resource_management",
+      "typicalStage": 0,
+      "description": "Over-reliance on external funding before validation",
+      "detection": {
+        "triggers": [
+          "Seeks angel investment before first customer",
+          "Cannot proceed without funding",
+          "Large loan before revenue"
+        ],
+        "questionPatterns": [
+          "funding_choice == 'angel_investors' AND revenue == 0",
+          "funding_choice == 'large_loan'",
+          "blocked_without_capital == true"
+        ]
+      },
+      "immediateImpact": {
+        "equityDilution": "+25%",
+        "autonomy": "-40%",
+        "pressure": "+60%",
+        "timeToMarket": "+2 months"
+      },
+      "compoundingImpact": {
+        "description": "Loss of control, misaligned incentives, forced decisions",
+        "stageEffects": {
+          "1": {
+            "investorPressure": "+50%",
+            "pivotFreedom": "-30%"
+          },
+          "2": {
+            "forcedGrowth": true,
+            "decisionControl": "-40%"
+          },
+          "3": {
+            "exitPressure": "+70%",
+            "strategicFlexibility": "-50%"
+          }
+        }
+      },
+      "recoveryPath": "Validate with minimal capital, build revenue before seeking investment",
+      "severity": "medium"
+    },
+    {
+      "code": "M4",
+      "name": "Premature Scaling",
+      "category": "growth",
+      "typicalStage": 1,
+      "description": "Investing in growth before unit economics work",
+      "detection": {
+        "triggers": [
+          "Marketing spend > $5K with negative unit economics",
+          "Hiring sales team without proven sales process",
+          "Expanding to new markets without PMF"
+        ],
+        "questionPatterns": [
+          "marketing_spend > 5000 AND unit_economics < 0",
+          "scale_before_pmf == true",
+          "geographic_expansion_early"
+        ]
+      },
+      "immediateImpact": {
+        "cashBurn": "+200%",
+        "churnRate": "+45%",
+        "lossPerCustomer": "+$X"
+      },
+      "compoundingImpact": {
+        "description": "Leaky bucket, unsustainable growth, eventual crash",
+        "stageEffects": {
+          "2": {
+            "cashCrisis": true,
+            "growthSustainability": "AT_RISK",
+            "investorConfidence": "-40%"
+          },
+          "3": {
+            "forcedPivotOrShutdown": true,
+            "teamLayoffs": "+60%"
+          }
+        }
+      },
+      "recoveryPath": "Stop scaling, fix unit economics, focus on retention before acquisition",
+      "severity": "critical"
+    },
+    {
+      "code": "M5",
+      "name": "Neglecting Customer Service",
+      "category": "customer_relations",
+      "typicalStage": 1,
+      "description": "Prioritizing customer acquisition over retention and service",
+      "detection": {
+        "triggers": [
+          "No refund policy established",
+          "Ignores customer complaints",
+          "Zero budget for customer success"
+        ],
+        "questionPatterns": [
+          "customer_service_priority == 'low'",
+          "refund_policy == 'none'",
+          "complaint_response == 'ignore'"
+        ]
+      },
+      "immediateImpact": {
+        "retention": "-35%",
+        "nps": "-50 points",
+        "reviewScore": "-1.5 stars"
+      },
+      "compoundingImpact": {
+        "description": "Reputation damage, negative reviews, CAC increases",
+        "stageEffects": {
+          "2": {
+            "wordOfMouth": "-60%",
+            "cacIncrease": "+40%",
+            "reputationDamage": true
+          },
+          "3": {
+            "marketPosition": "-30%",
+            "brandValue": "-50%"
+          }
+        }
+      },
+      "recoveryPath": "Implement customer success program, respond to all feedback, improve NPS",
+      "severity": "medium"
+    },
+    {
+      "code": "M6",
+      "name": "No Systems Built",
+      "category": "operations",
+      "typicalStage": 2,
+      "description": "Firefighting without documentation or processes",
+      "detection": {
+        "triggers": [
+          "Founder does everything manually",
+          "No SOPs documented",
+          "Cannot take a day off"
+        ],
+        "questionPatterns": [
+          "documentation_level == 'none'",
+          "delegation_capability == 'low'",
+          "founder_dependency == 'critical'"
+        ]
+      },
+      "immediateImpact": {
+        "scalability": "BLOCKED",
+        "founderBurnout": "+70%",
+        "errorRate": "+50%"
+      },
+      "compoundingImpact": {
+        "description": "Can't delegate, can't hire effectively, can't grow",
+        "stageEffects": {
+          "2": {
+            "growthCeiling": true,
+            "qualityInconsistency": "+60%"
+          },
+          "3": {
+            "businessValue": "-40%",
+            "exitReadiness": "NOT_READY",
+            "founderTrapRisk": "HIGH"
+          }
+        }
+      },
+      "recoveryPath": "Document top 5 processes, hire ops person, implement basic automation",
+      "severity": "high"
+    },
+    {
+      "code": "M7",
+      "name": "Non-Value Spending",
+      "category": "financial",
+      "typicalStage": "ALL",
+      "description": "Costs not tied to revenue generation or customer value",
+      "detection": {
+        "triggers": [
+          "Fancy office before revenue",
+          "Premium tools without need",
+          "Conference attendance > customer meetings"
+        ],
+        "questionPatterns": [
+          "spending_category == 'nice_to_have' AND revenue < 10000",
+          "tool_spend > revenue * 0.2",
+          "vanity_expenses == true"
+        ]
+      },
+      "immediateImpact": {
+        "burnRate": "+30%",
+        "runway": "-2 months",
+        "cashEfficiency": "-40%"
+      },
+      "compoundingImpact": {
+        "description": "Capital depletion, emergency measures, poor prioritization habits",
+        "stageEffects": {
+          "1": {
+            "cashCrunch": true,
+            "emergencyFundraising": true
+          },
+          "2": {
+            "forcedCuts": true,
+            "teamMorale": "-30%"
+          }
+        }
+      },
+      "recoveryPath": "Audit all expenses, cut non-essentials, implement spend approval process",
+      "severity": "medium"
+    },
+    {
+      "code": "M8",
+      "name": "Ignoring Unit Economics",
+      "category": "financial",
+      "typicalStage": 1,
+      "description": "Growing without understanding profitability per customer",
+      "detection": {
+        "triggers": [
+          "Cannot calculate CAC",
+          "LTV unknown",
+          "Celebrating revenue without profit"
+        ],
+        "questionPatterns": [
+          "cac_calculation == 'unknown'",
+          "ltv_cac_ratio < 1",
+          "profit_per_customer < 0"
+        ]
+      },
+      "immediateImpact": {
+        "profitPerSale": "NEGATIVE",
+        "lossesCompounded": true,
+        "investorTrust": "-50%"
+      },
+      "compoundingImpact": {
+        "description": "More growth = more losses, eventual business failure",
+        "stageEffects": {
+          "2": {
+            "cashCrisis": "GUARANTEED",
+            "growthParadox": true
+          },
+          "3": {
+            "businessFailureRisk": "CRITICAL",
+            "forcedPivotOrShutdown": true
+          }
+        }
+      },
+      "recoveryPath": "Calculate unit economics, adjust pricing, reduce CAC, increase LTV",
+      "severity": "critical"
+    }
+  ]
+}

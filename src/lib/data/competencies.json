@@ -1,0 +1,438 @@
+{
+  "competencies": [
+    {
+      "code": "C1",
+      "name": "Problem Sensing & Curiosity",
+      "category": "discovery",
+      "primaryStage": -2,
+      "description": "Deeply understand customer pain before building",
+      "levels": {
+        "L0": "No clear problem identification or customer understanding",
+        "L1": "Explores problems through observation and basic research",
+        "L2": "Identifies monetizable pain in Quality/Time/Cost framework with validation"
+      },
+      "indicators": {
+        "positive": [
+          "Specific customer segment defined",
+          "Problem framed in Q/T/C",
+          "Evidence from customer interviews",
+          "Quantified pain point"
+        ],
+        "negative": [
+          "Vague 'help people' language",
+          "No customer validation",
+          "Solution-first thinking",
+          "Assumed rather than validated"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C2",
+      "name": "Curiosity-Driven Learning",
+      "category": "discovery",
+      "primaryStage": -2,
+      "description": "Learn from customers and market without ego",
+      "levels": {
+        "L0": "Closed to learning, defensive about feedback",
+        "L1": "Shows openness to learning from others",
+        "L2": "Actively seeks and applies knowledge, willing to unlearn"
+      },
+      "indicators": {
+        "positive": [
+          "Recent learning cited",
+          "Industry research conducted",
+          "Expert consultation",
+          "Pivoted based on new info"
+        ],
+        "negative": [
+          "No recent learning",
+          "Defensive responses",
+          "Ignores feedback",
+          "Trend-chasing without depth"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C3",
+      "name": "Vision & Big-Picture Thinking",
+      "category": "direction",
+      "primaryStage": -1,
+      "description": "Articulate direction and align with execution",
+      "levels": {
+        "L0": "No clear vision or direction",
+        "L1": "Can articulate simple vision statement",
+        "L2": "Aligns vision with realistic execution path"
+      },
+      "indicators": {
+        "positive": [
+          "Clear success metrics",
+          "Realistic timeline",
+          "Obstacle awareness",
+          "Aligned personal & business goals"
+        ],
+        "negative": [
+          "Vague aspirations",
+          "Unrealistic expectations",
+          "No obstacle planning",
+          "Misaligned motivations"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C4",
+      "name": "Learning Agility",
+      "category": "direction",
+      "primaryStage": -1,
+      "description": "Absorb feedback and update decisions quickly",
+      "levels": {
+        "L0": "Rigid thinking, ignores feedback",
+        "L1": "Absorbs feedback without defensiveness",
+        "L2": "Willing to unlearn and adapt rapidly"
+      },
+      "indicators": {
+        "positive": [
+          "Asks clarifying questions",
+          "Modifies approach after feedback",
+          "Seeks to understand objections",
+          "Shows humility"
+        ],
+        "negative": [
+          "Defensive responses",
+          "Sticks to plan despite warnings",
+          "Dismisses criticism",
+          "Overconfidence"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C5",
+      "name": "Courage to Commit",
+      "category": "execution",
+      "primaryStage": 0,
+      "description": "Act, ship, test, and iterate decisively",
+      "levels": {
+        "L0": "Analysis paralysis, unable to commit",
+        "L1": "Moves from exploration to action",
+        "L2": "Demonstrates clear direction under uncertainty"
+      },
+      "indicators": {
+        "positive": [
+          "Ships MVP quickly",
+          "Takes calculated risks",
+          "Makes decisions with incomplete info",
+          "Commits resources"
+        ],
+        "negative": [
+          "Endless research",
+          "Waits for perfect conditions",
+          "Avoids commitment",
+          "Overthinking"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C6",
+      "name": "Financial Awareness",
+      "category": "execution",
+      "primaryStage": 0,
+      "description": "Understand pricing, costs, and cash flow",
+      "levels": {
+        "L0": "No understanding of business finances",
+        "L1": "Understands basic financial concepts",
+        "L2": "Applies financial discipline to decisions"
+      },
+      "indicators": {
+        "positive": [
+          "Budget planning",
+          "Burn rate awareness",
+          "Runway calculation",
+          "Pricing strategy"
+        ],
+        "negative": [
+          "No financial plan",
+          "Ignores burn rate",
+          "Unrealistic projections",
+          "No buffer planning"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C7",
+      "name": "Resourcefulness & Creative Leverage",
+      "category": "execution",
+      "primaryStage": 0,
+      "description": "Move forward without capital via creative means",
+      "levels": {
+        "L0": "Blocked without external resources",
+        "L1": "Identifies alternative resources",
+        "L2": "Creatively leverages partnerships, DIY, crowdfunding"
+      },
+      "indicators": {
+        "positive": [
+          "Bootstrap mindset",
+          "Pre-selling strategy",
+          "Partnership leverage",
+          "No-code/DIY solutions"
+        ],
+        "negative": [
+          "Funding dependency",
+          "Can't start without money",
+          "Expensive solutions first",
+          "No creative alternatives"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C8",
+      "name": "Marketing & Sales Courage",
+      "category": "validation",
+      "primaryStage": 1,
+      "description": "Communicate value and ask for the sale",
+      "levels": {
+        "L0": "Afraid to sell or promote",
+        "L1": "Can present offering to customers",
+        "L2": "Confidently closes and handles objections"
+      },
+      "indicators": {
+        "positive": [
+          "Clear value proposition",
+          "Comfortable asking for money",
+          "Handles objections",
+          "Persistent follow-up"
+        ],
+        "negative": [
+          "Avoids sales conversations",
+          "Underprices from fear",
+          "Can't handle rejection",
+          "No outreach strategy"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C9",
+      "name": "Financial Discipline",
+      "category": "validation",
+      "primaryStage": 1,
+      "description": "Know what makes money and what doesn't",
+      "levels": {
+        "L0": "No tracking of unit economics",
+        "L1": "Tracks financial metrics",
+        "L2": "Makes data-driven financial decisions"
+      },
+      "indicators": {
+        "positive": [
+          "CAC/LTV awareness",
+          "Unit economics tracked",
+          "Profitability focus",
+          "Cuts unprofitable activities"
+        ],
+        "negative": [
+          "Growth at all costs",
+          "Ignores unit economics",
+          "Vanity metrics focus",
+          "Spending without ROI"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C10",
+      "name": "Customer Service",
+      "category": "validation",
+      "primaryStage": 1,
+      "description": "Care for customers while protecting business health",
+      "levels": {
+        "L0": "Ignores customer needs",
+        "L1": "Responds to customer needs",
+        "L2": "Balances empathy with business sustainability"
+      },
+      "indicators": {
+        "positive": [
+          "Quick response times",
+          "Fair refund policy",
+          "Learns from complaints",
+          "Retention focus"
+        ],
+        "negative": [
+          "Ignores complaints",
+          "No refund policy",
+          "Prioritizes new over existing",
+          "Poor communication"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C11",
+      "name": "Systems & Process Thinking",
+      "category": "scaling",
+      "primaryStage": 2,
+      "description": "Create repeatable, scalable operations",
+      "levels": {
+        "L0": "Firefighting mode, no documentation",
+        "L1": "Recognizes need for processes",
+        "L2": "Builds systems that reduce self-dependency"
+      },
+      "indicators": {
+        "positive": [
+          "SOPs documented",
+          "Automation implemented",
+          "Repeatable processes",
+          "Quality control systems"
+        ],
+        "negative": [
+          "Everything manual",
+          "No documentation",
+          "Can't delegate",
+          "Founder bottleneck"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C12",
+      "name": "Hiring & People Management",
+      "category": "scaling",
+      "primaryStage": 2,
+      "description": "Hire well, delegate, and grow people",
+      "levels": {
+        "L0": "Poor hiring or can't manage others",
+        "L1": "Can hire and delegate basic tasks",
+        "L2": "Develops people to lead functions"
+      },
+      "indicators": {
+        "positive": [
+          "Clear role definitions",
+          "Effective delegation",
+          "Team development",
+          "Cultural fit hiring"
+        ],
+        "negative": [
+          "Micromanagement",
+          "Unclear expectations",
+          "Poor retention",
+          "Hiring too fast/slow"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C13",
+      "name": "Strategic & Investment Thinking",
+      "category": "establishment",
+      "primaryStage": 3,
+      "description": "Allocate capital, time, and energy wisely",
+      "levels": {
+        "L0": "Reactive, no strategic planning",
+        "L1": "Understands long-term impact",
+        "L2": "Allocates resources with discipline"
+      },
+      "indicators": {
+        "positive": [
+          "Long-term planning",
+          "Resource prioritization",
+          "ROI-focused decisions",
+          "Moat building"
+        ],
+        "negative": [
+          "Short-term focus",
+          "Random investments",
+          "No prioritization",
+          "Chasing opportunities"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C14",
+      "name": "Human Leadership",
+      "category": "establishment",
+      "primaryStage": 3,
+      "description": "Protect people, values, and trust under pressure",
+      "levels": {
+        "L0": "Sacrifices people/values under pressure",
+        "L1": "Considers impact on people",
+        "L2": "Maintains values under financial stress"
+      },
+      "indicators": {
+        "positive": [
+          "Transparent communication",
+          "Values-aligned decisions",
+          "Team protection",
+          "Ethical consistency"
+        ],
+        "negative": [
+          "Lies under pressure",
+          "Blames team",
+          "Abandons values",
+          "Self-serving decisions"
+        ]
+      },
+      "scoringWeight": 1.0
+    },
+    {
+      "code": "C15",
+      "name": "Financial Intelligence",
+      "category": "universal",
+      "primaryStage": null,
+      "assessedAcross": "ALL_STAGES",
+      "description": "Ongoing ability to understand and optimize business finances",
+      "levels": {
+        "L0": "No financial understanding",
+        "L1": "Basic burn rate and runway awareness",
+        "L2": "CAC/LTV mastery, unit economics optimization"
+      },
+      "indicators": {
+        "positive": [
+          "Accurate calculations",
+          "Proactive financial planning",
+          "Margin optimization",
+          "Cash flow management"
+        ],
+        "negative": [
+          "Calculation errors",
+          "Ignores financial signals",
+          "No margin awareness",
+          "Cash crunches"
+        ]
+      },
+      "scoringWeight": 0.75
+    },
+    {
+      "code": "C16",
+      "name": "Decision Quality Indicators",
+      "category": "universal",
+      "primaryStage": null,
+      "assessedAcross": "ALL_STAGES",
+      "description": "Overall quality of decisions under uncertainty",
+      "levels": {
+        "L0": "Poor decisions, doesn't learn from mistakes",
+        "L1": "Action vs overthinking balance",
+        "L2": "Learning from mistakes, ethical consistency"
+      },
+      "indicators": {
+        "positive": [
+          "Evidence-based decisions",
+          "Learning velocity",
+          "Ethical consistency",
+          "Appropriate risk-taking"
+        ],
+        "negative": [
+          "Pattern of poor decisions",
+          "Repeats mistakes",
+          "Inconsistent ethics",
+          "Risk avoidance/recklessness"
+        ]
+      },
+      "scoringWeight": 0.75
+    }
+  ]
+}

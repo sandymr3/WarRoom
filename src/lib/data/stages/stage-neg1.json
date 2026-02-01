@@ -1,0 +1,399 @@
+{
+  "stage": {
+    "id": "STAGE_-1",
+    "number": -1,
+    "name": "CONCEPTING",
+    "title": "Vision / Founders Fit",
+    "goal": "Align your vision with realistic execution and test your learning agility",
+    "subtitle": "A clear vision paired with adaptability separates dreamers from doers",
+    "durationMinutes": 10,
+    "competencies": ["C3", "C4"],
+    "simulatedMonths": [0],
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "You've identified a problem worth solving.",
+        "Now I need to understand your vision. Where do you see this going?",
+        "But more importantly, I need to see how you respond when that vision is challenged.",
+        "The best entrepreneurs hold their vision loosely while gripping their purpose tightly."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C3", "C4"],
+      "minimumQuestions": 5,
+      "convergenceLogic": "AI ensures C3 and C4 fully assessed before stage completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q-1.1",
+      "type": "open_text",
+      "questionText": "In ONE sentence: What is your business vision? What does success look like in 12 months?",
+      "narrativeIntro": "Vision is your north star. Let's see if you have a clear direction.",
+      "helpText": "Be specific about what success means: revenue, customers, impact, team size. Avoid vague statements like 'be successful' or 'make a difference'.",
+      "assess": ["C3"],
+      "isRequired": true,
+      "minLength": 20,
+      "maxLength": 300,
+      "order": 1,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "vague", "points": 2, "description": "Vague vision without specifics" },
+          { "criteria": "clear_unrealistic", "points": 4, "description": "Clear but unrealistic goals" },
+          { "criteria": "clear_realistic", "points": 10, "description": "Clear, specific, and achievable vision" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate vision clarity and realism. Check for specific metrics, timeframe awareness, and achievability given context.",
+        "redFlags": ["vague aspirations", "unrealistic scale", "no metrics", "too many goals"],
+        "greenFlags": ["specific targets", "realistic timeline", "measurable outcomes", "focused scope"]
+      },
+      "capturesContext": {
+        "field": "vision",
+        "usedIn": ["goal_tracking", "final_comparison"]
+      }
+    },
+
+    {
+      "id": "Q-1.2",
+      "type": "multiple_choice",
+      "questionText": "What does success mean to YOU personally?",
+      "narrativeIntro": "Understanding your personal definition of success reveals your true motivations.",
+      "assess": ["C3", "C4"],
+      "isRequired": true,
+      "order": 2,
+      "options": [
+        {
+          "id": "A",
+          "text": "$1M+ revenue in 12 months",
+          "points": 8,
+          "competencyLevel": "C3_L1",
+          "insight": "Financial focus - clear but may miss deeper purpose"
+        },
+        {
+          "id": "B",
+          "text": "Solving a meaningful problem for real people",
+          "points": 10,
+          "competencyLevel": "C3_L2",
+          "insight": "Purpose-driven - sustainable motivation"
+        },
+        {
+          "id": "C",
+          "text": "Learning and growing as an entrepreneur",
+          "points": 7,
+          "competencyLevel": "C4_L2",
+          "insight": "Growth mindset - valuable but needs business focus"
+        },
+        {
+          "id": "D",
+          "text": "Making money quickly",
+          "points": 3,
+          "warning": "WARNING: Short-term focus often leads to poor decisions",
+          "competencyLevel": "C3_WEAK"
+        },
+        {
+          "id": "E",
+          "text": "All of the above: revenue, impact, and learning",
+          "points": 9,
+          "competencyLevel": "C3_L2",
+          "insight": "Balanced perspective - good foundation"
+        }
+      ]
+    },
+
+    {
+      "id": "Q-1.3",
+      "type": "scenario",
+      "questionText": "Three experienced entrepreneurs review your idea. Their feedback:\n\n1) \"The market is saturated with similar solutions\"\n2) \"Your target customers don't have budget for this\"\n3) \"The execution will be much harder than you think\"\n\nHow do you respond?",
+      "narrativeIntro": "This is a critical moment. How you respond to challenges reveals your learning agility.",
+      "assess": ["C4"],
+      "isRequired": true,
+      "order": 3,
+      "scenario": {
+        "context": "You've shared your business idea with three entrepreneurs who have built successful companies in similar spaces.",
+        "stakes": "Your response will shape how you handle future challenges and criticism."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Thank them but stick with my plan - I know my market better",
+          "points": 2,
+          "competencyLevel": "C4_WEAK",
+          "consequence": {
+            "type": "risk_modifier",
+            "value": "+40%",
+            "target": "failure_risk"
+          },
+          "aiFollowUp": "Interesting. What makes you more confident than people who have built in this space?"
+        },
+        {
+          "id": "B",
+          "text": "Ask follow-up questions to understand their concerns better",
+          "points": 10,
+          "competencyLevel": "C4_L2",
+          "insight": "EXCELLENT: Shows curiosity and willingness to learn",
+          "followUp": {
+            "id": "Q-1.3B-FOLLOW",
+            "type": "open_text",
+            "questionText": "What specific questions would you ask them?",
+            "assess": ["C4", "C2"],
+            "scoring": {
+              "maxPoints": 5,
+              "rubric": [
+                { "criteria": "surface_questions", "points": 2 },
+                { "criteria": "probing_questions", "points": 4 },
+                { "criteria": "strategic_questions", "points": 5 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "C",
+          "text": "Pivot to a different idea entirely",
+          "points": 3,
+          "warning": "WARNING: Quick to abandon - may indicate lack of conviction",
+          "competencyLevel": "C5_WEAK"
+        },
+        {
+          "id": "D",
+          "text": "Acknowledge the concerns and consider how to modify my approach",
+          "points": 9,
+          "competencyLevel": "C4_L2",
+          "insight": "GOOD: Balances conviction with adaptability"
+        }
+      ]
+    },
+
+    {
+      "id": "Q-1.4",
+      "type": "scenario",
+      "questionText": "A potential customer tells you: \"I like your concept, but I wouldn't actually PAY for this.\" What do you do?",
+      "narrativeIntro": "This is the moment of truth. Every entrepreneur faces this challenge.",
+      "assess": ["C4", "C8"],
+      "isRequired": true,
+      "order": 4,
+      "scenario": {
+        "context": "You've just pitched your product to someone who matches your target customer profile exactly.",
+        "stakes": "This response pattern often determines if entrepreneurs build something people actually want."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Move on to find other customers who would pay",
+          "points": 6,
+          "competencyLevel": "C8_L1",
+          "insight": "Reasonable but might miss valuable feedback"
+        },
+        {
+          "id": "B",
+          "text": "Ask WHY they wouldn't pay and what WOULD make them pay",
+          "points": 10,
+          "competencyLevel": "C4_L2",
+          "insight": "BEST: Turns rejection into insight",
+          "followUp": {
+            "id": "Q-1.4B-FOLLOW",
+            "type": "open_text",
+            "questionText": "What would you specifically ask them to understand their reluctance?",
+            "assess": ["C4", "C1"]
+          }
+        },
+        {
+          "id": "C",
+          "text": "Offer a lower price or discount",
+          "points": 3,
+          "warning": "WARNING: Racing to the bottom rarely works",
+          "competencyLevel": "C6_WEAK"
+        },
+        {
+          "id": "D",
+          "text": "Try harder to convince them of the value",
+          "points": 4,
+          "competencyLevel": "C8_L1",
+          "insight": "Persistence is good, but listening might be better"
+        }
+      ]
+    },
+
+    {
+      "id": "Q-1.5",
+      "type": "open_text",
+      "questionText": "What are the 3 BIGGEST OBSTACLES between where you are now and your vision?",
+      "narrativeIntro": "Awareness of obstacles separates realistic visionaries from naive dreamers.",
+      "helpText": "Be specific. 'Finding customers' is too vague. 'Reaching busy parents who don't respond to ads' is better.",
+      "assess": ["C3"],
+      "isRequired": true,
+      "minLength": 50,
+      "maxLength": 800,
+      "order": 5,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "vague_obstacles", "points": 3, "description": "Generic obstacles without specifics" },
+          { "criteria": "specific_obstacles", "points": 7, "description": "Specific, well-understood obstacles" },
+          { "criteria": "obstacles_with_mitigation", "points": 10, "description": "Specific obstacles with thinking about how to overcome them" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate obstacle awareness. Look for specificity, realism, and initial thinking about mitigation.",
+        "redFlags": ["unrealistic optimism", "no obstacles identified", "generic answers"],
+        "greenFlags": ["specific challenges", "honest assessment", "mitigation thinking", "prioritization"]
+      }
+    },
+
+    {
+      "id": "Q-1.6",
+      "type": "multiple_choice",
+      "questionText": "Which obstacle concerns you MOST?",
+      "narrativeIntro": "Your biggest concern reveals what you perceive as your greatest challenge.",
+      "assess": ["C3", "C5", "C7"],
+      "isRequired": true,
+      "order": 6,
+      "branching": true,
+      "options": [
+        {
+          "id": "A",
+          "text": "Lack of funding",
+          "points": 5,
+          "followUp": {
+            "id": "Q-1.6A-FOLLOW",
+            "type": "open_text",
+            "questionText": "How much money do you think you need and why? Have you explored ways to start without funding?",
+            "assess": ["C6", "C7"],
+            "scoring": {
+              "maxPoints": 8,
+              "rubric": [
+                { "criteria": "no_numbers", "points": 2 },
+                { "criteria": "rough_estimate", "points": 5 },
+                { "criteria": "detailed_breakdown", "points": 8 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "B",
+          "text": "Finding the right team members",
+          "points": 5,
+          "followUp": {
+            "id": "Q-1.6B-FOLLOW",
+            "type": "open_text",
+            "questionText": "What specific skills do you need? Why can't you handle these initially yourself?",
+            "assess": ["C7", "C12"]
+          }
+        },
+        {
+          "id": "C",
+          "text": "Reaching and acquiring customers",
+          "points": 6,
+          "followUp": {
+            "id": "Q-1.6C-FOLLOW",
+            "type": "open_text",
+            "questionText": "How would you reach your first 10 customers WITHOUT spending money on ads?",
+            "assess": ["C7", "C8"],
+            "scoring": {
+              "maxPoints": 10,
+              "rubric": [
+                { "criteria": "no_ideas", "points": 0 },
+                { "criteria": "basic_ideas", "points": 5 },
+                { "criteria": "creative_specific", "points": 10 }
+              ]
+            }
+          }
+        },
+        {
+          "id": "D",
+          "text": "Building the actual product",
+          "points": 5,
+          "followUp": {
+            "id": "Q-1.6D-FOLLOW",
+            "type": "open_text",
+            "questionText": "Can you build the first version yourself? If not, what's the simplest version you could create to test the idea?",
+            "assess": ["C5", "C7"]
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q-1.7",
+      "type": "reflection",
+      "questionText": "Imagine it's 6 months from now and your business has failed. What's the most likely reason?",
+      "narrativeIntro": "Pre-mortem thinking: the best entrepreneurs think about failure to prevent it.",
+      "helpText": "Be honest with yourself. This exercise helps identify blind spots.",
+      "assess": ["C3", "C4"],
+      "isRequired": true,
+      "minLength": 50,
+      "maxLength": 600,
+      "order": 7,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "external_blame", "points": 2, "description": "Blames external factors only" },
+          { "criteria": "generic_reasons", "points": 5, "description": "Generic failure reasons" },
+          { "criteria": "specific_self_aware", "points": 10, "description": "Specific, self-aware analysis of potential failure modes" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate self-awareness and failure anticipation. Look for honest assessment, specificity, and connection to their own gaps.",
+        "redFlags": ["only external factors", "overconfidence", "vague answers"],
+        "greenFlags": ["honest self-assessment", "specific risks", "actionable insights", "humility"]
+      }
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C3", "C4"],
+    "displayMetrics": [
+      { "label": "Vision Clarity", "derivedFrom": "Q-1.1_score" },
+      { "label": "Learning Agility", "derivedFrom": "Q-1.3_score + Q-1.4_score" },
+      { "label": "Self-Awareness", "derivedFrom": "Q-1.5_score + Q-1.7_score" }
+    ],
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed competency",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns detected",
+        "recommendations": "What they should focus on"
+      }
+    }
+  },
+
+  "decisionPoint": {
+    "question": "Ready to COMMIT to this business?",
+    "narrativeIntro": "This is the point of no return. Once you commit, we start tracking your simulated business.",
+    "options": [
+      {
+        "id": "commit",
+        "text": "Yes, I'm all in. Let's build this.",
+        "nextStage": 0,
+        "consequence": {
+          "type": "start_simulation",
+          "initialState": {
+            "capital": 0,
+            "revenue": 0,
+            "team": 1,
+            "customers": 0,
+            "month": 1
+          }
+        }
+      },
+      {
+        "id": "refine",
+        "text": "I need to refine my idea first",
+        "action": "loop_back",
+        "targetStage": -2,
+        "timePenalty": { "weeks": 2 },
+        "narrativeResponse": "Fair enough. Taking time to refine is wise. But remember, perfectionism kills businesses. Let's revisit your problem definition."
+      },
+      {
+        "id": "restart",
+        "text": "I want to explore a completely different idea",
+        "action": "restart",
+        "targetStage": -2,
+        "timePenalty": { "weeks": 4 },
+        "narrativeResponse": "Starting fresh takes courage. But it also costs time. You're a month behind now. Let's make it count."
+      }
+    ]
+  }
+}

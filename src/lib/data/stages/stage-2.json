@@ -1,0 +1,589 @@
+{
+  "stage": {
+    "id": "STAGE_2",
+    "number": 2,
+    "name": "SCALING",
+    "title": "Business Model / Market Fit",
+    "goal": "Build systems and team to grow beyond founder-dependency",
+    "subtitle": "What got you here won't get you there. Time to build a real company.",
+    "durationMinutes": 20,
+    "competencies": ["C11", "C12"],
+    "simulatedMonths": [7, 8, 9, 10, 11],
+    "startingState": {
+      "month": 7,
+      "teamSize": "{{previousTeamSize}}",
+      "customers": "{{previousCustomers}}",
+      "revenue": "{{previousRevenue}}"
+    },
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "Congratulations. You've proven product-market fit.",
+        "But here's the hard truth: YOU are now the bottleneck.",
+        "To scale, you need to build systems that work without you.",
+        "And you need to hire people who are better than you at their jobs.",
+        "This is where founders either level up or burn out."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C11", "C12"],
+      "minimumQuestions": 7,
+      "convergenceLogic": "AI ensures C11 and C12 fully assessed before stage completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q2.1",
+      "type": "scenario",
+      "questionText": "MONTH 7: You have {{customers}} customers generating ${{revenue}}/month. Problem: You're working 70+ hours/week, support requests are piling up, development is slow, and the same issues keep recurring. What's your FIRST move?",
+      "narrativeIntro": "You've hit the founder capacity wall. Everyone does. How you respond defines your next phase.",
+      "assess": ["C11", "C12"],
+      "isRequired": true,
+      "order": 1,
+      "isDynamic": true,
+      "scenario": {
+        "context": "Classic scaling pain. You're drowning in tasks that don't require your unique skills.",
+        "stakes": "Your choice here determines whether you build a company or just a stressful job for yourself."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Hire customer support to handle the tickets",
+          "points": 10,
+          "competencyLevel": "C12_L1",
+          "insight": "Good first hire - frees you for higher-value work",
+          "stateImpact": {
+            "teamSize": "+1",
+            "supportCapacity": "+100%",
+            "founderTimeFreed": "20%"
+          },
+          "followUp": {
+            "id": "Q2.1A-FOLLOW",
+            "type": "multiple_choice",
+            "questionText": "What type of support person do you hire?",
+            "options": [
+              { "id": "fulltime", "text": "Full-time employee ($4K/mo)", "cost": 4000, "commitment": "high" },
+              { "id": "parttime", "text": "Part-time contractor ($2K/mo)", "cost": 2000, "commitment": "medium" },
+              { "id": "virtual", "text": "Virtual assistant from overseas ($500/mo)", "cost": 500, "commitment": "low", "qualityRisk": true }
+            ]
+          }
+        },
+        {
+          "id": "B",
+          "text": "Build systems and automation to reduce manual work",
+          "points": 15,
+          "competencyLevel": "C11_L2",
+          "insight": "BEST: Systems scale infinitely, people don't",
+          "stateImpact": {
+            "timeSaved": "20hr/week",
+            "scalability": "+50%",
+            "developmentTime": 2
+          }
+        },
+        {
+          "id": "C",
+          "text": "Pause new customer acquisition to catch up",
+          "points": 7,
+          "competencyLevel": "C11_L1",
+          "insight": "Breathing room, but growth stalls",
+          "stateImpact": {
+            "growthPaused": true,
+            "stress": "-30%",
+            "revenue": "flat"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Power through - hustle harder",
+          "points": -5,
+          "competencyLevel": "C11_WEAK",
+          "warning": "CRITICAL: This path leads to burnout",
+          "stateImpact": {
+            "burnoutRisk": "+70%",
+            "quality": "-40%",
+            "health": "declining"
+          },
+          "triggersMistake": "M6",
+          "mistakeName": "No Systems Built"
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.2",
+      "type": "scenario",
+      "questionText": "MONTH 8: You notice the same customer questions coming in 10+ times per week. You're answering the same things repeatedly. What do you do?",
+      "narrativeIntro": "Repetition is the enemy of scale. Every repeated task is a system waiting to be built.",
+      "assess": ["C11"],
+      "isRequired": true,
+      "order": 2,
+      "scenario": {
+        "context": "Support volume is growing with customers. You can't keep answering manually.",
+        "stakes": "This is a test of whether you think in systems or just tasks."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Create an FAQ and knowledge base",
+          "points": 15,
+          "competencyLevel": "C11_L2",
+          "insight": "GOOD: Self-service reduces tickets",
+          "stateImpact": {
+            "timeSaved": "8hr/week",
+            "customerEmpowerment": "high",
+            "developmentTime": 1
+          }
+        },
+        {
+          "id": "B",
+          "text": "Hire someone to answer them",
+          "points": 5,
+          "competencyLevel": "C11_L1",
+          "warning": "Solves symptom, not cause",
+          "stateImpact": {
+            "cost": "+4000/mo",
+            "problemPersists": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Keep answering manually - it's personal service",
+          "points": 0,
+          "competencyLevel": "C11_WEAK",
+          "warning": "WARNING: This doesn't scale",
+          "stateImpact": {
+            "founderTimeConsumed": "increasing",
+            "scalabilityBlocked": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Create video tutorials + automated onboarding emails",
+          "points": 18,
+          "competencyLevel": "C11_L2",
+          "insight": "BEST: Proactive education beats reactive support",
+          "stateImpact": {
+            "timeSaved": "12hr/week",
+            "onboardingQuality": "+40%",
+            "customerSuccess": "+25%"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.3",
+      "type": "scenario",
+      "questionText": "MONTH 9: Revenue is ${{revenue}}/mo. You need to scale product development. What's your approach?",
+      "narrativeIntro": "Product development is often the first thing that breaks at scale. How do you fix it?",
+      "assess": ["C11", "C12"],
+      "isRequired": true,
+      "order": 3,
+      "isDynamic": true,
+      "options": [
+        {
+          "id": "A",
+          "text": "Hire a senior developer ($8K/month)",
+          "points": 8,
+          "competencyLevel": "C12_L1",
+          "stateImpact": {
+            "teamSize": "+1",
+            "devCapacity": "+80%",
+            "monthlyCost": "+8000"
+          },
+          "followUp": {
+            "id": "Q2.3A-FOLLOW",
+            "type": "scenario",
+            "questionText": "Two weeks in, your new senior dev is moving slower than expected. Investigation reveals: your code has no documentation, no onboarding process, and unclear priorities. What do you do?",
+            "options": [
+              {
+                "id": "fire",
+                "text": "Let them go - they're not performing",
+                "points": -5,
+                "warning": "MISTAKE: The problem is YOUR systems, not them",
+                "stateImpact": { "teamMorale": "-30%", "problemPersists": true }
+              },
+              {
+                "id": "document",
+                "text": "Stop and build proper documentation and onboarding",
+                "points": 15,
+                "competencyLevel": "C11_L2",
+                "insight": "BEST: Fix the root cause",
+                "stateImpact": { "developmentTime": 1, "futureOnboarding": "smooth" }
+              },
+              {
+                "id": "micromanage",
+                "text": "Micromanage them through every task",
+                "points": 2,
+                "stateImpact": { "founderTimeConsumed": "+40%", "devAutonomy": "zero" }
+              },
+              {
+                "id": "honest",
+                "text": "Have an honest conversation and improve together",
+                "points": 18,
+                "competencyLevel": "C12_L2",
+                "insight": "EXCELLENT: Builds trust and solves root cause",
+                "stateImpact": { "relationshipStrength": "high", "systemsImproved": true }
+              }
+            ]
+          }
+        },
+        {
+          "id": "B",
+          "text": "Hire 2 junior developers ($6K total)",
+          "points": 6,
+          "competencyLevel": "C12_L1",
+          "stateImpact": {
+            "teamSize": "+2",
+            "devCapacity": "+50%",
+            "managementOverhead": "+60%"
+          }
+        },
+        {
+          "id": "C",
+          "text": "Stay solo and use freelancers for specific tasks",
+          "points": 5,
+          "competencyLevel": "C11_L1",
+          "stateImpact": {
+            "flexibility": "high",
+            "consistency": "low",
+            "knowledgeRetention": "poor"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Bring on a technical co-founder",
+          "points": 7,
+          "competencyLevel": "C12_L1",
+          "stateImpact": {
+            "equity": "-30%",
+            "devCapacity": "+150%",
+            "timeToFind": 2
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.4",
+      "type": "scenario",
+      "questionText": "MONTH 10: Your support team member comes to you: \"The same issues keep recurring. Customers are frustrated. We're treating symptoms, not causes. Can we please fix the root problems instead of just responding to tickets?\"",
+      "narrativeIntro": "Your team is giving you feedback. This is a test of whether you can receive it.",
+      "assess": ["C11", "C12", "C4"],
+      "isRequired": true,
+      "order": 4,
+      "scenario": {
+        "context": "A team member is advocating for systematic improvement over firefighting.",
+        "stakes": "How you respond determines your culture and their engagement."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Thank them and prioritize fixing root causes",
+          "points": 15,
+          "competencyLevel": "C11_L2",
+          "insight": "EXCELLENT: Listens and acts",
+          "stateImpact": {
+            "teamEngagement": "high",
+            "issuesReduced": true,
+            "cultureStrength": "+20%"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Tell them to focus on their job - fixing root causes is your responsibility",
+          "points": -5,
+          "competencyLevel": "C12_WEAK",
+          "warning": "MISTAKE: Discourages initiative, damages morale",
+          "stateImpact": {
+            "teamMorale": "-40%",
+            "turnoverRisk": "high",
+            "problemPersists": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Ask them to document the patterns and propose solutions",
+          "points": 20,
+          "competencyLevel": "C12_L2",
+          "insight": "BEST: Empowers team and gets valuable insights",
+          "stateImpact": {
+            "teamOwnership": "high",
+            "insightsGained": true,
+            "developmentPath": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Acknowledge but say you'll get to it eventually",
+          "points": 0,
+          "competencyLevel": "C11_WEAK",
+          "stateImpact": {
+            "problemsCompound": true,
+            "teamTrust": "-20%"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.5",
+      "type": "scenario",
+      "questionText": "MONTH 10: A potential client offers you a $50,000 custom project. BUT: It requires 2 months of dedicated work, will derail your product roadmap, and the features won't benefit other customers. Do you take it?",
+      "narrativeIntro": "Custom work temptation. Every startup faces this. It's a trap that's hard to resist.",
+      "assess": ["C13", "C9"],
+      "isRequired": true,
+      "order": 5,
+      "scenario": {
+        "context": "$50K is significant. But custom work rarely scales.",
+        "stakes": "This decision reveals whether you're building a product company or a services company."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Yes - hard to turn down that cash",
+          "points": 5,
+          "competencyLevel": "C9_L1",
+          "warning": "Cash now, but roadmap derailed",
+          "stateImpact": {
+            "cash": "+50000",
+            "roadmapDelayed": 2,
+            "focusLost": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "No - stay focused on the product for all customers",
+          "points": 12,
+          "competencyLevel": "C13_L1",
+          "insight": "GOOD: Protects long-term vision",
+          "stateImpact": {
+            "shortTermLost": 50000,
+            "productFocusMaintained": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Negotiate: $75K with extended timeline to minimize disruption",
+          "points": 15,
+          "competencyLevel": "C13_L2",
+          "insight": "BEST: Gets value while protecting core business",
+          "stateImpact": {
+            "cash": "+75000",
+            "roadmapPartiallyProtected": true,
+            "negotiationWin": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Set up a separate services arm with dedicated team",
+          "points": 10,
+          "competencyLevel": "C11_L2",
+          "insight": "Creative but adds complexity",
+          "stateImpact": {
+            "cash": "+50000",
+            "complexityIncreased": true,
+            "coreProtected": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.6",
+      "type": "scenario",
+      "questionText": "MONTH 11: Your first employee (6 months tenure) requests a 20% raise. They're good but not exceptional. Market rate for their role is +10% from what they're earning. You can afford it but it's tight. What do you do?",
+      "narrativeIntro": "People management moment. How you handle compensation reveals your leadership style.",
+      "assess": ["C12", "C14"],
+      "isRequired": true,
+      "order": 6,
+      "scenario": {
+        "context": "They've been loyal. But 20% is above market, and you have limited resources.",
+        "stakes": "This sets precedent for how you handle compensation across your company."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Give the full 20% - retain them at any cost",
+          "points": 6,
+          "competencyLevel": "C12_L1",
+          "warning": "Sets high precedent, strains budget",
+          "stateImpact": {
+            "cost": "+20%",
+            "precedent": "high_raises",
+            "retention": "secured"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Offer market rate (10%) and explain the reasoning",
+          "points": 10,
+          "competencyLevel": "C12_L2",
+          "insight": "Fair and transparent",
+          "stateImpact": {
+            "cost": "+10%",
+            "satisfaction": "medium"
+          }
+        },
+        {
+          "id": "C",
+          "text": "10% now, another 10% at 1-year mark tied to performance",
+          "points": 15,
+          "competencyLevel": "C12_L2",
+          "insight": "SMART: Creates retention incentive",
+          "stateImpact": {
+            "cost": "+10%",
+            "retention": "high",
+            "performanceIncentive": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Decline - you can't afford any raise right now",
+          "points": 3,
+          "competencyLevel": "C12_WEAK",
+          "warning": "Risk losing them",
+          "stateImpact": {
+            "turnoverRisk": "high",
+            "morale": "-30%"
+          }
+        },
+        {
+          "id": "E",
+          "text": "Have a deeper conversation about their goals and explore non-cash options",
+          "points": 18,
+          "competencyLevel": "C14_L2",
+          "insight": "BEST: Understands motivation beyond money",
+          "stateImpact": {
+            "relationshipDeepened": true,
+            "creativeSolution": true,
+            "loyalty": "high"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q2.7",
+      "type": "scenario",
+      "questionText": "MONTH 11: A well-funded competitor launches a similar product with aggressive pricing. Three of your customers have already churned to them. What's your response?",
+      "narrativeIntro": "Competition has arrived in force. This is where leaders separate from followers.",
+      "assess": ["C13", "C8", "C10"],
+      "isRequired": true,
+      "order": 7,
+      "scenario": {
+        "context": "Your market is being disrupted. You have less resources than the new competitor.",
+        "stakes": "Your response here could determine whether you survive or thrive."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Match their pricing",
+          "points": 3,
+          "competencyLevel": "C9_WEAK",
+          "warning": "WARNING: Price war with a better-funded competitor is suicide",
+          "stateImpact": {
+            "margins": "-40%",
+            "survivalRisk": "high"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Double down on your value differentiation",
+          "points": 12,
+          "competencyLevel": "C8_L2",
+          "insight": "GOOD: Compete on value, not price",
+          "stateImpact": {
+            "positioning": "defended",
+            "marginsMaintained": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Accelerate your roadmap - build features they don't have",
+          "points": 15,
+          "competencyLevel": "C13_L2",
+          "insight": "EXCELLENT: Create distance through innovation",
+          "stateImpact": {
+            "differentiation": "strengthened",
+            "developmentIntensity": "+50%"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Talk to the churned customers - understand why they left",
+          "points": 18,
+          "competencyLevel": "C10_L2",
+          "insight": "BEST: Learn from loss, possibility of win-back",
+          "stateImpact": {
+            "insightsGained": true,
+            "winbackPossible": true,
+            "productIntelligence": "+30%"
+          }
+        },
+        {
+          "id": "E",
+          "text": "Panic - cut costs and team to survive",
+          "points": -10,
+          "competencyLevel": "C14_WEAK",
+          "warning": "CRITICAL: Panic decisions destroy companies",
+          "stateImpact": {
+            "teamMorale": "-60%",
+            "capability": "-40%"
+          }
+        }
+      ]
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C11", "C12"],
+    "financialState": {
+      "display": [
+        { "label": "Customers", "value": "{{customers}}" },
+        { "label": "Monthly Revenue", "value": "${{revenue}}" },
+        { "label": "Team Size", "value": "{{teamSize}}" },
+        { "label": "Monthly Burn", "value": "${{burnRate}}" },
+        { "label": "Runway", "value": "{{runway}} months" }
+      ]
+    },
+    "teamHealth": {
+      "display": [
+        { "label": "Team Size", "value": "{{teamSize}}" },
+        { "label": "Employee Satisfaction", "value": "{{satisfaction}}/10" },
+        { "label": "Systems Built", "value": "{{systemsCount}}" },
+        { "label": "Documentation Level", "value": "{{documentationLevel}}" }
+      ]
+    },
+    "scalabilityMetrics": {
+      "display": [
+        { "label": "Founder Hours/Week", "value": "{{founderHours}}" },
+        { "label": "Delegation Score", "value": "{{delegationScore}}/100" },
+        { "label": "Repeatable Processes", "value": "{{processCount}}" }
+      ]
+    },
+    "mistakesTriggered": {
+      "display": true,
+      "showImpact": true,
+      "showCompounding": true
+    },
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed competency",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns detected",
+        "recommendations": "What they should focus on"
+      }
+    }
+  },
+
+  "stageTransition": {
+    "narrativeIntro": "You've built systems and a team. The business can run without you doing everything. Now comes the final test: can you lead through crisis and maintain your values under pressure?",
+    "nextStage": 3,
+    "timeAdvance": {
+      "months": 1,
+      "narrative": "Month 12. The final stretch. You're close to your goal, but challenges remain."
+    }
+  }
+}

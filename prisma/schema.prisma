@@ -1,0 +1,346 @@
+// prisma/schema.prisma
+// KK's War Room - Entrepreneurial Assessment Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// AUTHENTICATION MODELS (NextAuth)
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  password      String?   // For credentials auth (hashed)
+  image         String?
+  role          UserRole  @default(PARTICIPANT)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  assessments   Assessment[]
+  cohortParticipations CohortParticipant[]
+  
+  @@map("users")
+}
+
+enum UserRole {
+  PARTICIPANT
+  FACILITATOR
+  ADMIN
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================
+// CORE ASSESSMENT MODELS
+// ============================================
+
+model Assessment {
+  id                    String            @id @default(cuid())
+  userId                String
+  attemptNumber         Int               @default(1) // 1 or 2
+  status                AssessmentStatus  @default(NOT_STARTED)
+  
+  // Business context captured at start
+  businessContext       Json?             // { industry, customerSegment, problem, solution, businessModel }
+  
+  // Progress tracking
+  currentStage          Int               @default(-2) // -2 to 3
+  currentQuestionId     String?
+  
+  // Timing
+  startedAt             DateTime?
+  completedAt           DateTime?
+  totalDurationMinutes  Int?
+  lastActiveAt          DateTime?
+  
+  // State snapshots (JSON for flexibility)
+  financialState        Json?             // { capital, monthlyRevenue, burnRate, runwayMonths, equity }
+  teamState             Json?             // { size, satisfaction, skills, turnover }
+  customerState         Json?             // { total, retention, nps, churn }
+  productState          Json?             // { mvpProgress, quality, features, technicalDebt }
+  marketState           Json?             // { awareness, positioning, competitorActions }
+  
+  // Simulation time tracking
+  simulatedMonth        Int               @default(1) // 1-12
+  
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  
+  // Relations
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stages                Stage[]
+  responses             Response[]
+  competencyScores      CompetencyScore[]
+  mistakesTriggered     MistakeTriggered[]
+  reports               Report[]
+  
+  @@unique([userId, attemptNumber])
+  @@map("assessments")
+}
+
+enum AssessmentStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PAUSED
+  STAGE_COMPLETE
+  COMPLETED
+  ABANDONED
+}
+
+model Stage {
+  id                String    @id @default(cuid())
+  assessmentId      String
+  stageNumber       Int       // -2, -1, 0, 1, 2, 3
+  stageName         String    // "IDEATING", "CONCEPTING", etc.
+  
+  startedAt         DateTime?
+  completedAt       DateTime?
+  durationMinutes   Int?
+  
+  // State at stage end (snapshot for reports)
+  stateSnapshot     Json?
+  
+  // Questions answered in this stage
+  questionsAnswered Int       @default(0)
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  assessment        Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  responses         Response[]
+  
+  @@unique([assessmentId, stageNumber])
+  @@map("stages")
+}
+
+model Response {
+  id              String    @id @default(cuid())
+  assessmentId    String
+  stageId         String
+  
+  // Question reference (from JSON database)
+  questionId      String
+  questionType    String    // "open_text", "multiple_choice", etc.
+  
+  // Response data (flexible JSON structure per question type)
+  responseData    Json      // { selectedOption, textResponse, budgetAllocation, calculatedValue, etc. }
+  
+  // AI Evaluation results
+  aiEvaluation    Json?     // { score, levelAchieved, evidence, redFlags, greenFlags, followUpNeeded }
+  
+  // Scoring
+  rawScore        Int?
+  adjustedScore   Int?      // After bonuses/penalties
+  
+  // Competencies assessed by this question (stored as JSON array)
+  competenciesAssessed Json      @default("[]")
+  
+  // Consequences triggered
+  consequencesApplied Json?   // { financialImpact, stateChanges, mistakesTriggered }
+  
+  // Timing
+  startedAt       DateTime  @default(now())
+  answeredAt      DateTime?
+  durationSeconds Int?
+  
+  createdAt       DateTime  @default(now())
+  
+  // Relations
+  assessment      Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  stage           Stage      @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  
+  @@map("responses")
+}
+
+// ============================================
+// COMPETENCY & MISTAKE TRACKING
+// ============================================
+
+model CompetencyScore {
+  id              String    @id @default(cuid())
+  assessmentId    String
+  
+  competencyCode  String    // "C1", "C2", ... "C16"
+  competencyName  String    // "Problem Sensing & Curiosity"
+  
+  // Scoring
+  rawScore        Int       @default(0)
+  normalizedScore Int       @default(0) // 0-100
+  levelAchieved   String    @default("L0") // "L0", "L1", "L2"
+  
+  // Evidence collected
+  evidence        Json      // [{ questionId, signal, points, note }]
+  
+  // AI-generated insights (stored as JSON arrays for MySQL compatibility)
+  strengths       Json      @default("[]")
+  weaknesses      Json      @default("[]")
+  recommendations Json      @default("[]")
+  
+  lastUpdated     DateTime  @default(now())
+  
+  // Relations
+  assessment      Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  @@unique([assessmentId, competencyCode])
+  @@map("competency_scores")
+}
+
+model MistakeTriggered {
+  id                  String    @id @default(cuid())
+  assessmentId        String
+  
+  mistakeCode         String    // "M1", "M2", ... "M8"
+  mistakeName         String    // "Hiring Too Soon"
+  
+  // When/where triggered
+  triggeredAtStage    Int
+  triggeredAtQuestion String
+  triggeredAtMonth    Int       // Simulated month
+  
+  // Impact tracking
+  immediateImpact     Json      // { burnRate: "+50%", runway: "-3mo" }
+  compoundingImpact   String    // Description of future effects
+  
+  // Has it compounded yet?
+  hasCompounded       Boolean   @default(false)
+  compoundedAtStage   Int?
+  compoundedEffect    Json?     // Actual effect when it compounded
+  
+  triggeredAt         DateTime  @default(now())
+  
+  // Relations
+  assessment          Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  @@map("mistakes_triggered")
+}
+
+// ============================================
+// REPORTING
+// ============================================
+
+model Report {
+  id              String      @id @default(cuid())
+  assessmentId    String
+  
+  reportType      ReportType
+  stageNumber     Int?        // For PHASE_END reports
+  
+  // Report content (JSON for flexibility)
+  content         Json        // Full report data
+  
+  // AI-generated sections
+  executiveSummary    String?   @db.Text
+  aiJustification     String?   @db.Text
+  developmentRoadmap  Json?
+  leadershipProfile   Json?
+  
+  // Export tracking
+  pdfUrl          String?
+  exportedAt      DateTime?
+  
+  generatedAt     DateTime    @default(now())
+  
+  // Relations
+  assessment      Assessment  @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  @@map("reports")
+}
+
+enum ReportType {
+  PHASE_END
+  FINAL
+  COMPARISON
+}
+
+// ============================================
+// COHORT MANAGEMENT (for facilitators)
+// ============================================
+
+model Cohort {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Settings
+  startDate   DateTime?
+  endDate     DateTime?
+  isActive    Boolean  @default(true)
+  
+  // Created by facilitator
+  createdById String
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  participants CohortParticipant[]
+  
+  @@map("cohorts")
+}
+
+model CohortParticipant {
+  id         String   @id @default(cuid())
+  cohortId   String
+  userId     String
+  
+  joinedAt   DateTime @default(now())
+  
+  // Relations
+  cohort     Cohort   @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([cohortId, userId])
+  @@map("cohort_participants")
+}

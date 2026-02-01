@@ -1,0 +1,646 @@
+{
+  "stage": {
+    "id": "STAGE_3",
+    "number": 3,
+    "name": "ESTABLISHING",
+    "title": "Leadership & Sustainability",
+    "goal": "Lead through adversity while maintaining values and vision",
+    "subtitle": "The final test. Crisis reveals character. How will you lead?",
+    "durationMinutes": 20,
+    "competencies": ["C13", "C14", "C15", "C16"],
+    "simulatedMonths": [12],
+    "startingState": {
+      "month": 12,
+      "teamSize": "{{previousTeamSize}}",
+      "customers": "{{previousCustomers}}",
+      "revenue": "{{previousRevenue}}",
+      "runway": "{{previousRunway}}"
+    },
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "Month 12. You've come far.",
+        "But leadership isn't tested when things go well.",
+        "It's tested in crisis. In ethical dilemmas. In impossible choices.",
+        "These final scenarios will reveal who you truly are as a leader.",
+        "There are no perfect answers here. Only YOUR answers."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C13", "C14", "C15", "C16"],
+      "minimumQuestions": 8,
+      "convergenceLogic": "AI ensures all leadership competencies fully assessed before completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q3.1",
+      "type": "scenario",
+      "questionText": "CRISIS: Your largest customer (40% of revenue) threatens to leave unless you build a custom feature that conflicts with your product vision. The feature would fragment your codebase and slow down development for all other customers. What do you do?",
+      "narrativeIntro": "The customer concentration problem. When one customer has too much power.",
+      "assess": ["C13", "C14"],
+      "isRequired": true,
+      "order": 1,
+      "scenario": {
+        "context": "Losing them means significant revenue loss. Building the feature means compromising everything.",
+        "stakes": "This tests whether you sacrifice long-term vision for short-term survival."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Build the feature - you can't afford to lose them",
+          "points": 5,
+          "competencyLevel": "C13_L0",
+          "warning": "TRAP: Creates technical debt and precedent",
+          "stateImpact": {
+            "customerRetained": true,
+            "technicalDebt": "+60%",
+            "developmentSlowed": true,
+            "precedent": "customers_dictate_roadmap"
+          },
+          "followUp": {
+            "id": "Q3.1A-FOLLOW",
+            "type": "open_text",
+            "questionText": "6 months later, three other customers are now demanding custom features too, citing the precedent. Your engineering team is demoralized and fragmented. What have you learned?",
+            "aiEvaluation": {
+              "systemPrompt": "Evaluate whether they understand the precedent they set. Look for: recognition of the slippery slope, understanding of focus importance, plan to course correct",
+              "redFlags": ["blame others", "no lessons learned", "would do it again"],
+              "greenFlags": ["recognize the mistake", "plan to diversify customers", "commitment to product vision"]
+            }
+          }
+        },
+        {
+          "id": "B",
+          "text": "Decline firmly but offer alternatives",
+          "points": 15,
+          "competencyLevel": "C14_L2",
+          "insight": "GOOD: Protect vision while showing respect",
+          "stateImpact": {
+            "churnRisk": "medium",
+            "visionProtected": true,
+            "respectMaintained": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Use this as wake-up call to diversify customer base",
+          "points": 18,
+          "competencyLevel": "C13_L2",
+          "insight": "EXCELLENT: Addresses root cause (concentration risk)",
+          "stateImpact": {
+            "customerAcquisitionFocus": true,
+            "diversificationPrioritized": true,
+            "strategicClarity": "high"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Negotiate: increased pricing for custom work, clearly separate from product",
+          "points": 12,
+          "competencyLevel": "C16_L2",
+          "insight": "SMART: Captures value, protects core",
+          "stateImpact": {
+            "revenue": "+30%",
+            "boundariesSet": true,
+            "productProtected": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.2",
+      "type": "scenario",
+      "questionText": "ETHICAL DILEMMA: You discover your product has a bug that causes data to be slightly inaccurate - about 3% error rate. Customers haven't noticed, and fixing it will take 2 weeks of development time. Your investors are pushing for new features to hit growth targets. What do you do?",
+      "narrativeIntro": "When integrity meets pressure. This is who you are.",
+      "assess": ["C14", "C15"],
+      "isRequired": true,
+      "order": 2,
+      "scenario": {
+        "context": "No one knows. You could ship features and fix it later.",
+        "stakes": "This tests your integrity when no one is watching."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Fix it immediately and tell customers proactively",
+          "points": 20,
+          "competencyLevel": "C15_L2",
+          "insight": "EXCELLENT: Integrity builds trust",
+          "stateImpact": {
+            "trustScore": "+40%",
+            "featureDelayed": 2,
+            "customerLoyalty": "reinforced"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Fix it quietly without telling anyone",
+          "points": 10,
+          "competencyLevel": "C15_L1",
+          "stateImpact": {
+            "bugFixed": true,
+            "transparencyMissed": true,
+            "featureDelayed": 2
+          }
+        },
+        {
+          "id": "C",
+          "text": "Add it to backlog - fix after hitting growth targets",
+          "points": -5,
+          "competencyLevel": "C15_WEAK",
+          "warning": "RISK: Bug compounds, trust erodes when discovered",
+          "stateImpact": {
+            "problemCompounds": true,
+            "integrityScore": "-30%",
+            "timeBeforeDiscovery": "random"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Push back on investors - integrity is non-negotiable",
+          "points": 18,
+          "competencyLevel": "C14_L2",
+          "insight": "STRONG: Leadership means making hard calls",
+          "stateImpact": {
+            "investorRelation": "tested",
+            "integrityDemonstrated": true,
+            "cultureStrengthened": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.3",
+      "type": "scenario",
+      "questionText": "LEADERSHIP TEST: Your second employee, who has been loyal but underperforming for 3 months, breaks down in a 1-on-1: \"I know I'm struggling. My mom is sick. I'm barely sleeping. But I need this job.\" What do you do?",
+      "narrativeIntro": "Leadership isn't just about business. It's about humans.",
+      "assess": ["C14", "C12"],
+      "isRequired": true,
+      "order": 3,
+      "scenario": {
+        "context": "They're a good person going through a hard time. But they're not delivering.",
+        "stakes": "How you treat people in hard times defines your company's soul."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Offer temporary reduced hours/responsibilities while they recover",
+          "points": 18,
+          "competencyLevel": "C14_L2",
+          "insight": "EXCELLENT: Compassion builds loyalty",
+          "stateImpact": {
+            "employeeLoyalty": "+80%",
+            "capacityTemporarilyReduced": true,
+            "cultureStrengthened": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "Let them go with generous severance",
+          "points": 8,
+          "competencyLevel": "C14_L1",
+          "stateImpact": {
+            "capacityMaintained": true,
+            "severanceCost": "+2000",
+            "teamMoraleImpact": "mixed"
+          }
+        },
+        {
+          "id": "C",
+          "text": "Give clear performance requirements with a deadline",
+          "points": 5,
+          "competencyLevel": "C12_L1",
+          "warning": "Reasonable but cold given context",
+          "stateImpact": {
+            "expectationsClear": true,
+            "employeeStress": "increased",
+            "likelyOutcome": "termination"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Create a support plan: EAP resources, flexible schedule, clear path back to full performance",
+          "points": 20,
+          "competencyLevel": "C14_L2",
+          "insight": "BEST: Structured compassion",
+          "stateImpact": {
+            "supportProvided": true,
+            "clearExpectations": true,
+            "cultureDemonstrated": "excellence"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.4",
+      "type": "scenario",
+      "questionText": "STRATEGIC FORK: A competitor approaches you about being acquired. The offer: $2M cash, plus you stay on as VP of Product. It would mean the end of your independent vision, but financial security. Your co-founder (if you have one) wants to sell. Your investor wants you to grow. What do you do?",
+      "narrativeIntro": "The exit question. Every founder faces it eventually.",
+      "assess": ["C13", "C16"],
+      "isRequired": true,
+      "order": 4,
+      "scenario": {
+        "context": "$2M is life-changing money. But your vision dies.",
+        "stakes": "This reveals what entrepreneurship means to you."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Take the offer - financial security matters",
+          "points": 10,
+          "competencyLevel": "C16_L1",
+          "stateImpact": {
+            "exit": true,
+            "financialSecurity": true,
+            "visionEnds": true,
+            "autonomyLost": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "Decline - this is about more than money",
+          "points": 12,
+          "competencyLevel": "C13_L2",
+          "stateImpact": {
+            "independencePreserved": true,
+            "riskRemains": true,
+            "missionContinues": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Counter: Ask for more money or better terms",
+          "points": 15,
+          "competencyLevel": "C16_L2",
+          "insight": "SMART: Negotiate to understand true value",
+          "stateImpact": {
+            "negotiationInitiated": true,
+            "informationGathered": true,
+            "optionsExpanded": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Use the offer as validation to raise more funding and stay independent",
+          "points": 18,
+          "competencyLevel": "C13_L2",
+          "insight": "EXCELLENT: Leverage creates options",
+          "stateImpact": {
+            "marketValidation": true,
+            "fundraisingLeverage": "+50%",
+            "independenceStrengthened": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.5",
+      "type": "scenario",
+      "questionText": "CULTURE CRISIS: Anonymous feedback comes in that your team feels 'burnt out' and 'like numbers, not people'. Productivity is dropping. Two people are interviewing elsewhere. But you're close to a major milestone. What's your immediate response?",
+      "narrativeIntro": "Culture eats strategy for breakfast. Your team is telling you something important.",
+      "assess": ["C14", "C15"],
+      "isRequired": true,
+      "order": 5,
+      "scenario": {
+        "context": "You've been pushing hard. Maybe too hard.",
+        "stakes": "Lose your team and you lose everything."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Push through to the milestone, then address it",
+          "points": -5,
+          "competencyLevel": "C14_WEAK",
+          "warning": "CRITICAL: People leave, milestone at risk anyway",
+          "stateImpact": {
+            "turnoverRisk": "+80%",
+            "milestoneProbability": "low",
+            "cultureDebt": "+50%"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Hold an all-hands, acknowledge the problem, pause and regroup",
+          "points": 15,
+          "competencyLevel": "C14_L2",
+          "insight": "GOOD: Transparency and humility",
+          "stateImpact": {
+            "trustRestored": true,
+            "milestoneDelayed": 1,
+            "teamEngagement": "recovering"
+          }
+        },
+        {
+          "id": "C",
+          "text": "Give the team an immediate week off, push milestone",
+          "points": 12,
+          "competencyLevel": "C15_L1",
+          "stateImpact": {
+            "immediateRelief": true,
+            "milestoneDelayed": 2,
+            "rootCauseUnaddressed": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Have 1-on-1s with everyone, understand individual concerns, build personal recovery plans",
+          "points": 20,
+          "competencyLevel": "C14_L2",
+          "insight": "BEST: Personal attention shows real care",
+          "stateImpact": {
+            "individualNeeds": "understood",
+            "retention": "high",
+            "cultureReset": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.6",
+      "type": "scenario",
+      "questionText": "CRISIS: A critical infrastructure provider doubles their pricing overnight with 30 days notice. Your margins go from healthy to nearly zero. Options are limited in the short term. What do you do?",
+      "narrativeIntro": "External shocks happen. Your response reveals resilience.",
+      "assess": ["C13", "C16"],
+      "isRequired": true,
+      "order": 6,
+      "scenario": {
+        "context": "You built on someone else's platform. Now they're squeezing you.",
+        "stakes": "This tests your ability to adapt under extreme pressure."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Pass the cost to customers with price increase",
+          "points": 10,
+          "competencyLevel": "C9_L1",
+          "stateImpact": {
+            "marginRestored": true,
+            "customerChurnRisk": "high",
+            "competitorAdvantage": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "Absorb the cost short-term while finding alternatives",
+          "points": 12,
+          "competencyLevel": "C13_L1",
+          "stateImpact": {
+            "marginCompressed": true,
+            "timeToFindAlternative": 3,
+            "customerRelationPreserved": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Emergency migration to alternative provider",
+          "points": 8,
+          "competencyLevel": "C16_L1",
+          "warning": "Risk: Migration under pressure causes bugs",
+          "stateImpact": {
+            "migrationRisk": "high",
+            "timeToMigrate": 1,
+            "bugProbability": "elevated"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Negotiate with provider while building alternatives",
+          "points": 18,
+          "competencyLevel": "C16_L2",
+          "insight": "BEST: Multiple approaches simultaneously",
+          "stateImpact": {
+            "negotiationInitiated": true,
+            "alternativeExplored": true,
+            "optionsExpanded": true
+          }
+        },
+        {
+          "id": "E",
+          "text": "This is a wake-up call - build internal capability to never be hostage again",
+          "points": 15,
+          "competencyLevel": "C13_L2",
+          "insight": "STRATEGIC: Long-term thinking",
+          "stateImpact": {
+            "strategicInvestment": true,
+            "dependencyReduced": true,
+            "timeToIndependence": 6
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.7",
+      "type": "scenario",
+      "questionText": "FINAL DECISION: Month 12 ends. You've been offered three paths forward:\n\n1. RAISE: A VC offers $500K at $3M valuation - growth pressure, but resources\n2. PROFITABLE: Continue bootstrapped at $15K MRR - slower but sustainable\n3. EXIT: Acquirer offers $1.5M - you're done, team gets jobs\n\nWhich path do you choose?",
+      "narrativeIntro": "This is your crossroads. Every path is valid. What matters is that you choose intentionally.",
+      "assess": ["C13", "C16"],
+      "isRequired": true,
+      "order": 7,
+      "scenario": {
+        "context": "Three legitimate paths. No wrong answer. Only YOUR answer.",
+        "stakes": "This reveals what you truly want from entrepreneurship."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "RAISE: Take the VC money and accelerate growth",
+          "points": 12,
+          "competencyLevel": "C13_L2",
+          "stateImpact": {
+            "path": "venture",
+            "equity": "-20%",
+            "resources": "+500K",
+            "expectations": "high_growth"
+          },
+          "reflection": {
+            "id": "Q3.7A-REF",
+            "type": "open_text",
+            "questionText": "Why did you choose to raise? What does growth mean to you?",
+            "aiEvaluation": {
+              "systemPrompt": "Evaluate their reasoning for choosing venture path. Look for: clear growth vision, understanding of tradeoffs, specific plans for the capital",
+              "redFlags": ["no clear plan", "just want money", "unrealistic expectations"],
+              "greenFlags": ["specific growth strategy", "understands dilution tradeoff", "clear milestones"]
+            }
+          }
+        },
+        {
+          "id": "B",
+          "text": "PROFITABLE: Stay bootstrapped and grow organically",
+          "points": 12,
+          "competencyLevel": "C13_L2",
+          "stateImpact": {
+            "path": "bootstrapped",
+            "equity": "100%",
+            "growthRate": "sustainable",
+            "lifestyle": "controlled"
+          },
+          "reflection": {
+            "id": "Q3.7B-REF",
+            "type": "open_text",
+            "questionText": "Why did you choose to stay independent? What does sustainability mean to you?",
+            "aiEvaluation": {
+              "systemPrompt": "Evaluate their reasoning for choosing bootstrapped path. Look for: values clarity, long-term thinking, understanding of constraints",
+              "redFlags": ["fear of commitment", "lack of ambition", "avoiding hard decisions"],
+              "greenFlags": ["values alignment", "clear vision", "understand tradeoffs"]
+            }
+          }
+        },
+        {
+          "id": "C",
+          "text": "EXIT: Take the acquisition offer",
+          "points": 12,
+          "competencyLevel": "C16_L2",
+          "stateImpact": {
+            "path": "exit",
+            "liquidity": "+1.5M",
+            "journeyComplete": true,
+            "teamProtected": true
+          },
+          "reflection": {
+            "id": "Q3.7C-REF",
+            "type": "open_text",
+            "questionText": "Why did you choose to exit? What does completion mean to you?",
+            "aiEvaluation": {
+              "systemPrompt": "Evaluate their reasoning for choosing exit. Look for: self-awareness, understanding of personal goals, appreciation of what was built",
+              "redFlags": ["burnout without reflection", "giving up", "money as only motivation"],
+              "greenFlags": ["clarity on personal goals", "gratitude for journey", "thoughtful next chapter"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q3.8",
+      "type": "reflection",
+      "questionText": "Final Reflection: Looking back at your entire entrepreneurial journey from IDEATING to now, what have you learned about yourself as a leader and entrepreneur? What would you do differently? What are you most proud of?",
+      "narrativeIntro": "This is your moment of truth. Not for scoring. For growth.",
+      "assess": ["C14", "C16"],
+      "isRequired": true,
+      "order": 8,
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate the depth of their self-reflection. Look for: honest self-assessment, specific lessons learned, growth mindset, acknowledgment of mistakes, clarity on future direction. This is a synthesis question - expect them to draw on their entire journey.",
+        "rubric": [
+          {
+            "level": "L2",
+            "indicators": [
+              "References specific decisions and outcomes",
+              "Demonstrates genuine self-awareness",
+              "Shows growth in thinking from start to end",
+              "Balances confidence with humility",
+              "Has clear future direction"
+            ]
+          },
+          {
+            "level": "L1",
+            "indicators": [
+              "General reflection without specific examples",
+              "Some self-awareness",
+              "Limited connection between decisions and outcomes"
+            ]
+          },
+          {
+            "level": "L0",
+            "indicators": [
+              "Surface-level response",
+              "No genuine reflection",
+              "Defensive or blaming",
+              "No lessons learned"
+            ]
+          }
+        ],
+        "redFlags": [
+          "Blames external factors",
+          "No acknowledgment of mistakes",
+          "Overconfident without basis",
+          "No specific examples"
+        ],
+        "greenFlags": [
+          "Honest about failures",
+          "Specific lessons with examples",
+          "Growth mindset demonstrated",
+          "Clear vision for future"
+        ]
+      },
+      "stateImpact": {
+        "selfAwarenessScore": "evaluated",
+        "growthMindsetScore": "evaluated",
+        "journeyComplete": true
+      }
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C13", "C14", "C15", "C16"],
+    "allCompetencyScores": ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16"],
+    "finalMetrics": {
+      "display": [
+        { "label": "Journey Duration", "value": "12 simulated months" },
+        { "label": "Final Customers", "value": "{{customers}}" },
+        { "label": "Final MRR", "value": "${{revenue}}" },
+        { "label": "Team Size", "value": "{{teamSize}}" },
+        { "label": "Path Chosen", "value": "{{pathChosen}}" }
+      ]
+    },
+    "competencyOverview": {
+      "display": true,
+      "showByStage": true,
+      "showTrends": true
+    },
+    "mistakesSummary": {
+      "display": true,
+      "showImpact": true,
+      "showCompounding": true,
+      "showRecovery": true
+    },
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed leadership",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns across the full journey",
+        "competencyGrowth": "How competencies evolved through stages",
+        "recommendations": "Focused development areas with specific actions",
+        "entrepreneurProfile": "Synthesis of their entrepreneurial style"
+      }
+    }
+  },
+
+  "assessmentComplete": {
+    "narrativeIntro": {
+      "character": "MENTOR",
+      "lines": [
+        "You've completed the War Room simulation.",
+        "This wasn't about right or wrong answers.",
+        "It was about understanding how YOU think, decide, and lead.",
+        "Your report will show your competency profile across 16 dimensions.",
+        "And most importantly - your growth areas and action items.",
+        "The real entrepreneurial journey begins now."
+      ]
+    },
+    "reportGeneration": {
+      "sections": [
+        "Executive Summary",
+        "Competency Radar Chart (16 competencies)",
+        "Stage-by-Stage Journey Review",
+        "Key Decisions Analysis",
+        "Mistakes Triggered & Impact",
+        "Strengths Synthesis",
+        "Development Areas",
+        "Personalized Action Plan",
+        "Recommended Resources"
+      ]
+    },
+    "callToAction": {
+      "primary": "Download Full Report",
+      "secondary": "Schedule Mentor Session",
+      "tertiary": "Retake Assessment"
+    }
+  }
+}

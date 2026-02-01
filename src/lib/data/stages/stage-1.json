@@ -1,0 +1,591 @@
+{
+  "stage": {
+    "id": "STAGE_1",
+    "number": 1,
+    "name": "VALIDATING",
+    "title": "Product / Market Fit",
+    "goal": "Prove people will pay for your solution and keep using it",
+    "subtitle": "Revenue is the ultimate validation. Everything else is vanity.",
+    "durationMinutes": 20,
+    "competencies": ["C8", "C9", "C10"],
+    "simulatedMonths": [3, 4, 5, 6],
+    "startingState": {
+      "month": 3,
+      "productStatus": "launched",
+      "customers": 0,
+      "revenue": 0
+    },
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "Your product is live. Congratulations - you've built something.",
+        "But building is the easy part. Now you need to prove people will PAY.",
+        "In this stage, you'll face rejection, objections, and hard truths.",
+        "How you handle them will determine if this becomes a real business."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C8", "C9", "C10"],
+      "minimumQuestions": 8,
+      "convergenceLogic": "AI ensures C8, C9, C10 fully assessed before stage completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q1.1",
+      "type": "scenario",
+      "questionText": "Your product is LIVE. Month 3. How will you get your first 10 paying customers?",
+      "narrativeIntro": "This is where most startups die. Getting those first customers is brutal. How will you do it?",
+      "assess": ["C8", "C7"],
+      "isRequired": true,
+      "order": 1,
+      "scenario": {
+        "context": "You have a functional product but zero customers. Your runway is {{runway}} months. Every day without customers is a day closer to failure.",
+        "stakes": "Your acquisition strategy sets the tone for your entire go-to-market approach."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Cold outreach - email and LinkedIn to prospects",
+          "points": 10,
+          "competencyLevel": "C8_L1",
+          "insight": "Takes courage but works. High rejection rate.",
+          "stateImpact": {
+            "cost": 0,
+            "timeRequired": "high",
+            "expectedConversion": 0.15,
+            "expectedCustomers": { "min": 1, "max": 5 }
+          }
+        },
+        {
+          "id": "B",
+          "text": "Run paid ads (Google, Facebook, etc.)",
+          "points": 6,
+          "competencyLevel": "C8_L1",
+          "stateImpact": {
+            "timeRequired": "low"
+          },
+          "followUp": {
+            "id": "Q1.1B-FOLLOW",
+            "type": "number_input",
+            "questionText": "How much will you spend on ads this month?",
+            "min": 500,
+            "max": 10000,
+            "assess": ["C6"],
+            "consequence": {
+              "cac": "{{value / 3}}",
+              "expectedCustomers": "{{value / 500}}"
+            }
+          }
+        },
+        {
+          "id": "C",
+          "text": "Leverage personal network and ask for referrals",
+          "points": 12,
+          "competencyLevel": "C8_L1",
+          "insight": "SMART: Highest trust, lowest cost",
+          "stateImpact": {
+            "cost": 0,
+            "timeRequired": "medium",
+            "trustLevel": "high",
+            "expectedCustomers": { "min": 5, "max": 8 }
+          }
+        },
+        {
+          "id": "D",
+          "text": "Create content marketing (blog, social, YouTube)",
+          "points": 8,
+          "competencyLevel": "C8_L1",
+          "insight": "Long-term play. Won't show results immediately.",
+          "stateImpact": {
+            "cost": 0,
+            "timeRequired": "very_high",
+            "expectedCustomers": { "min": 0, "max": 2 },
+            "longTermValue": "high"
+          }
+        },
+        {
+          "id": "E",
+          "text": "Partner with existing businesses who serve your customers",
+          "points": 14,
+          "competencyLevel": "C8_L2",
+          "insight": "BEST: Leverage others' audiences",
+          "stateImpact": {
+            "cost": "revenue_share",
+            "timeRequired": "medium",
+            "expectedCustomers": { "min": 8, "max": 15 },
+            "scalability": "high"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q1.2",
+      "type": "open_text",
+      "questionText": "What's your pricing? How much will customers pay, and WHY that specific number?",
+      "narrativeIntro": "Pricing reveals how much you understand your value. Most founders undercharge.",
+      "helpText": "Consider: competitor prices, value delivered, customer's willingness to pay, your costs, and desired margins.",
+      "assess": ["C6", "C9"],
+      "isRequired": true,
+      "minLength": 50,
+      "maxLength": 600,
+      "order": 2,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "random_no_justification", "points": 2, "description": "Random number with no reasoning" },
+          { "criteria": "cost_based_only", "points": 5, "description": "Based only on costs" },
+          { "criteria": "value_based_with_research", "points": 10, "description": "Value-based pricing with market awareness" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate pricing strategy. Look for value-based thinking, competitive awareness, margin consideration, and justification.",
+        "redFlags": ["arbitrary number", "cost-only", "no research", "way below market"],
+        "greenFlags": ["value-based", "competitive analysis", "customer validation", "healthy margins"]
+      },
+      "capturesContext": {
+        "field": "pricing",
+        "usedIn": ["unit_economics", "revenue_calculations"]
+      }
+    },
+
+    {
+      "id": "Q1.3",
+      "type": "scenario",
+      "questionText": "A prospect says: \"Your competitor charges 30% less. Why should I pay more?\"",
+      "narrativeIntro": "Price objections are inevitable. How you handle them reveals your sales skills.",
+      "assess": ["C8"],
+      "isRequired": true,
+      "order": 3,
+      "scenario": {
+        "context": "You're in a sales conversation with a qualified prospect who's comparing you to a cheaper alternative.",
+        "stakes": "Win the deal at full price, or set a precedent of discounting."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Match the competitor's price",
+          "points": 3,
+          "competencyLevel": "C8_WEAK",
+          "warning": "WARNING: Racing to the bottom destroys margins",
+          "stateImpact": {
+            "pricePerception": "commodity",
+            "marginReduction": 0.3,
+            "closeRate": 0.8
+          }
+        },
+        {
+          "id": "B",
+          "text": "Explain the superior value you provide",
+          "points": 10,
+          "competencyLevel": "C8_L2",
+          "insight": "BEST: Maintain value positioning",
+          "stateImpact": {
+            "pricePerception": "premium",
+            "closeRate": 0.6
+          },
+          "followUp": {
+            "id": "Q1.3B-FOLLOW",
+            "type": "open_text",
+            "questionText": "Specifically, what would you say to justify the higher price?",
+            "assess": ["C8"]
+          }
+        },
+        {
+          "id": "C",
+          "text": "Offer an early-adopter discount",
+          "points": 7,
+          "competencyLevel": "C8_L1",
+          "insight": "Reasonable compromise, but be careful of precedent",
+          "stateImpact": {
+            "revenueReduction": 0.15,
+            "closeRate": 0.75,
+            "discountPrecedent": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Let them go - they're not the right customer",
+          "points": 8,
+          "competencyLevel": "C9_L1",
+          "insight": "Sometimes the best deal is no deal",
+          "stateImpact": {
+            "qualityFilter": "high",
+            "shortTermLost": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q1.4",
+      "type": "outcome",
+      "questionText": "MONTH 3 RESULTS ARE IN",
+      "narrativeIntro": "Let's see how your first month of sales went.",
+      "assess": ["C9", "C10"],
+      "isRequired": true,
+      "order": 4,
+      "outcome": {
+        "dynamicDisplay": true,
+        "metrics": {
+          "customers": "{{calculated_customers}}",
+          "revenue": "{{customers * pricing}}",
+          "cac": "{{acquisition_cost / customers}}",
+          "burnRate": "{{burnRate}}",
+          "runway": "{{capital / burnRate}}"
+        },
+        "customerFeedback": {
+          "positive": ["2 customers LOVE it - using daily", "Great feedback on core feature"],
+          "negative": ["3 customers say 'missing feature X'", "1 customer already churned"],
+          "neutral": ["Others are lukewarm"]
+        }
+      },
+      "decisionRequired": {
+        "questionText": "Based on this feedback, what's your MONTH 4 priority?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Focus on retention - improve the experience for existing customers",
+            "points": 12,
+            "competencyLevel": "C10_L2",
+            "insight": "SMART: Keep what you have before getting more",
+            "stateImpact": {
+              "quality": "+15%",
+              "churn": "-20%"
+            }
+          },
+          {
+            "id": "B",
+            "text": "Double down on acquisition - get more customers",
+            "points": 6,
+            "competencyLevel": "C8_L1",
+            "warning": "WARNING: Leaky bucket problem - more in, more out",
+            "stateImpact": {
+              "newCustomers": "+50%",
+              "churnRisk": "+30%",
+              "burnRate": "+30%"
+            }
+          },
+          {
+            "id": "C",
+            "text": "Build feature X that customers requested",
+            "points": 10,
+            "competencyLevel": "C4_L1",
+            "insight": "Responsive to feedback - good if it's the right feature",
+            "stateImpact": {
+              "developmentTime": 3,
+              "satisfaction": "+25%"
+            }
+          },
+          {
+            "id": "D",
+            "text": "Talk to ALL customers personally to understand deeply",
+            "points": 15,
+            "competencyLevel": "C10_L2",
+            "insight": "BEST: Understanding before acting",
+            "stateImpact": {
+              "customerIntimacy": "high",
+              "productClarity": "+30%"
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "Q1.5",
+      "type": "scenario",
+      "questionText": "URGENT: A customer reports a critical bug that's breaking their workflow. Meanwhile, you have a big sales meeting tomorrow that you haven't prepared for. What do you do?",
+      "narrativeIntro": "Welcome to startup life. Everything is urgent, and you can't do everything.",
+      "assess": ["C10", "C5"],
+      "isRequired": true,
+      "order": 5,
+      "scenario": {
+        "context": "It's 6 PM. The bug will take about 2 days to fix. The sales meeting could bring in a customer worth 3x your average deal.",
+        "stakes": "This decision reveals your priorities and how you handle conflicting demands."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Fix the bug immediately - existing customers first",
+          "points": 15,
+          "competencyLevel": "C10_L2",
+          "insight": "EXCELLENT: Customer trust is everything",
+          "stateImpact": {
+            "retention": "+20%",
+            "salesPrepared": false,
+            "reputation": "+15%"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Prepare for the sales meeting - bigger opportunity",
+          "points": 5,
+          "competencyLevel": "C8_L1",
+          "warning": "WARNING: Existing customer may churn and leave bad review",
+          "stateImpact": {
+            "salesOptimized": true,
+            "customerAtRisk": true,
+            "reputationRisk": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Split time between both",
+          "points": 7,
+          "competencyLevel": "C5_L1",
+          "insight": "Compromise - neither done well",
+          "stateImpact": {
+            "bugRushed": true,
+            "salesMinimal": true,
+            "stress": "high"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Communicate with both, prioritize bug, reschedule sales meeting",
+          "points": 12,
+          "competencyLevel": "C10_L2",
+          "insight": "MATURE: Transparent communication preserves trust",
+          "stateImpact": {
+            "trustMaintained": true,
+            "bugFixed": true,
+            "salesDelayed": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q1.6",
+      "type": "calculation",
+      "questionText": "MONTH 5: You now have 50 customers and $10,000 monthly revenue. You spent $5,000 on marketing. What is your Customer Acquisition Cost (CAC)?",
+      "narrativeIntro": "Unit economics 101. If you don't know your CAC, you're flying blind.",
+      "assess": ["C9"],
+      "isRequired": true,
+      "order": 6,
+      "calculation": {
+        "formula": "marketing_spend / new_customers",
+        "expectedAnswer": 100,
+        "tolerance": 0,
+        "unit": "$"
+      },
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "correct", "points": 10 },
+          { "criteria": "wrong", "points": 0 }
+        ]
+      },
+      "educationalFeedback": {
+        "ifCorrect": "Correct! $100 CAC. Now the question is: is that sustainable?",
+        "ifWrong": "CAC = Marketing Spend ÷ New Customers Acquired. $5,000 ÷ 50 = $100 per customer.",
+        "competencyImpact": {
+          "ifWrong": { "C9": -5 }
+        }
+      }
+    },
+
+    {
+      "id": "Q1.7",
+      "type": "scenario",
+      "questionText": "Your numbers: Average revenue per customer: ${{arpc}}, CAC: ${{cac}}, Gross margin: {{margin}}%. You are currently {{profitability_status}}.",
+      "narrativeIntro": "Unit economics determine whether growth helps or hurts you.",
+      "assess": ["C9"],
+      "isRequired": true,
+      "order": 7,
+      "isDynamic": true,
+      "branches": {
+        "ifProfitable": {
+          "questionText": "Your unit economics are healthy. What do you do?",
+          "options": [
+            {
+              "id": "A",
+              "text": "Aggressively scale marketing - pour fuel on the fire",
+              "points": 10,
+              "competencyLevel": "C9_L2",
+              "stateImpact": {
+                "growth": "+100%",
+                "burnRate": "+80%"
+              }
+            },
+            {
+              "id": "B",
+              "text": "Optimize margins further before scaling",
+              "points": 12,
+              "competencyLevel": "C9_L2",
+              "insight": "EXCELLENT: Maximize before multiplying",
+              "stateImpact": {
+                "growth": "+30%",
+                "profitability": "+20%"
+              }
+            }
+          ]
+        },
+        "ifUnprofitable": {
+          "questionText": "You're losing money on each customer. What do you do?",
+          "options": [
+            {
+              "id": "A",
+              "text": "PAUSE new acquisition and fix the economics",
+              "points": 15,
+              "competencyLevel": "C9_L2",
+              "insight": "BEST: Stop the bleeding before it kills you",
+              "stateImpact": {
+                "growthPaused": true,
+                "focusOnProfitability": true
+              }
+            },
+            {
+              "id": "B",
+              "text": "Raise prices",
+              "points": 12,
+              "competencyLevel": "C9_L2",
+              "stateImpact": {
+                "margin": "+20%",
+                "churnRisk": "+10%"
+              }
+            },
+            {
+              "id": "C",
+              "text": "Cut costs aggressively",
+              "points": 10,
+              "competencyLevel": "C9_L1",
+              "stateImpact": {
+                "margin": "+15%",
+                "qualityRisk": true
+              }
+            },
+            {
+              "id": "D",
+              "text": "Keep growing - we'll figure it out later",
+              "points": -10,
+              "competencyLevel": "C9_WEAK",
+              "warning": "CRITICAL: This is how startups die",
+              "triggersMistake": "M4",
+              "mistakeName": "Premature Scaling"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "id": "Q1.8",
+      "type": "scenario",
+      "questionText": "MONTH 6 CRISIS: Three things hit at once:\n1) Your biggest customer (20% of revenue) threatens to leave unless you build a custom feature\n2) Five smaller customers report the same bug\n3) A major prospect wants a demo TODAY or they'll go with competitor",
+      "narrativeIntro": "This is entrepreneurship. Everything breaks at once. How do you handle it?",
+      "assess": ["C10", "C5", "C12"],
+      "isRequired": true,
+      "order": 8,
+      "scenario": {
+        "context": "You have limited resources. Choosing one means neglecting others.",
+        "stakes": "This tests your prioritization under extreme pressure."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Build custom feature for major customer",
+          "points": 5,
+          "competencyLevel": "C10_L1",
+          "warning": "WARNING: Custom work derails product vision",
+          "stateImpact": {
+            "majorCustomerRetained": true,
+            "roadmapDerailed": true,
+            "otherCustomersNeglected": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "Fix the bug for the 5 customers",
+          "points": 12,
+          "competencyLevel": "C10_L2",
+          "insight": "GOOD: Serve the many over the one",
+          "stateImpact": {
+            "fiveCustomersHappy": true,
+            "majorCustomerRisk": "high",
+            "prospectLost": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Do the sales demo - biggest opportunity",
+          "points": 6,
+          "competencyLevel": "C8_L1",
+          "stateImpact": {
+            "salesOptimized": true,
+            "existingCustomersNeglected": true
+          }
+        },
+        {
+          "id": "D",
+          "text": "Delegate and handle multiple priorities",
+          "points": 15,
+          "competencyLevel": "C12_L1",
+          "condition": {
+            "requires": "teamSize > 1",
+            "failMessage": "You're solo - you can't delegate what you don't have"
+          },
+          "insight": "BEST IF POSSIBLE: This is why you build a team",
+          "stateImpact": {
+            "allHandled": true,
+            "teamGrowth": true
+          }
+        },
+        {
+          "id": "E",
+          "text": "Have honest conversations with all three, set expectations, prioritize bug",
+          "points": 14,
+          "competencyLevel": "C10_L2",
+          "insight": "MATURE: Transparency builds trust even when you can't do everything"
+        }
+      ]
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C8", "C9", "C10"],
+    "financialState": {
+      "display": [
+        { "label": "Customers", "value": "{{customers}}" },
+        { "label": "Monthly Revenue", "value": "${{revenue}}" },
+        { "label": "CAC", "value": "${{cac}}" },
+        { "label": "Retention Rate", "value": "{{retention}}%" },
+        { "label": "Gross Margin", "value": "{{margin}}%" },
+        { "label": "Runway", "value": "{{runway}} months" }
+      ]
+    },
+    "customerHealth": {
+      "display": [
+        { "label": "Total Customers", "value": "{{customers}}" },
+        { "label": "Happy Customers", "value": "{{happyCustomers}}" },
+        { "label": "At-Risk Customers", "value": "{{atRiskCustomers}}" },
+        { "label": "Churned", "value": "{{churned}}" }
+      ]
+    },
+    "mistakesTriggered": {
+      "display": true,
+      "showImpact": true,
+      "showCompounding": true
+    },
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed competency",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns detected",
+        "recommendations": "What they should focus on"
+      }
+    }
+  },
+
+  "stageTransition": {
+    "narrativeIntro": "You've validated that people will pay. Now comes the harder question: can you scale without breaking everything you've built?",
+    "nextStage": 2,
+    "timeAdvance": {
+      "months": 4,
+      "narrative": "Four months of intense customer work. You're at Month 7 now. Time to think about scaling."
+    }
+  }
+}

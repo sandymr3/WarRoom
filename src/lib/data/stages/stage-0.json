@@ -1,0 +1,617 @@
+{
+  "stage": {
+    "id": "STAGE_0",
+    "number": 0,
+    "name": "COMMITTING",
+    "title": "From Idea to Action",
+    "goal": "Turn your vision into concrete action with limited resources",
+    "subtitle": "The graveyard of startups is full of great ideas with no execution",
+    "durationMinutes": 15,
+    "competencies": ["C5", "C6", "C7"],
+    "simulatedMonths": [1, 2],
+    "initialState": {
+      "capital": 0,
+      "revenue": 0,
+      "team": 1,
+      "customers": 0,
+      "burnRate": 0,
+      "runway": "infinite",
+      "equity": 100
+    },
+    "introNarrative": {
+      "character": "MENTOR",
+      "lines": [
+        "Alright, you've committed. Now the real work begins.",
+        "You're starting with $0 in capital and nothing but your idea.",
+        "Every decision you make now will compound forward.",
+        "Choose wisely. The mistakes you make here will haunt you later."
+      ]
+    },
+    "stageEndCheck": {
+      "requiredCompetencies": ["C5", "C6", "C7"],
+      "minimumQuestions": 6,
+      "convergenceLogic": "AI ensures C5, C6, C7 fully assessed before stage completion"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "Q0.1",
+      "type": "scenario",
+      "questionText": "You have $0 in business capital. How will you fund your startup?",
+      "narrativeIntro": "This is your first major decision. It will shape everything that follows.",
+      "assess": ["C6", "C7"],
+      "isRequired": true,
+      "order": 1,
+      "isMajorDecision": true,
+      "scenario": {
+        "context": "You need resources to build and launch. Your funding choice affects your equity, runway, and pressure level.",
+        "stakes": "This decision determines your financial foundation for the next 12 months."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Bootstrap with personal savings",
+          "points": 10,
+          "competencyLevel": "C7_L2",
+          "insight": "EXCELLENT: Maintains full control and forces discipline",
+          "stateImpact": {
+            "equity": 100,
+            "pressure": "low"
+          },
+          "followUp": {
+            "id": "Q0.1A-FOLLOW",
+            "type": "number_input",
+            "questionText": "How much of your personal savings will you invest?",
+            "helpText": "Be realistic. This is money you might lose.",
+            "min": 1000,
+            "max": 100000,
+            "assess": ["C6"],
+            "stateImpact": {
+              "capital": "{{value}}"
+            }
+          }
+        },
+        {
+          "id": "B",
+          "text": "Take a business loan",
+          "points": 5,
+          "competencyLevel": "C6_L1",
+          "stateImpact": {
+            "equity": 100,
+            "pressure": "medium",
+            "hasDebt": true,
+            "interestRate": 0.08
+          },
+          "followUp": {
+            "id": "Q0.1B-FOLLOW",
+            "type": "slider",
+            "questionText": "How much will you borrow? ($10K-$50K is typical for small business loans)",
+            "min": 10000,
+            "max": 50000,
+            "step": 5000,
+            "assess": ["C6"],
+            "stateImpact": {
+              "capital": "{{value}}",
+              "monthlyDebtPayment": "{{value * 0.03}}"
+            }
+          }
+        },
+        {
+          "id": "C",
+          "text": "Seek angel investors",
+          "points": 6,
+          "competencyLevel": "C7_L1",
+          "stateImpact": {
+            "pressure": "high",
+            "timeCost": 2,
+            "equityDilution": 25
+          },
+          "followUp": {
+            "id": "Q0.1C-FOLLOW",
+            "type": "slider",
+            "questionText": "How much funding are you seeking? ($25K-$150K is typical angel range)",
+            "min": 25000,
+            "max": 150000,
+            "step": 25000,
+            "assess": ["C6"],
+            "consequence": {
+              "type": "negotiation_scenario",
+              "equityGiven": "{{value / 5000}}%"
+            }
+          }
+        },
+        {
+          "id": "D",
+          "text": "Launch a crowdfunding campaign",
+          "points": 8,
+          "competencyLevel": "C7_L2",
+          "insight": "Creative approach - validates market too",
+          "stateImpact": {
+            "equity": 100,
+            "timeCost": 1,
+            "successRate": 0.6
+          },
+          "followUp": {
+            "id": "Q0.1D-FOLLOW",
+            "type": "multiple_choice",
+            "questionText": "How much time will you dedicate to the campaign?",
+            "options": [
+              { "id": "full", "text": "1 month full-time", "successBonus": 0.2 },
+              { "id": "part", "text": "2 weeks part-time", "successBonus": 0 }
+            ]
+          },
+          "outcome": {
+            "id": "Q0.1D-OUTCOME",
+            "type": "outcome",
+            "calculated": true,
+            "baseSuccessRate": 0.6,
+            "successResult": {
+              "capital": "{{fundingGoal * (0.8 + Math.random() * 0.4)}}",
+              "narrative": "Your crowdfunding campaign succeeded! You raised {{capital}} and validated market demand."
+            },
+            "failureResult": {
+              "capital": 0,
+              "timeLost": 1,
+              "narrative": "Your campaign didn't reach its goal. A month of effort, but you've learned what doesn't resonate."
+            }
+          }
+        },
+        {
+          "id": "E",
+          "text": "Pre-sell to customers before building",
+          "points": 15,
+          "competencyLevel": "C7_L2",
+          "insight": "BEST CHOICE: Validates demand AND generates capital",
+          "stateImpact": {
+            "equity": 100,
+            "validation": "high"
+          },
+          "followUp": {
+            "id": "Q0.1E-FOLLOW",
+            "type": "open_text",
+            "questionText": "How will you pre-sell? Describe your approach to getting people to pay before the product exists.",
+            "assess": ["C7", "C8"],
+            "scoring": {
+              "maxPoints": 10,
+              "rubric": [
+                { "criteria": "vague_approach", "points": 3 },
+                { "criteria": "clear_approach", "points": 7 },
+                { "criteria": "detailed_creative", "points": 10 }
+              ]
+            }
+          },
+          "outcome": {
+            "id": "Q0.1E-OUTCOME",
+            "type": "outcome",
+            "scenario": "You reach out to 20 potential customers from your target segment...",
+            "results": {
+              "excellent": { "presales": 8, "revenue": 4000, "probability": 0.2 },
+              "good": { "presales": 5, "revenue": 2500, "probability": 0.4 },
+              "moderate": { "presales": 2, "revenue": 1000, "probability": 0.3 },
+              "poor": { "presales": 0, "revenue": 0, "probability": 0.1 }
+            }
+          }
+        },
+        {
+          "id": "F",
+          "text": "Find a co-founder who can invest",
+          "points": 6,
+          "competencyLevel": "C7_L1",
+          "stateImpact": {
+            "teamSize": 2,
+            "equityDilution": 50,
+            "teamStrengthBonus": 0.3
+          },
+          "followUp": {
+            "id": "Q0.1F-FOLLOW",
+            "type": "scenario",
+            "questionText": "Your potential co-founder wants to negotiate equity. They can invest $30K and have skills you lack. What split do you offer?",
+            "options": [
+              { "id": "equal", "text": "50/50 equal split", "points": 5, "equity": 50 },
+              { "id": "majority", "text": "60/40 (you keep 60%)", "points": 7, "equity": 60 },
+              { "id": "vesting", "text": "60/40 with 4-year vesting for both", "points": 10, "equity": 60, "insight": "SMART: Protects both parties" }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q0.2",
+      "type": "budget_allocation",
+      "questionText": "You have ${{capital}}. Allocate your budget across these categories (must total 100%):",
+      "narrativeIntro": "How you allocate resources reveals your priorities. Choose wisely.",
+      "assess": ["C6", "C7"],
+      "isRequired": true,
+      "order": 2,
+      "isDynamic": true,
+      "categories": [
+        {
+          "id": "product",
+          "name": "Product Development",
+          "recommendedRange": [30, 50],
+          "description": "Building your MVP, tools, and tech"
+        },
+        {
+          "id": "marketing",
+          "name": "Marketing & Sales",
+          "recommendedRange": [15, 40],
+          "description": "Customer acquisition, content, outreach"
+        },
+        {
+          "id": "hiring",
+          "name": "Hiring",
+          "recommendedRange": [0, 30],
+          "description": "Team members, contractors, freelancers",
+          "warning": {
+            "threshold": 30,
+            "message": "WARNING: >30% on hiring before product-market fit is risky"
+          }
+        },
+        {
+          "id": "operations",
+          "name": "Operations",
+          "recommendedRange": [5, 15],
+          "description": "Legal, accounting, software subscriptions"
+        },
+        {
+          "id": "buffer",
+          "name": "Emergency Buffer",
+          "recommendedRange": [10, 25],
+          "description": "Unexpected costs and runway extension",
+          "warning": {
+            "threshold": 10,
+            "comparison": "below",
+            "message": "WARNING: Low buffer leaves no room for surprises"
+          }
+        }
+      ],
+      "mistakeDetection": {
+        "condition": "hiring > 30 && revenue === 0",
+        "triggersMistake": "M1",
+        "mistakeName": "Hiring Too Soon",
+        "immediateImpact": {
+          "burnRate": "+50%",
+          "runway": "-3 months",
+          "flexibility": "-30%"
+        },
+        "compoundingImpact": "Forces layoffs later, damages culture, wastes capital"
+      },
+      "scoring": {
+        "maxPoints": 15,
+        "evaluation": {
+          "balanced": { "points": 15, "criteria": "Within recommended ranges, buffer >= 15%" },
+          "acceptable": { "points": 10, "criteria": "Minor deviations from recommended" },
+          "risky": { "points": 5, "criteria": "Major deviations, low buffer" },
+          "dangerous": { "points": 0, "criteria": "Triggers mistake condition" }
+        }
+      }
+    },
+
+    {
+      "id": "Q0.3",
+      "type": "scenario",
+      "questionText": "With your budget set, how do you approach building your product?",
+      "narrativeIntro": "Speed vs. quality is a classic tradeoff. How do you balance it?",
+      "assess": ["C5", "C7"],
+      "isRequired": true,
+      "order": 3,
+      "options": [
+        {
+          "id": "A",
+          "text": "Ship a basic MVP in 1 month - ugly but functional",
+          "points": 15,
+          "competencyLevel": "C5_L2",
+          "insight": "EXCELLENT: Speed to learning is everything early on",
+          "stateImpact": {
+            "timeToMarket": 1,
+            "productQuality": 60,
+            "learningSpeed": "fast"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Build a polished product in 3 months",
+          "points": 5,
+          "competencyLevel": "C5_L1",
+          "warning": "WARNING: 3 months without revenue is risky",
+          "stateImpact": {
+            "timeToMarket": 3,
+            "productQuality": 85,
+            "learningSpeed": "slow"
+          },
+          "consequence": {
+            "type": "runway_impact",
+            "burnDuration": 3
+          }
+        },
+        {
+          "id": "C",
+          "text": "Test with a landing page and waitlist first",
+          "points": 12,
+          "competencyLevel": "C5_L2",
+          "insight": "SMART: Validate before building",
+          "stateImpact": {
+            "timeToMarket": 0.5,
+            "productQuality": 0,
+            "validation": "high"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q0.4",
+      "type": "multiple_choice",
+      "questionText": "How will you build your initial product?",
+      "narrativeIntro": "Your build approach affects cost, speed, and your learning.",
+      "assess": ["C7", "C6"],
+      "isRequired": true,
+      "order": 4,
+      "options": [
+        {
+          "id": "A",
+          "text": "Build it myself - I'll learn as I go",
+          "points": 10,
+          "competencyLevel": "C7_L2",
+          "insight": "EXCELLENT: Maximum learning, zero cost",
+          "stateImpact": {
+            "cost": 0,
+            "timeMultiplier": 1.5,
+            "founderSkillGain": true
+          }
+        },
+        {
+          "id": "B",
+          "text": "Use no-code tools (Bubble, Webflow, etc.)",
+          "points": 10,
+          "competencyLevel": "C7_L2",
+          "insight": "SMART: Fast and cheap",
+          "stateImpact": {
+            "cost": 500,
+            "timeMultiplier": 0.8,
+            "scalabilityLimit": true
+          }
+        },
+        {
+          "id": "C",
+          "text": "Hire freelancers for specific tasks",
+          "points": 7,
+          "competencyLevel": "C7_L1",
+          "stateImpact": {
+            "cost": 5000,
+            "timeMultiplier": 1,
+            "qualityVariance": "high"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Hire a full-time developer",
+          "points": 2,
+          "competencyLevel": "C6_WEAK",
+          "warning": "WARNING: Full-time hire before PMF is a common mistake",
+          "stateImpact": {
+            "cost": 15000,
+            "monthlyCost": 5000,
+            "burnRate": "+50%"
+          },
+          "triggersMistake": "M1"
+        },
+        {
+          "id": "E",
+          "text": "Hire an agency to build it",
+          "points": 4,
+          "competencyLevel": "C6_L1",
+          "stateImpact": {
+            "cost": 25000,
+            "timeMultiplier": 0.7,
+            "ownershipRisk": true
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q0.5",
+      "type": "scenario",
+      "questionText": "A talented friend offers to do design work. They want either 10% equity OR $15,000 cash. What do you offer?",
+      "narrativeIntro": "Equity decisions made early can cost millions later. Think carefully.",
+      "assess": ["C6", "C7"],
+      "isRequired": true,
+      "order": 5,
+      "scenario": {
+        "context": "Your friend is a skilled designer whose work would significantly improve your product. Your current capital is ${{capital}}.",
+        "stakes": "This decision affects both your finances and your cap table."
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": "Give them 10% equity - cash is precious right now",
+          "points": 7,
+          "competencyLevel": "C6_L1",
+          "stateImpact": {
+            "equity": -10,
+            "cashSaved": 15000,
+            "designQuality": "high"
+          }
+        },
+        {
+          "id": "B",
+          "text": "Negotiate: 5% equity with 2-year vesting",
+          "points": 10,
+          "competencyLevel": "C6_L2",
+          "insight": "BEST: Protects equity while getting help",
+          "stateImpact": {
+            "equity": -5,
+            "vestingProtection": true,
+            "designQuality": "high"
+          }
+        },
+        {
+          "id": "C",
+          "text": "Offer profit-sharing instead of equity",
+          "points": 9,
+          "competencyLevel": "C6_L2",
+          "insight": "CREATIVE: Keeps equity, aligns incentives",
+          "stateImpact": {
+            "equity": 0,
+            "profitShareObligation": true,
+            "designQuality": "high"
+          }
+        },
+        {
+          "id": "D",
+          "text": "Pay the $15K cash - protect equity at all costs",
+          "points": 6,
+          "competencyLevel": "C6_L1",
+          "stateImpact": {
+            "capital": -15000,
+            "equity": 0,
+            "designQuality": "high"
+          },
+          "condition": {
+            "requires": "capital >= 15000",
+            "failMessage": "You don't have enough capital for this option."
+          }
+        },
+        {
+          "id": "E",
+          "text": "Decline and do design myself",
+          "points": 5,
+          "competencyLevel": "C7_L1",
+          "stateImpact": {
+            "equity": 0,
+            "designQuality": "basic",
+            "founderTime": "+20%"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "Q0.6",
+      "type": "calculation",
+      "questionText": "Based on your decisions, calculate your monthly burn rate.",
+      "narrativeIntro": "Financial awareness means knowing your numbers cold. Let's test that.",
+      "helpText": "Burn rate = total monthly expenses. Consider: any salaries, tools/subscriptions, marketing spend, your own living costs if full-time.",
+      "assess": ["C6"],
+      "isRequired": true,
+      "order": 6,
+      "calculation": {
+        "components": [
+          { "label": "Monthly salaries/contractors", "suggestedValue": "{{monthlyPayroll}}" },
+          { "label": "Tools & subscriptions", "suggestedValue": 200 },
+          { "label": "Marketing budget", "suggestedValue": "{{marketingBudget / 12}}" },
+          { "label": "Other operating costs", "suggestedValue": 300 }
+        ],
+        "formula": "sum_of_components",
+        "tolerance": 0.1
+      },
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "accurate", "points": 10, "description": "Within 10% of calculated value" },
+          { "criteria": "close", "points": 7, "description": "Within 25% of calculated value" },
+          { "criteria": "off", "points": 3, "description": "Off by more than 25%" }
+        ]
+      },
+      "educationalFeedback": {
+        "ifWrong": "Burn rate is critical. If you don't know this number, you'll run out of money without warning. Your correct burn rate is ${{correctBurnRate}}/month."
+      }
+    },
+
+    {
+      "id": "Q0.7",
+      "type": "calculation",
+      "questionText": "With your current capital and burn rate, how many months of runway do you have?",
+      "narrativeIntro": "Runway determines how long you can survive without revenue.",
+      "assess": ["C6"],
+      "isRequired": true,
+      "order": 7,
+      "calculation": {
+        "formula": "capital / burnRate",
+        "unit": "months",
+        "tolerance": 0.5
+      },
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "accurate", "points": 10 },
+          { "criteria": "close", "points": 7 },
+          { "criteria": "off", "points": 3 }
+        ]
+      },
+      "educationalFeedback": {
+        "ifCorrect": "Good. You have {{runway}} months to reach profitability or raise more money.",
+        "ifWrong": "Runway = Capital ÷ Burn Rate. You have {{correctRunway}} months. Every entrepreneur must know this number.",
+        "warningThreshold": 3,
+        "warningMessage": "WARNING: Less than 3 months runway is dangerous. You'll spend all your time fundraising instead of building."
+      }
+    },
+
+    {
+      "id": "Q0.8",
+      "type": "reflection",
+      "questionText": "Looking at your decisions so far, what's the BIGGEST RISK in your approach?",
+      "narrativeIntro": "Self-awareness about risks is a sign of entrepreneurial maturity.",
+      "assess": ["C6", "C16"],
+      "isRequired": true,
+      "minLength": 50,
+      "maxLength": 600,
+      "order": 8,
+      "scoring": {
+        "maxPoints": 10,
+        "rubric": [
+          { "criteria": "no_awareness", "points": 2, "description": "Can't identify real risks" },
+          { "criteria": "surface_risks", "points": 5, "description": "Generic or surface-level risks" },
+          { "criteria": "specific_honest", "points": 10, "description": "Specific, honest risk assessment tied to their decisions" }
+        ]
+      },
+      "aiEvaluation": {
+        "systemPrompt": "Evaluate risk awareness. Look for connection to their actual decisions, honesty, and depth of understanding.",
+        "checkAgainst": ["previous_decisions", "financial_state", "common_mistakes"]
+      }
+    }
+  ],
+
+  "stageEndSummary": {
+    "competencyScores": ["C5", "C6", "C7"],
+    "financialState": {
+      "display": [
+        { "label": "Starting Capital", "value": "{{capital}}" },
+        { "label": "Monthly Burn Rate", "value": "{{burnRate}}" },
+        { "label": "Runway", "value": "{{runway}} months" },
+        { "label": "Equity Retained", "value": "{{equity}}%" },
+        { "label": "Team Size", "value": "{{teamSize}}" }
+      ]
+    },
+    "displayMetrics": [
+      { "label": "Financial Awareness", "derivedFrom": "Q0.6_score + Q0.7_score" },
+      { "label": "Resourcefulness", "derivedFrom": "Q0.1_score + Q0.4_score" },
+      { "label": "Commitment Quality", "derivedFrom": "Q0.3_score + Q0.5_score" }
+    ],
+    "mistakesTriggered": {
+      "display": true,
+      "showImpact": true,
+      "showCompounding": true
+    },
+    "aiJustification": {
+      "format": {
+        "positiveSignals": "List specific decisions that showed competency",
+        "negativeSignals": "List specific decisions that showed weakness",
+        "patternsNoticed": "Behavioral patterns detected",
+        "recommendations": "What they should focus on"
+      }
+    }
+  },
+
+  "stageTransition": {
+    "narrativeIntro": "You've committed resources and made your initial moves. Now it's time to see if anyone will actually pay for what you're building.",
+    "nextStage": 1,
+    "timeAdvance": {
+      "months": 2,
+      "narrative": "Two months have passed. Your MVP is ready (or close to it). Time to face the market."
+    }
+  }
+}
