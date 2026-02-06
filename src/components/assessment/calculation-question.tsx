@@ -129,6 +129,8 @@ export default function CalculationQuestion({
   }
 
   const unit = question.unit || question.calculation?.unit || ''
+  const isCurrencyUnit = !unit || unit.toLowerCase() === 'dollars' || unit.toLowerCase() === 'usd' || unit === '$'
+  const showDollarSign = isCurrencyUnit
 
   return (
     <div className="space-y-6">
@@ -149,19 +151,21 @@ export default function CalculationQuestion({
               {input.label}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                $
-              </span>
+              {showDollarSign && (
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                  $
+                </span>
+              )}
               <Input
                 type="number"
                 value={values[input.id]}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value)}
                 min={input.min ?? 0}
                 max={input.max}
-                className="pl-7 pr-12"
+                className={showDollarSign ? "pl-7 pr-12" : "pr-16"}
                 placeholder="0"
               />
-              {unit && (
+              {unit && !isCurrencyUnit && (
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
                   {unit}
                 </span>
@@ -199,8 +203,8 @@ export default function CalculationQuestion({
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-2">Your Result</p>
               <p className="text-4xl font-bold text-primary">
-                ${result.toLocaleString()}
-                {unit && <span className="text-lg ml-1">{unit}</span>}
+                {showDollarSign ? '$' : ''}{result.toLocaleString()}
+                {unit && !isCurrencyUnit && <span className="text-lg ml-1">{unit}</span>}
               </p>
             </div>
           </CardContent>

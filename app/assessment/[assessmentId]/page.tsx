@@ -8,6 +8,7 @@ import StateDashboard from '@/src/components/assessment/state-dashboard'
 import NarrativeIntro from '@/src/components/assessment/narrative-intro'
 import StageTransition from '@/src/components/assessment/stage-transition'
 import ConsequenceDisplay from '@/src/components/assessment/consequence-display'
+import AnswersModal from '@/src/components/assessment/answers-modal'
 import { useAssessment } from '@/src/lib/hooks/use-assessment'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -31,6 +32,9 @@ export default function AssessmentPage() {
     stageConfig,
     submitAnswer,
     pauseAssessment,
+    goToPreviousQuestion,
+    canGoBack,
+    responses,
     getStageProgress
   } = useAssessment(assessmentId)
 
@@ -67,26 +71,14 @@ export default function AssessmentPage() {
     try {
       const result = await submitAnswer(response)
 
-      // Show consequences if any
-      if (result.consequences && result.consequences.length > 0) {
-        setLastConsequences(result.consequences)
-        setCurrentView('consequence')
-        
-        // Auto-advance after showing consequences
-        setTimeout(() => {
-          if (result.type === 'stage_complete') {
-            setCurrentView('stage-transition')
-          } else if (result.type === 'assessment_complete') {
-            router.push(`/assessment/${assessmentId}/final-report`)
-          } else {
-            setCurrentView('question')
-          }
-        }, 2500)
-      } else if (result.type === 'stage_complete') {
+      // Skip consequence display to avoid influencing user decisions
+      // Consequences are still tracked and will appear in the final report
+      if (result.type === 'stage_complete') {
         setCurrentView('stage-transition')
       } else if (result.type === 'assessment_complete') {
         router.push(`/assessment/${assessmentId}/final-report`)
       }
+      // For next_question, view stays on 'question' and question is already updated
     } catch (error) {
       console.error('Error submitting answer:', error)
     } finally {
@@ -261,6 +253,11 @@ export default function AssessmentPage() {
                     timeRemaining={Math.floor(timeRemaining / 60)}
                   />
                 )}
+                
+                {/* View Answers Button */}
+                {responses.length > 0 && (
+                  <AnswersModal responses={responses} />
+                )}
               </div>
             </aside>
 
@@ -272,6 +269,19 @@ export default function AssessmentPage() {
                 transition={{ duration: 0.3 }}
                 className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
               >
+                {/* Previous Question Button */}
+                {canGoBack() && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={goToPreviousQuestion}
+                    className="mb-4"
+                  >
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    Previous Question
+                  </Button>
+                )}
+                
                 {currentQuestion && (
                   <QuestionRenderer
                     question={currentQuestion}

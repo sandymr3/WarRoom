@@ -54,7 +54,6 @@
           "text": "Bootstrap with personal savings",
           "points": 10,
           "competencyLevel": "C7_L2",
-          "insight": "EXCELLENT: Maintains full control and forces discipline",
           "stateImpact": {
             "equity": 100,
             "pressure": "low"
@@ -162,7 +161,6 @@
           "text": "Pre-sell to customers before building",
           "points": 15,
           "competencyLevel": "C7_L2",
-          "insight": "BEST CHOICE: Validates demand AND generates capital",
           "stateImpact": {
             "equity": 100,
             "validation": "high"
@@ -210,8 +208,34 @@
             "options": [
               { "id": "equal", "text": "50/50 equal split", "points": 5, "equity": 50 },
               { "id": "majority", "text": "60/40 (you keep 60%)", "points": 7, "equity": 60 },
-              { "id": "vesting", "text": "60/40 with 4-year vesting for both", "points": 10, "equity": 60, "insight": "SMART: Protects both parties" }
+              { "id": "vesting", "text": "60/40 with 4-year vesting for both", "points": 10, "equity": 60 }
             ]
+          }
+        },
+        {
+          "id": "G",
+          "text": "Partner with an existing or retiring business owner and take over operations on profit sharing basis",
+          "points": 8,
+          "competencyLevel": "C7_L2",
+          "stateImpact": {
+            "equity": 50,
+            "hasExistingBusiness": true,
+            "profitShareObligation": true,
+            "existingCustomerBase": true
+          },
+          "followUp": {
+            "id": "Q0.1G-FOLLOW",
+            "type": "open_text",
+            "questionText": "What type of existing business would you target to partner with, and how would you approach the owner?",
+            "assess": ["C7", "C8"],
+            "scoring": {
+              "maxPoints": 10,
+              "rubric": [
+                { "criteria": "vague_approach", "points": 3 },
+                { "criteria": "clear_approach", "points": 7 },
+                { "criteria": "detailed_creative", "points": 10 }
+              ]
+            }
           }
         }
       ]
@@ -303,7 +327,6 @@
           "text": "Ship a basic MVP in 1 month - ugly but functional",
           "points": 15,
           "competencyLevel": "C5_L2",
-          "insight": "EXCELLENT: Speed to learning is everything early on",
           "stateImpact": {
             "timeToMarket": 1,
             "productQuality": 60,
@@ -315,7 +338,6 @@
           "text": "Build a polished product in 3 months",
           "points": 5,
           "competencyLevel": "C5_L1",
-          "warning": "WARNING: 3 months without revenue is risky",
           "stateImpact": {
             "timeToMarket": 3,
             "productQuality": 85,
@@ -331,7 +353,6 @@
           "text": "Test with a landing page and waitlist first",
           "points": 12,
           "competencyLevel": "C5_L2",
-          "insight": "SMART: Validate before building",
           "stateImpact": {
             "timeToMarket": 0.5,
             "productQuality": 0,
@@ -355,7 +376,6 @@
           "text": "Build it myself - I'll learn as I go",
           "points": 10,
           "competencyLevel": "C7_L2",
-          "insight": "EXCELLENT: Maximum learning, zero cost",
           "stateImpact": {
             "cost": 0,
             "timeMultiplier": 1.5,
@@ -367,7 +387,6 @@
           "text": "Use no-code tools (Bubble, Webflow, etc.)",
           "points": 10,
           "competencyLevel": "C7_L2",
-          "insight": "SMART: Fast and cheap",
           "stateImpact": {
             "cost": 500,
             "timeMultiplier": 0.8,
@@ -390,7 +409,6 @@
           "text": "Hire a full-time developer",
           "points": 2,
           "competencyLevel": "C6_WEAK",
-          "warning": "WARNING: Full-time hire before PMF is a common mistake",
           "stateImpact": {
             "cost": 15000,
             "monthlyCost": 5000,
@@ -407,6 +425,18 @@
             "cost": 25000,
             "timeMultiplier": 0.7,
             "ownershipRisk": true
+          }
+        },
+        {
+          "id": "F",
+          "text": "Hire a commission-only based partner on profit sharing basis",
+          "points": 8,
+          "competencyLevel": "C7_L2",
+          "stateImpact": {
+            "cost": 0,
+            "timeMultiplier": 1.2,
+            "profitShareObligation": true,
+            "partnerAlignment": "high"
           }
         }
       ]
@@ -441,7 +471,6 @@
           "text": "Negotiate: 5% equity with 2-year vesting",
           "points": 10,
           "competencyLevel": "C6_L2",
-          "insight": "BEST: Protects equity while getting help",
           "stateImpact": {
             "equity": -5,
             "vestingProtection": true,
@@ -453,7 +482,6 @@
           "text": "Offer profit-sharing instead of equity",
           "points": 9,
           "competencyLevel": "C6_L2",
-          "insight": "CREATIVE: Keeps equity, aligns incentives",
           "stateImpact": {
             "equity": 0,
             "profitShareObligation": true,

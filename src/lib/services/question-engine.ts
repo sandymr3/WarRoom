@@ -102,6 +102,11 @@ export function getNextQuestion(
   for (let i = currentIndex + 1; i < questions.length; i++) {
     const nextQuestion = questions[i]
     
+    // Skip if a similar question has already been answered in previous stages
+    if (hasSimilarQuestionBeenAnswered(nextQuestion, responses)) {
+      continue
+    }
+    
     // Check if question has a condition
     if (nextQuestion.condition) {
       if (evaluateCondition(nextQuestion.condition, responses, state)) {
@@ -305,6 +310,64 @@ export function getNextStage(currentStage: StageNumber): StageNumber | null {
   return stages[currentIndex + 1]
 }
 
+/**
+ * Question patterns that should not repeat across stages
+ * Maps pattern keywords to a unique identifier
+ */
+const UNIQUE_QUESTION_PATTERNS: Record<string, string[]> = {
+  'risk_assessment': ['biggest risk', 'biggest threat', 'main risk', 'what risks'],
+  'success_definition': ['success mean', 'define success', 'what is success'],
+  'biggest_challenge': ['biggest challenge', 'main challenge', 'hardest part'],
+  'pricing_strategy': ['pricing', 'how much will you charge', 'what will customers pay'],
+  'customer_acquisition': ['first customers', 'initial customers', 'acquire customers'],
+}
+
+/**
+ * Get the pattern ID for a question if it matches a unique pattern
+ */
+function getQuestionPatternId(questionText: string): string | null {
+  const lowerText = questionText.toLowerCase()
+  
+  for (const [patternId, keywords] of Object.entries(UNIQUE_QUESTION_PATTERNS)) {
+    if (keywords.some(keyword => lowerText.includes(keyword))) {
+      return patternId
+    }
+  }
+  
+  return null
+}
+
+/**
+ * Check if a similar question has already been answered in any stage
+ */
+export function hasSimilarQuestionBeenAnswered(
+  question: Question,
+  allResponses: QuestionResponse[]
+): boolean {
+  const patternId = getQuestionPatternId(question.questionText)
+  
+  if (!patternId) {
+    return false // No pattern match, question is unique
+  }
+  
+  // Check if any answered question matches the same pattern
+  for (const response of allResponses) {
+    if (response.questionId === question.id) {
+      continue // Don't compare with self
+    }
+    
+    const answeredQuestion = getQuestionById(response.questionId)
+    if (!answeredQuestion) continue
+    
+    const answeredPatternId = getQuestionPatternId(answeredQuestion.questionText)
+    if (answeredPatternId === patternId) {
+      return true // Similar question already answered
+    }
+  }
+  
+  return false
+}
+
 export default {
   getStageConfig,
   getStageQuestions,
@@ -317,4 +380,5 @@ export default {
   getAllStages,
   getFirstQuestionOfStage,
   getNextStage,
+  hasSimilarQuestionBeenAnswered,
 }

@@ -41,6 +41,7 @@ export interface Question {
   assess?: string[]
   isRequired?: boolean
   isDynamic?: boolean
+  generate?: boolean  // When true, use AI to adapt question to user's business context
   options?: QuestionOption[]
   categoryId?: string
   competencies?: string[]

@@ -43,6 +43,7 @@ export function useAssessment(assessmentId: string) {
   const [stageConfig, setStageConfig] = useState<StageConfig | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [responses, setResponses] = useState<QuestionResponse[]>([])
+  const [questionHistory, setQuestionHistory] = useState<string[]>([])
   const [currentState, setCurrentState] = useState<AssessmentState>(defaultInitialState)
   const [isLoading, setIsLoading] = useState(true)
   const [hasLoadedFromServer, setHasLoadedFromServer] = useState(false)
@@ -193,6 +194,11 @@ export function useAssessment(assessmentId: string) {
         if (!currentQuestion) {
           const firstQuestion = questionEngine.getFirstQuestionOfStage(currentStage)
           setCurrentQuestion(firstQuestion)
+          if (firstQuestion) {
+            setQuestionHistory(prev => 
+              prev.includes(firstQuestion.id) ? prev : [...prev, firstQuestion.id]
+            )
+          }
         }
         
         setAssessment(prev => ({
@@ -306,6 +312,9 @@ export function useAssessment(assessmentId: string) {
 
         if (nextQuestion) {
           setCurrentQuestion(nextQuestion)
+          setQuestionHistory(prev => 
+            prev.includes(nextQuestion.id) ? prev : [...prev, nextQuestion.id]
+          )
           return { 
             type: 'next_question', 
             question: nextQuestion,
@@ -340,12 +349,60 @@ export function useAssessment(assessmentId: string) {
 
   const pauseAssessment = useCallback(async () => {
     setAssessment(prev => ({ ...prev, status: 'paused' }))
-    // In real implementation: save state to API
-  }, [])
+    
+    // Save current state to server so we can resume from exact position
+    try {
+      await fetch(`/api/assessment/${assessmentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'paused',
+          currentQuestionId: currentQuestion?.id,
+          currentStage: currentStage
+        })
+      })
+    } catch (error) {
+      console.error('Error saving pause state:', error)
+    }
+  }, [assessmentId, currentQuestion?.id, currentStage])
 
   const resumeAssessment = useCallback(async () => {
     setAssessment(prev => ({ ...prev, status: 'in_progress' }))
   }, [])
+
+  // Go to previous question (allows user to review/change their answer)
+  const goToPreviousQuestion = useCallback(() => {
+    if (questionHistory.length <= 1) {
+      return false // Can't go back from first question
+    }
+    
+    // Get the previous question ID from history
+    const currentIndex = questionHistory.indexOf(currentQuestion?.id || '')
+    if (currentIndex <= 0) {
+      return false
+    }
+    
+    const previousQuestionId = questionHistory[currentIndex - 1]
+    const previousQuestion = questionEngine.getQuestionById(previousQuestionId, currentStage)
+    
+    if (previousQuestion) {
+      setCurrentQuestion(previousQuestion)
+      return true
+    }
+    return false
+  }, [questionHistory, currentQuestion?.id, currentStage])
+
+  // Check if we can go to previous question
+  const canGoBack = useCallback(() => {
+    if (questionHistory.length <= 1) return false
+    const currentIndex = questionHistory.indexOf(currentQuestion?.id || '')
+    return currentIndex > 0
+  }, [questionHistory, currentQuestion?.id])
+
+  // Get response for a specific question (for viewing answers)
+  const getResponseForQuestion = useCallback((questionId: string) => {
+    return responses.find(r => r.questionId === questionId)
+  }, [responses])
 
   return {
     currentQuestion,
@@ -357,6 +414,9 @@ export function useAssessment(assessmentId: string) {
     submitAnswer,
     pauseAssessment,
     resumeAssessment,
+    goToPreviousQuestion,
+    canGoBack,
+    getResponseForQuestion,
     getStageProgress
   }
 }

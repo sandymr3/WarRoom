@@ -34,7 +34,7 @@ export default function BudgetAllocationQuestion({
   ]
 
   const [allocation, setAllocation] = useState<BudgetItem[]>(
-    categories.map((cat) => ({ ...cat, percent: 25 }))
+    categories.map((cat) => ({ ...cat, percent: 0 }))
   )
 
   const totalPercent = allocation.reduce((sum, item) => sum + item.percent, 0)

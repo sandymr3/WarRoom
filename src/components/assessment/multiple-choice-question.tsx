@@ -49,11 +49,6 @@ export default function MultipleChoiceQuestion({
                   className="flex-1 cursor-pointer"
                 >
                   <div className="font-medium text-foreground">{option.text}</div>
-                  {option.warning && (
-                    <Badge variant="outline" className="mt-2 bg-yellow-50 text-yellow-700 border-yellow-200">
-                      {option.warning}
-                    </Badge>
-                  )}
                 </label>
               </div>
             </Card>

@@ -84,9 +84,6 @@ export default function ScenarioQuestion({
     if (isHovered) {
       return 'border-primary/50 bg-muted/50'
     }
-    if (option.warning || option.triggersMistake) {
-      return 'border-border hover:border-yellow-500/50'
-    }
     return 'border-border hover:border-primary/50'
   }
 
@@ -182,25 +179,10 @@ export default function ScenarioQuestion({
                           {option.id}
                         </div>
                         
-                        <div className="flex-1 space-y-2">
+                        <div className="flex-1">
                           <p className="font-medium text-foreground leading-relaxed">
                             {option.text}
                           </p>
-                          
-                          {/* Warning indicator */}
-                          {extOption.warning && (
-                            <div className="flex items-center gap-2 text-sm text-yellow-600 dark:text-yellow-400">
-                              <AlertTriangle className="h-4 w-4" />
-                              <span>{extOption.warning}</span>
-                            </div>
-                          )}
-                          
-                          {/* Mistake trigger indicator */}
-                          {extOption.triggersMistake && (
-                            <Badge variant="destructive" className="text-xs">
-                              Triggers: {extOption.triggersMistake}
-                            </Badge>
-                          )}
                         </div>
                       </div>
                     </Card>
@@ -209,25 +191,6 @@ export default function ScenarioQuestion({
               })}
             </div>
 
-            {/* Hover preview */}
-            {showConsequencePreview && hoveredOptionData?.stateImpact && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 rounded-lg bg-muted/50 border border-border"
-              >
-                <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
-                  Potential Impact Preview
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(hoveredOptionData.stateImpact).map(([key, value]) => (
-                    <Badge key={key} variant="outline" className="text-xs">
-                      {key}: {String(value)}
-                    </Badge>
-                  ))}
-                </div>
-              </motion.div>
-            )}
           </motion.div>
         ) : (
           /* Confirmation view */
@@ -251,52 +214,10 @@ export default function ScenarioQuestion({
                     <p className="font-medium text-foreground">
                       {selectedOptionData?.text}
                     </p>
-                    {selectedOptionData?.insight && (
-                      <p className="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4" />
-                        {selectedOptionData.insight}
-                      </p>
-                    )}
-                    {selectedOptionData?.warning && (
-                      <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-2 flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4" />
-                        {selectedOptionData.warning}
-                      </p>
-                    )}
                   </div>
                 </div>
               </Card>
             </div>
-
-            {/* Impact preview */}
-            {selectedOptionData?.stateImpact && (
-              <div className="rounded-xl bg-muted/30 border border-border p-4">
-                <p className="text-sm font-medium mb-3 text-muted-foreground">
-                  This choice will:
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(selectedOptionData.stateImpact).map(([key, value]) => {
-                    const isPositive = typeof value === 'string' && (value.startsWith('+') || value === 'true' || value === 'high')
-                    const isNegative = typeof value === 'string' && (value.startsWith('-') || value.includes('Risk') || value === 'poor')
-                    
-                    return (
-                      <div 
-                        key={key}
-                        className={cn(
-                          'flex items-center justify-between p-2 rounded-lg text-sm',
-                          isPositive ? 'bg-green-500/10 text-green-700 dark:text-green-400' :
-                          isNegative ? 'bg-red-500/10 text-red-700 dark:text-red-400' :
-                          'bg-muted text-muted-foreground'
-                        )}
-                      >
-                        <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                        <span className="font-medium">{String(value)}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
 
             <div className="flex gap-3 justify-center">
               <Button
