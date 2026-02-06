@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Play, RotateCcw, CheckCircle2, Clock, LogOut } from 'lucide-react'
+import { Play, RotateCcw, CheckCircle2, Clock, LogOut, BarChart3 } from 'lucide-react'
 
 interface Attempt {
   id: string | null
@@ -153,6 +153,18 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* View Results Link */}
+        {stats.attemptsCompleted > 0 && (
+          <div className="mb-8 flex justify-end">
+            <Link href="/results">
+              <Button variant="outline">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                View All Results
+              </Button>
+            </Link>
+          </div>
+        )}
 
         {/* Assessment Attempts */}
         <div className="mb-12">

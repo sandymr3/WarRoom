@@ -32,6 +32,7 @@ export default function AssessmentPage() {
     stageConfig,
     submitAnswer,
     pauseAssessment,
+    advanceToNextStage,
     goToPreviousQuestion,
     canGoBack,
     responses,
@@ -41,6 +42,7 @@ export default function AssessmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [currentView, setCurrentView] = useState<AssessmentView>('narrative')
   const [lastConsequences, setLastConsequences] = useState<ConsequenceItem[]>([])
+  const [stageCompletionData, setStageCompletionData] = useState<any>(null)
   const [showNarrativeForStage, setShowNarrativeForStage] = useState<StageNumber | null>(null)
   const [timeRemaining, setTimeRemaining] = useState(90 * 60) // 90 minutes in seconds
 
@@ -71,9 +73,8 @@ export default function AssessmentPage() {
     try {
       const result = await submitAnswer(response)
 
-      // Skip consequence display to avoid influencing user decisions
-      // Consequences are still tracked and will appear in the final report
       if (result.type === 'stage_complete') {
+        setStageCompletionData(result.stageData || null)
         setCurrentView('stage-transition')
       } else if (result.type === 'assessment_complete') {
         router.push(`/assessment/${assessmentId}/final-report`)
@@ -87,7 +88,9 @@ export default function AssessmentPage() {
   }
 
   const handleStageTransitionComplete = () => {
-    // Will show narrative for next stage automatically via useEffect
+    // Advance to the next stage using data from the complete-stage API
+    advanceToNextStage(stageCompletionData)
+    setStageCompletionData(null)
     setShowNarrativeForStage(null)
     setCurrentView('narrative')
   }
@@ -174,12 +177,22 @@ export default function AssessmentPage() {
         {currentView === 'stage-transition' && (
           <StageTransition
             key="transition"
-            currentStageName={stageConfig?.stage?.name || 'Current Stage'}
-            currentStageNumber={assessment?.currentStage || 0}
-            nextStageName="Next Stage"
-            nextStageNumber={(assessment?.currentStage || 0) + 1 as StageNumber}
-            competencyScores={[]}
-            mistakesTriggered={[]}
+            currentStageName={stageCompletionData?.stageName || stageConfig?.stage?.name || 'Current Stage'}
+            currentStageNumber={stageCompletionData?.stageCompleted ?? assessment?.currentStage ?? 0}
+            nextStageName={stageCompletionData?.nextStageName || 'Next Stage'}
+            nextStageNumber={stageCompletionData?.nextStage ?? ((assessment?.currentStage || 0) + 1) as StageNumber}
+            competencyScores={(stageCompletionData?.competencyScores || []).map((c: any) => ({
+              code: c.competencyCode,
+              name: c.competencyName,
+              score: c.currentScore,
+              maxScore: c.maxPossibleScore,
+              level: c.levelAchieved,
+            }))}
+            mistakesTriggered={(stageCompletionData?.mistakesTriggered || []).map((m: any) => ({
+              code: m.mistakeCode,
+              name: m.mistakeName,
+              stage: m.triggeredAtStage,
+            }))}
             stageMetrics={[
               { label: 'Questions Answered', value: progress.answered },
               { label: 'Time Spent', value: formatTime(90 * 60 - timeRemaining) }

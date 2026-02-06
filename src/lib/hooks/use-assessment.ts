@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react'
-import type { 
-  Question, 
+import type {
+  Question,
   QuestionResponse,
   StageNumber,
   StageConfig,
@@ -15,14 +15,14 @@ import * as questionEngine from '@/src/lib/services/question-engine'
 // Default initial state
 const defaultInitialState: AssessmentState = {
   financial: {
-    capital: 10000,
+    capital: 0,
     monthlyRevenue: 0,
     burnRate: 0,
-    runwayMonths: 12
+    runwayMonths: 0
   },
   team: {
     size: 1,
-    satisfaction: 8
+    satisfaction: 100
   },
   customers: {
     total: 0,
@@ -36,6 +36,7 @@ interface SubmitResult {
   question?: Question
   stage?: number
   consequences?: ConsequenceItem[]
+  stageData?: any
 }
 
 export function useAssessment(assessmentId: string) {
@@ -57,89 +58,99 @@ export function useAssessment(assessmentId: string) {
     lastActivityAt: new Date()
   })
 
+  // Helper: map API state fields to local AssessmentState
+  const mapApiStateToLocal = useCallback((data: any): AssessmentState => {
+    const financial = data.financialState || data.state?.financial || {}
+    const team = data.teamState || data.state?.team || {}
+    const customers = data.customerState || data.state?.customers || {}
+
+    return {
+      financial: {
+        capital: financial.currentCapital ?? financial.capital ?? defaultInitialState.financial.capital,
+        monthlyRevenue: financial.monthlyRevenue ?? defaultInitialState.financial.monthlyRevenue,
+        burnRate: financial.burnRate ?? defaultInitialState.financial.burnRate,
+        runwayMonths: financial.runwayMonths ?? defaultInitialState.financial.runwayMonths
+      },
+      team: {
+        size: team.size ?? defaultInitialState.team.size,
+        satisfaction: team.satisfaction ?? defaultInitialState.team.satisfaction
+      },
+      customers: {
+        total: customers.total ?? defaultInitialState.customers.total,
+        retention: customers.retention ?? defaultInitialState.customers.retention
+      },
+      mistakes: data.mistakesTriggered?.map((m: any) => m.mistakeCode) || []
+    }
+  }, [])
+
   // Load existing assessment data from server on mount
   useEffect(() => {
     const loadExistingAssessment = async () => {
       if (hasLoadedFromServer) return
-      
+
       setIsLoading(true)
       try {
         const response = await fetch(`/api/assessment/${assessmentId}`)
-        
+
         if (response.ok) {
           const data = await response.json()
           console.log('[useAssessment] Loaded from server:', data)
-          
+
           if (data.assessment) {
+            const serverAssessment = data.assessment
+            const serverStatus = serverAssessment.status.toLowerCase().replace('_', '-')
+
             // Update assessment state
             setAssessment({
-              id: data.assessment.id,
-              userId: data.assessment.userId,
-              attemptNumber: data.assessment.attemptNumber,
-              status: data.assessment.status.toLowerCase().replace('_', '-'),
-              currentStage: data.assessment.currentStage,
-              totalDurationMinutes: data.assessment.totalDurationMinutes || 0,
-              lastActivityAt: new Date(data.assessment.lastActiveAt || Date.now())
+              id: serverAssessment.id,
+              userId: serverAssessment.userId,
+              attemptNumber: serverAssessment.attemptNumber,
+              status: serverStatus,
+              currentStage: serverAssessment.currentStage,
+              totalDurationMinutes: serverAssessment.totalDurationMinutes || 0,
+              lastActivityAt: new Date(serverAssessment.lastActiveAt || Date.now())
             })
-            
+
             // Set the current stage from server
-            setCurrentStage(data.assessment.currentStage as StageNumber)
-            
-            // Load financial state if available (either from financialState or state snapshot)
-            const financialState = data.assessment.financialState || data.state?.financial
-            if (financialState) {
-              setCurrentState(prev => ({
-                ...prev,
-                financial: {
-                  capital: financialState.capital ?? prev.financial.capital,
-                  monthlyRevenue: financialState.monthlyRevenue ?? 0,
-                  burnRate: financialState.burnRate ?? 0,
-                  runwayMonths: financialState.runwayMonths ?? 12
-                }
-              }))
-            }
-            
-            // Load team state if available
-            const teamState = data.assessment.teamState || data.state?.team
-            if (teamState) {
-              setCurrentState(prev => ({
-                ...prev,
-                team: {
-                  size: teamState.size ?? 1,
-                  satisfaction: teamState.satisfaction ?? 8
-                }
-              }))
-            }
-            
-            // Load customer state if available
-            const customerState = data.assessment.customerState || data.state?.customers
-            if (customerState) {
-              setCurrentState(prev => ({
-                ...prev,
-                customers: {
-                  total: customerState.total ?? 0,
-                  retention: customerState.retention ?? 0
-                }
-              }))
-            }
-            
-            // Load responses if available
-            if (data.assessment.responses && Array.isArray(data.assessment.responses)) {
-              const loadedResponses = data.assessment.responses.map((r: any) => ({
+            setCurrentStage(serverAssessment.currentStage as StageNumber)
+
+            // Load full state from Assessment-level JSON fields
+            setCurrentState(mapApiStateToLocal(serverAssessment))
+
+            // Load responses from DB and rebuild history
+            if (serverAssessment.responses && Array.isArray(serverAssessment.responses)) {
+              const loadedResponses = serverAssessment.responses.map((r: any) => ({
                 questionId: r.questionId,
                 assessmentId: r.assessmentId,
-                stageNumber: data.assessment.currentStage as StageNumber,
+                stageNumber: (r.stage?.stageNumber ?? serverAssessment.currentStage) as StageNumber,
                 responseType: r.questionType,
                 responseData: r.responseData,
                 pointsAwarded: r.rawScore || 0,
                 competenciesAssessed: r.competenciesAssessed || [],
-                answeredAt: new Date(r.answeredAt),
+                answeredAt: new Date(r.answeredAt || r.createdAt),
                 responseTimeSeconds: r.durationSeconds || 0
               }))
               setResponses(loadedResponses)
+
+              // Rebuild question history from response order
+              const loadedHistory = loadedResponses.map((r: any) => r.questionId)
+              setQuestionHistory(loadedHistory)
+            }
+
+            // If assessment was paused, resume it on the server
+            if (serverAssessment.status === 'PAUSED') {
+              try {
+                await fetch(`/api/assessment/${assessmentId}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ status: 'IN_PROGRESS' }),
+                })
+              } catch (err) {
+                console.error('Error auto-resuming assessment:', err)
+              }
             }
           }
-          
+
           // Set current question from server if available
           if (data.currentQuestion) {
             console.log('[useAssessment] Setting question from server:', data.currentQuestion.id)
@@ -153,7 +164,7 @@ export function useAssessment(assessmentId: string) {
               data.assessment.currentStage as StageNumber,
               data.assessment.responses.map((r: any) => ({
                 questionId: r.questionId,
-                stageNumber: data.assessment.currentStage as StageNumber,
+                stageNumber: (r.stage?.stageNumber ?? data.assessment.currentStage) as StageNumber,
                 responseData: r.responseData,
                 competenciesAssessed: r.competenciesAssessed || []
               })) as any,
@@ -163,7 +174,7 @@ export function useAssessment(assessmentId: string) {
               setCurrentQuestion(nextQ)
             }
           }
-          
+
           // Load stage config for current stage
           if (data.assessment?.currentStage !== undefined) {
             const config = questionEngine.getStageConfig(data.assessment.currentStage as StageNumber)
@@ -179,28 +190,28 @@ export function useAssessment(assessmentId: string) {
     }
 
     loadExistingAssessment()
-  }, [assessmentId, hasLoadedFromServer])
+  }, [assessmentId, hasLoadedFromServer, mapApiStateToLocal])
 
   // Load stage config and first question when stage changes (only after initial load)
   useEffect(() => {
     if (!hasLoadedFromServer) return
-    
+
     const loadStage = async () => {
       try {
         const config = questionEngine.getStageConfig(currentStage)
         setStageConfig(config)
-        
+
         // Only get first question if we don't have a current question
         if (!currentQuestion) {
           const firstQuestion = questionEngine.getFirstQuestionOfStage(currentStage)
           setCurrentQuestion(firstQuestion)
           if (firstQuestion) {
-            setQuestionHistory(prev => 
+            setQuestionHistory(prev =>
               prev.includes(firstQuestion.id) ? prev : [...prev, firstQuestion.id]
             )
           }
         }
-        
+
         setAssessment(prev => ({
           ...prev,
           currentStage
@@ -221,122 +232,135 @@ export function useAssessment(assessmentId: string) {
     return questionEngine.getStageProgress(currentStage, responses)
   }, [currentStage, responses, stageConfig])
 
-  // Submit answer and get next question
+  // Submit answer via backend API and get next question
   const submitAnswer = useCallback(
     async (response: Omit<QuestionResponse, 'assessmentId' | 'stageNumber' | 'responseType' | 'pointsAwarded' | 'competenciesAssessed' | 'responseTimeSeconds'>): Promise<SubmitResult> => {
       setIsLoading(true)
       try {
-        // Build full response
+        // POST to the backend respond API
+        const apiResponse = await fetch(`/api/assessment/${assessmentId}/respond`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questionId: response.questionId,
+            responseData: response.responseData,
+            responseTimeSeconds: 0,
+          }),
+        })
+
+        if (!apiResponse.ok) {
+          const errorData = await apiResponse.json()
+          throw new Error(errorData.error || 'Failed to submit response')
+        }
+
+        const data = await apiResponse.json()
+
+        // Build full response record from API result
         const fullResponse: QuestionResponse = {
           ...response,
           assessmentId,
           stageNumber: currentStage,
           responseType: currentQuestion?.type || 'open_text',
-          pointsAwarded: 0, // Will be calculated by scoring engine
+          pointsAwarded: data.pointsAwarded || 0,
           competenciesAssessed: currentQuestion?.assess || [],
           responseTimeSeconds: 0
         }
 
-        // Add to responses
+        // Update local responses
         setResponses(prev => [...prev, fullResponse])
 
-        // Calculate consequences from the selected option
+        // Update local state from API response
+        if (data.updatedState) {
+          setCurrentState(prev => ({
+            financial: {
+              capital: data.updatedState.financial?.currentCapital ?? data.updatedState.financial?.capital ?? prev.financial.capital,
+              monthlyRevenue: data.updatedState.financial?.monthlyRevenue ?? prev.financial.monthlyRevenue,
+              burnRate: data.updatedState.financial?.burnRate ?? prev.financial.burnRate,
+              runwayMonths: data.updatedState.financial?.runwayMonths ?? prev.financial.runwayMonths
+            },
+            team: {
+              size: data.updatedState.team?.size ?? prev.team.size,
+              satisfaction: data.updatedState.team?.satisfaction ?? prev.team.satisfaction
+            },
+            customers: {
+              total: data.updatedState.customers?.total ?? prev.customers.total,
+              retention: data.updatedState.customers?.retention ?? prev.customers.retention
+            },
+            mistakes: data.updatedState.mistakes || prev.mistakes
+          }))
+        }
+
+        // Build consequences for UI display
         const consequences: ConsequenceItem[] = []
-        if (response.responseData?.type === 'choice' && currentQuestion?.options) {
-          const selectedOption = currentQuestion.options.find(
-            opt => opt.id === response.responseData.selectedOptionId
-          )
-          if (selectedOption) {
-            // Convert state impact to consequences
-            const stateImpact = (selectedOption as any).stateImpact
-            if (stateImpact) {
-              Object.entries(stateImpact).forEach(([key, value]) => {
-                const strValue = String(value)
-                let type: 'positive' | 'negative' | 'neutral' | 'warning' = 'neutral'
-                
-                if (strValue.startsWith('+') || value === true || strValue.toLowerCase().includes('high')) {
-                  type = 'positive'
-                } else if (strValue.startsWith('-') || strValue.toLowerCase().includes('risk') || strValue.toLowerCase().includes('poor')) {
-                  type = 'negative'
-                }
-                
-                if ((selectedOption as any).warning) {
-                  type = 'warning'
-                }
-
-                consequences.push({
-                  type,
-                  label: key.replace(/([A-Z])/g, ' $1').trim(),
-                  value: strValue,
-                  description: (selectedOption as any).insight || (selectedOption as any).warning
-                })
-              })
-            }
-
-            // Apply state changes
-            // (In a real implementation, this would call the state manager service)
-          }
+        if (data.consequenceApplied) {
+          Object.entries(data.consequenceApplied).forEach(([key, value]) => {
+            consequences.push({
+              type: 'neutral',
+              label: key.replace(/([A-Z])/g, ' $1').trim(),
+              value: String(value),
+            })
+          })
         }
 
-        // Check if stage is complete
-        const isComplete = questionEngine.isStageComplete(currentStage, [...responses, fullResponse])
-        
-        if (isComplete) {
-          // Get next stage
+        // Stage complete - call complete-stage API
+        if (data.stageComplete) {
+          try {
+            const completeRes = await fetch(`/api/assessment/${assessmentId}/complete-stage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+            })
+
+            if (completeRes.ok) {
+              const stageData = await completeRes.json()
+
+              if (stageData.isComplete) {
+                // Assessment fully complete
+                return {
+                  type: 'assessment_complete',
+                  consequences,
+                  stageData,
+                }
+              }
+
+              // Stage complete, prepare for next stage
+              return {
+                type: 'stage_complete',
+                stage: currentStage,
+                consequences,
+                stageData,
+              }
+            }
+          } catch (err) {
+            console.error('Error completing stage:', err)
+          }
+
+          // Fallback if complete-stage call failed
           const nextStage = questionEngine.getNextStage(currentStage)
-          
           if (nextStage === null) {
-            // Assessment complete
-            return { 
-              type: 'assessment_complete',
-              consequences
-            }
+            return { type: 'assessment_complete', consequences }
           }
-          
-          // Move to next stage
-          setCurrentStage(nextStage)
-          return { 
-            type: 'stage_complete', 
-            stage: currentStage,
-            consequences
-          }
+          return { type: 'stage_complete', stage: currentStage, consequences }
         }
 
-        // Get next question
-        const nextQuestion = questionEngine.getNextQuestion(
-          currentQuestion?.id || '',
-          currentStage,
-          [...responses, fullResponse],
-          currentState as any // Type assertion for now
-        )
-
-        if (nextQuestion) {
-          setCurrentQuestion(nextQuestion)
-          setQuestionHistory(prev => 
-            prev.includes(nextQuestion.id) ? prev : [...prev, nextQuestion.id]
+        // Next question from API
+        if (data.nextQuestion) {
+          setCurrentQuestion(data.nextQuestion)
+          setQuestionHistory(prev =>
+            prev.includes(data.nextQuestion.id) ? prev : [...prev, data.nextQuestion.id]
           )
-          return { 
-            type: 'next_question', 
-            question: nextQuestion,
+          return {
+            type: 'next_question',
+            question: data.nextQuestion,
             consequences
           }
         }
 
-        // No more questions, stage complete
+        // No more questions from API (shouldn't typically happen if stageComplete is correct)
         const nextStage = questionEngine.getNextStage(currentStage)
         if (nextStage === null) {
-          return { 
-            type: 'assessment_complete',
-            consequences
-          }
+          return { type: 'assessment_complete', consequences }
         }
-        
-        setCurrentStage(nextStage)
-        return { 
-          type: 'stage_complete', 
-          stage: currentStage,
-          consequences
-        }
+        return { type: 'stage_complete', stage: currentStage, consequences }
       } catch (error) {
         console.error('Error submitting answer:', error)
         throw error
@@ -344,47 +368,96 @@ export function useAssessment(assessmentId: string) {
         setIsLoading(false)
       }
     },
-    [currentQuestion, currentStage, responses, currentState, assessmentId]
+    [currentQuestion, currentStage, assessmentId]
   )
+
+  // Advance to next stage (called after stage transition UI)
+  const advanceToNextStage = useCallback(async (stageData?: any) => {
+    if (stageData?.nextStage !== undefined) {
+      const nextStage = stageData.nextStage as StageNumber
+      setCurrentStage(nextStage)
+
+      // Set the first question of the new stage from stageData or question engine
+      if (stageData.firstQuestion) {
+        setCurrentQuestion(stageData.firstQuestion)
+        setQuestionHistory(prev =>
+          prev.includes(stageData.firstQuestion.id) ? prev : [...prev, stageData.firstQuestion.id]
+        )
+      } else {
+        setCurrentQuestion(null) // Will be loaded by stage change useEffect
+      }
+    } else {
+      // Fallback: advance by incrementing
+      const nextStage = questionEngine.getNextStage(currentStage)
+      if (nextStage !== null) {
+        setCurrentStage(nextStage)
+        setCurrentQuestion(null) // Will be loaded by stage change useEffect
+      }
+    }
+  }, [currentStage])
 
   const pauseAssessment = useCallback(async () => {
     setAssessment(prev => ({ ...prev, status: 'paused' }))
-    
-    // Save current state to server so we can resume from exact position
+
+    // Save current state + position to server
     try {
       await fetch(`/api/assessment/${assessmentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          status: 'paused',
+          status: 'PAUSED',
           currentQuestionId: currentQuestion?.id,
-          currentStage: currentStage
+          currentStage: currentStage,
+          financialState: {
+            currentCapital: currentState.financial.capital,
+            monthlyRevenue: currentState.financial.monthlyRevenue,
+            burnRate: currentState.financial.burnRate,
+            runwayMonths: currentState.financial.runwayMonths,
+          },
+          teamState: {
+            size: currentState.team.size,
+            satisfaction: currentState.team.satisfaction,
+          },
+          customerState: {
+            total: currentState.customers.total,
+            retention: currentState.customers.retention,
+          },
         })
       })
     } catch (error) {
       console.error('Error saving pause state:', error)
     }
-  }, [assessmentId, currentQuestion?.id, currentStage])
+  }, [assessmentId, currentQuestion?.id, currentStage, currentState])
 
   const resumeAssessment = useCallback(async () => {
     setAssessment(prev => ({ ...prev, status: 'in_progress' }))
-  }, [])
+
+    try {
+      await fetch(`/api/assessment/${assessmentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'IN_PROGRESS' }),
+      })
+    } catch (error) {
+      console.error('Error resuming assessment:', error)
+    }
+  }, [assessmentId])
 
   // Go to previous question (allows user to review/change their answer)
   const goToPreviousQuestion = useCallback(() => {
     if (questionHistory.length <= 1) {
       return false // Can't go back from first question
     }
-    
+
     // Get the previous question ID from history
     const currentIndex = questionHistory.indexOf(currentQuestion?.id || '')
     if (currentIndex <= 0) {
       return false
     }
-    
+
     const previousQuestionId = questionHistory[currentIndex - 1]
     const previousQuestion = questionEngine.getQuestionById(previousQuestionId, currentStage)
-    
+
     if (previousQuestion) {
       setCurrentQuestion(previousQuestion)
       return true
@@ -414,6 +487,7 @@ export function useAssessment(assessmentId: string) {
     submitAnswer,
     pauseAssessment,
     resumeAssessment,
+    advanceToNextStage,
     goToPreviousQuestion,
     canGoBack,
     getResponseForQuestion,

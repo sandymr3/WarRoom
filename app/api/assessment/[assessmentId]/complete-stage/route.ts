@@ -33,7 +33,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       where: { id: assessmentId },
       include: {
         stages: { orderBy: { stageNumber: 'desc' } },
-        responses: true,
+        responses: {
+          include: { stage: { select: { stageNumber: true } } },
+        },
         mistakesTriggered: true,
         competencyScores: true,
       },
@@ -50,15 +52,23 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const currentStage = assessment.currentStage as StageNumber
     const stageConfig = getStageConfig(currentStage)
     
-    // Get current state
-    const currentState = assessment.stages[0]?.stateSnapshot as any || {}
+    // Get current state from Assessment-level fields (updated on each response),
+    // with fallback to latest stage snapshot
+    const stageSnapshot = (assessment.stages[0]?.stateSnapshot as any) || {}
+    const currentState = {
+      financial: assessment.financialState || stageSnapshot.financial || {},
+      team: assessment.teamState || stageSnapshot.team || {},
+      customers: assessment.customerState || stageSnapshot.customers || {},
+      product: assessment.productState || stageSnapshot.product || {},
+      market: assessment.marketState || stageSnapshot.market || {},
+    }
     
     // Calculate competency scores for this stage
     const stageResponses = assessment.responses
-      .filter((r: any) => r.stageNumber === currentStage)
+      .filter((r: any) => r.stage?.stageNumber === currentStage)
       .map((r: any) => ({
         ...r,
-        stageNumber: r.stageNumber as StageNumber,
+        stageNumber: r.stage?.stageNumber as StageNumber,
         responseData: r.responseData as any,
         competenciesAssessed: (r.competenciesAssessed as string[]) || [],
       })) as QuestionResponse[]

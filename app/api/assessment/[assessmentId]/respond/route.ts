@@ -11,6 +11,7 @@ import { getQuestionById, getNextQuestion, getStageConfig } from '@/src/lib/serv
 import { scoreMultipleChoiceResponse, scoreBudgetAllocation } from '@/src/lib/services/scoring-engine'
 import { checkForMistakeTrigger, createMistakeTriggered, getMistakeImmediateImpact } from '@/src/lib/services/mistake-detector'
 import { applyMistakeImmediateConsequence } from '@/src/lib/services/consequence-engine'
+import { createInitialState, applyConsequence } from '@/src/lib/services/state-manager'
 import { evaluateOpenTextResponse } from '@/src/lib/gemini'
 import type { ResponseData, MistakeCode, StageNumber } from '@/src/types'
 
@@ -203,9 +204,37 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       }
     }
     
-    // Get current state from latest stage
-    const currentState = assessment.stages[0]?.stateSnapshot as any || {}
-    
+    // Reconstruct full simulation state from Assessment-level fields
+    const stageSnapshot = (assessment.stages[0]?.stateSnapshot as any) || {}
+    const initialState = createInitialState()
+    let fullState = {
+      ...initialState,
+      financial: { ...initialState.financial, ...(assessment.financialState as any || stageSnapshot.financial || {}) },
+      team: { ...initialState.team, ...(assessment.teamState as any || stageSnapshot.team || {}) },
+      customers: { ...initialState.customers, ...(assessment.customerState as any || stageSnapshot.customers || {}) },
+      product: { ...initialState.product, ...(assessment.productState as any || stageSnapshot.product || {}) },
+      market: { ...initialState.market, ...(assessment.marketState as any || stageSnapshot.market || {}) },
+    }
+
+    // Apply option state impact to simulation state
+    if (typedResponseData.type === 'choice' && question.options) {
+      const selectedOption = question.options.find(
+        o => o.id === typedResponseData.selectedOptionId
+      )
+      if (selectedOption) {
+        const stateImpact = (selectedOption as any).stateImpact || (selectedOption as any).consequence
+        if (stateImpact) {
+          fullState = applyConsequence(fullState, stateImpact)
+        }
+      }
+    }
+
+    // Apply mistake immediate consequences to state if triggered
+    if (mistakeToTrigger && !currentMistakes.includes(mistakeToTrigger)) {
+      const mistakeResult = applyMistakeImmediateConsequence(fullState, mistakeToTrigger)
+      fullState = mistakeResult.newState
+    }
+
     // Get next question
     const nextQuestion = getNextQuestion(
       questionId,
@@ -216,15 +245,20 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         responseData: r.responseData as ResponseData,
         competenciesAssessed: (r.competenciesAssessed as string[]) || [],
       })) as any,
-      currentState
+      fullState
     )
-    
-    // Update assessment
+
+    // Update assessment with next question AND current simulation state
     await prisma.assessment.update({
       where: { id: assessmentId },
       data: {
         currentQuestionId: nextQuestion?.id || null,
         lastActiveAt: new Date(),
+        financialState: fullState.financial as any,
+        teamState: fullState.team as any,
+        customerState: fullState.customers as any,
+        productState: fullState.product as any,
+        marketState: fullState.market as any,
       },
     })
     
@@ -239,6 +273,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       consequenceApplied,
       nextQuestion,
       stageComplete,
+      updatedState: {
+        financial: fullState.financial,
+        team: fullState.team,
+        customers: fullState.customers,
+        product: fullState.product,
+        market: fullState.market,
+      },
     })
   } catch (error) {
     console.error('Error submitting response:', error)

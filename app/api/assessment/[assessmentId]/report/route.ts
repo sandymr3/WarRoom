@@ -32,7 +32,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       where: { id: assessmentId },
       include: {
         stages: { orderBy: { stageNumber: 'asc' } },
-        responses: { orderBy: { answeredAt: 'asc' } },
+        responses: { orderBy: { answeredAt: 'asc' }, include: { stage: { select: { stageNumber: true } } } },
         mistakesTriggered: true,
         competencyScores: true,
         reports: true,
@@ -56,7 +56,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Calculate all competency scores
     const allResponses = assessment.responses.map((r: any) => ({
       ...r,
-      stageNumber: r.stageNumber as StageNumber,
+      stageNumber: r.stage?.stageNumber as StageNumber,
+      pointsAwarded: r.rawScore || 0,
       responseData: r.responseData as any,
       competenciesAssessed: (r.competenciesAssessed as string[]) || [],
     })) as QuestionResponse[]

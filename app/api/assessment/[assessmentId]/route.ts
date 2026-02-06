@@ -33,6 +33,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         },
         responses: {
           orderBy: { answeredAt: 'asc' },
+          include: {
+            stage: { select: { stageNumber: true, stageName: true } },
+          },
         },
         competencyScores: true,
         mistakesTriggered: true,
@@ -52,16 +55,24 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       ? getQuestionById(assessment.currentQuestionId)
       : null
     
-    // Get latest state from most recent stage
+    // Build state from Assessment-level JSON fields (populated on each response),
+    // with fallback to latest stage snapshot
     const latestStage = assessment.stages[assessment.stages.length - 1]
-    const state = latestStage?.stateSnapshot || {}
+    const stageSnapshot = (latestStage?.stateSnapshot as any) || {}
+    const state = {
+      financial: assessment.financialState || stageSnapshot.financial || {},
+      team: assessment.teamState || stageSnapshot.team || {},
+      customers: assessment.customerState || stageSnapshot.customers || {},
+      product: assessment.productState || stageSnapshot.product || {},
+      market: assessment.marketState || stageSnapshot.market || {},
+    }
     
-    // Calculate progress
+    // Calculate progress - use stage relation to get stageNumber
     const progress = getStageProgress(
       assessment.currentStage as any,
       assessment.responses.map((r: any) => ({
         ...r,
-        stageNumber: r.stageNumber as any,
+        stageNumber: r.stage?.stageNumber ?? assessment.currentStage,
         responseData: r.responseData as any,
         competenciesAssessed: (r.competenciesAssessed as string[]) || [],
       }))
@@ -98,7 +109,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     
     const { assessmentId } = await params
     const body = await request.json()
-    const { currentStage, currentQuestionId, status, businessContext } = body
+    const { currentStage, currentQuestionId, status, businessContext,
+            financialState, teamState, customerState, productState, marketState } = body
     
     const assessment = await prisma.assessment.findUnique({
       where: { id: assessmentId },
@@ -121,8 +133,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (currentQuestionId !== undefined) updateData.currentQuestionId = currentQuestionId
     if (status !== undefined) updateData.status = status
     if (businessContext !== undefined) updateData.businessContext = businessContext
+    if (financialState !== undefined) updateData.financialState = financialState
+    if (teamState !== undefined) updateData.teamState = teamState
+    if (customerState !== undefined) updateData.customerState = customerState
+    if (productState !== undefined) updateData.productState = productState
+    if (marketState !== undefined) updateData.marketState = marketState
     
-    if (status === 'completed') {
+    if (status === 'COMPLETED') {
       updateData.completedAt = new Date()
     }
     
