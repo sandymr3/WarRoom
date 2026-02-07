@@ -18,3 +18,7 @@ export { default as NarrativeIntro, type NarrativeLine } from './narrative-intro
 export { default as ConsequenceDisplay, type ConsequenceItem } from './consequence-display'
 export { default as StageTransition, type CompetencyScoreDisplay, type MistakeDisplay, type StageMetric } from './stage-transition'
 export { default as StateDashboard } from './state-dashboard'
+
+// Shark Tank-style panelist components
+export { default as PanelSelection } from './panel-selection'
+export { default as PanelistPanel, ActivePanelistDisplay, PanelistFeedback } from './panelist-panel'

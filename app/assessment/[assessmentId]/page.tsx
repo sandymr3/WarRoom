@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import QuestionRenderer from '@/src/components/assessment/question-renderer'
 import StateDashboard from '@/src/components/assessment/state-dashboard'
@@ -9,12 +9,14 @@ import NarrativeIntro from '@/src/components/assessment/narrative-intro'
 import StageTransition from '@/src/components/assessment/stage-transition'
 import ConsequenceDisplay from '@/src/components/assessment/consequence-display'
 import AnswersModal from '@/src/components/assessment/answers-modal'
+import PanelistPanel, { ActivePanelistDisplay } from '@/src/components/assessment/panelist-panel'
 import { useAssessment } from '@/src/lib/hooks/use-assessment'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { ChevronLeft, Pause, Clock, Zap } from 'lucide-react'
+import { ChevronLeft, Pause, Clock, Zap, Users } from 'lucide-react'
 import Link from 'next/link'
+import { getPanelistsByIds, ALL_PANELISTS } from '@/src/lib/panelists'
 import type { StageNumber, NarrativeIntro as NarrativeIntroType, ConsequenceItem, CompetencyScoreDisplay, MistakeDisplay, StageMetric } from '@/src/types'
 
 type AssessmentView = 'narrative' | 'question' | 'consequence' | 'stage-transition'
@@ -45,6 +47,25 @@ export default function AssessmentPage() {
   const [stageCompletionData, setStageCompletionData] = useState<any>(null)
   const [showNarrativeForStage, setShowNarrativeForStage] = useState<StageNumber | null>(null)
   const [timeRemaining, setTimeRemaining] = useState(90 * 60) // 90 minutes in seconds
+  const [activePanelistIndex, setActivePanelistIndex] = useState(0)
+
+  // Get panelists from assessment (or fallback to first 6 for demo)
+  const selectedPanelistIds = useMemo(() => {
+    if (assessment?.selectedPanelists && Array.isArray(assessment.selectedPanelists)) {
+      return assessment.selectedPanelists as string[]
+    }
+    // Fallback: pick first 6 panelists (2 from each category)
+    return ALL_PANELISTS.slice(0, 6).map(p => p.id)
+  }, [assessment?.selectedPanelists])
+
+  const panelists = useMemo(() => getPanelistsByIds(selectedPanelistIds), [selectedPanelistIds])
+  
+  // Rotate active panelist based on question number
+  const activePanelist = useMemo(() => {
+    if (panelists.length === 0) return null
+    const questionNumber = responses.length
+    return panelists[questionNumber % panelists.length]
+  }, [panelists, responses.length])
 
   // Show narrative intro when stage changes
   useEffect(() => {
@@ -207,7 +228,7 @@ export default function AssessmentPage() {
         <>
           {/* Header */}
           <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
               <div className="flex items-center justify-between">
                 <Link href="/dashboard">
                   <Button variant="ghost" size="sm">
@@ -215,11 +236,21 @@ export default function AssessmentPage() {
                     Exit
                   </Button>
                 </Link>
-                <div className="flex items-center gap-6">
+                
+                {/* Panelist Panel - Center */}
+                <div className="hidden md:flex items-center gap-3">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <PanelistPanel 
+                    panelistIds={selectedPanelistIds}
+                    activePanelistId={activePanelist?.id}
+                  />
+                </div>
+                
+                <div className="flex items-center gap-4">
                   <div className="hidden sm:flex items-center gap-2 text-sm">
                     <span className="text-primary font-semibold">{stageConfig?.stage?.name}</span>
                     <span className="text-muted-foreground">•</span>
-                    <span className="text-muted-foreground">Q{progress.answered + 1} of {progress.total}</span>
+                    <span className="text-muted-foreground">Q{progress.answered + 1}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm font-mono">
                     <Clock className="h-4 w-4 text-muted-foreground" />
@@ -233,7 +264,7 @@ export default function AssessmentPage() {
                   </Button>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-3">
                 <Progress value={progress.percentage} className="h-1.5" />
               </div>
             </div>
@@ -280,8 +311,16 @@ export default function AssessmentPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+                className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
               >
+                {/* Active Panelist Display */}
+                {activePanelist && (
+                  <ActivePanelistDisplay 
+                    panelist={activePanelist}
+                    isThinking={isSubmitting}
+                  />
+                )}
+                
                 {/* Previous Question Button */}
                 {canGoBack() && (
                   <Button

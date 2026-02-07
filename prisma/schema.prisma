@@ -94,6 +94,9 @@ model Assessment {
   // Business context captured at start
   businessContext       Json?             // { industry, customerSegment, problem, solution, businessModel }
   
+  // Selected panel members (Shark Tank style)
+  selectedPanelists     Json?             // Array of panelist IDs: ["kevin-oleary", "mark-cuban", ...]
+  
   // Progress tracking
   currentStage          Int               @default(-2) // -2 to 3
   currentQuestionId     String?

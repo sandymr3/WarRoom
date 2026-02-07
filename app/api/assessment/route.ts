@@ -56,7 +56,15 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.json()
-    const { cohortId } = body
+    const { cohortId, selectedPanelists } = body
+    
+    // Validate panelists selection (6 required: 2 from each category)
+    if (!selectedPanelists || !Array.isArray(selectedPanelists) || selectedPanelists.length !== 6) {
+      return NextResponse.json(
+        { error: 'Must select exactly 6 panelists (2 from each category)' },
+        { status: 400 }
+      )
+    }
     
     // Check how many assessments user already has
     const existingCount = await prisma.assessment.count({
@@ -87,6 +95,7 @@ export async function POST(request: NextRequest) {
         status: 'IN_PROGRESS',
         currentStage: -2,
         currentQuestionId: firstQuestion?.id || null,
+        selectedPanelists: selectedPanelists, // Store selected War Room panelists
         startedAt: new Date(),
         lastActiveAt: new Date(),
         // Create first stage record

@@ -430,6 +430,187 @@ Respond in this exact JSON format:
   }
 }
 
+/**
+ * Panelist feedback interfaces
+ */
+export interface PanelistFeedbackRequest {
+  panelistId: string
+  panelistName: string
+  panelistRole: string
+  primaryLens: string
+  characteristics: string[]
+  challengeQuestions: string[]
+  tone: string
+  guidanceStyle: string
+}
+
+export interface PanelistReaction {
+  panelistId: string
+  panelistName: string
+  sentiment: 'positive' | 'negative' | 'neutral' | 'challenging'
+  reaction: string // Short reaction (1-2 sentences)
+  challengeQuestion?: string // Follow-up challenge (optional)
+  advice?: string // Quick advice based on their lens
+}
+
+export interface PanelistPanelFeedback {
+  reactions: PanelistReaction[]
+  overallTension: string // Any conflicting advice between panelists
+  dominantConcern: string // Main issue raised
+}
+
+/**
+ * Generate Shark Tank-style panelist reactions to a user's pitch response
+ */
+export async function generatePanelistReactions(
+  question: string,
+  userResponse: string,
+  panelists: PanelistFeedbackRequest[],
+  context: {
+    stageName: string
+    businessContext?: string
+    currentState?: {
+      capital?: number
+      runway?: number
+      customers?: number
+    }
+  }
+): Promise<PanelistPanelFeedback> {
+  const model = getGeminiModel()
+
+  const prompt = `You are simulating a Shark Tank-style panel of investors, mentors, and leaders reacting to an entrepreneur's pitch response.
+
+ENTREPRENEUR'S CONTEXT:
+- Current Stage: ${context.stageName}
+- Business Context: ${context.businessContext || 'Early-stage startup'}
+${context.currentState ? `- Capital: $${context.currentState.capital?.toLocaleString() || 'N/A'}
+- Runway: ${context.currentState.runway || 'N/A'} months
+- Customers: ${context.currentState.customers || 0}` : ''}
+
+QUESTION ASKED:
+${question}
+
+ENTREPRENEUR'S RESPONSE:
+${userResponse}
+
+PANEL MEMBERS:
+${panelists.map((p, i) => `
+${i + 1}. ${p.panelistName} (${p.panelistRole})
+   - Primary Lens: ${p.primaryLens}
+   - Tone: ${p.tone}
+   - Characteristics: ${p.characteristics.join(', ')}
+   - Typical Challenge Questions: ${p.challengeQuestions.join('; ')}
+   - Guidance Style: ${p.guidanceStyle}
+`).join('\n')}
+
+INSTRUCTIONS:
+Generate authentic reactions from each panelist based on their unique personality and lens. Each panelist should:
+1. React according to their PRIMARY LENS (what they care about most)
+2. Use their characteristic TONE (some are blunt, others warm, etc.)
+3. Potentially challenge the entrepreneur with a follow-up question
+4. Offer brief advice from their perspective
+
+The reactions should sometimes CONFLICT with each other - this is intentional! Entrepreneurs must learn to navigate conflicting advice.
+
+Respond in this exact JSON format:
+{
+  "reactions": [
+    {
+      "panelistId": "<panelist id>",
+      "panelistName": "<name>",
+      "sentiment": "<positive|negative|neutral|challenging>",
+      "reaction": "<1-2 sentence reaction in their voice/tone>",
+      "challengeQuestion": "<optional follow-up question they might ask>",
+      "advice": "<optional brief advice from their lens>"
+    }
+  ],
+  "overallTension": "<describe any conflicting advice between panelists>",
+  "dominantConcern": "<the main issue or opportunity panelists are focused on>"
+}`
+
+  try {
+    const result = await model.generateContent(prompt)
+    const response = result.response.text()
+
+    const jsonMatch = response.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      throw new Error('Failed to parse JSON from panelist reactions')
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]) as PanelistPanelFeedback
+    return parsed
+  } catch (error) {
+    console.error('Gemini panelist reactions error:', error)
+    // Return fallback reactions
+    return {
+      reactions: panelists.map(p => ({
+        panelistId: p.panelistId,
+        panelistName: p.panelistName,
+        sentiment: 'neutral' as const,
+        reaction: "Interesting approach. Let's see how this plays out.",
+      })),
+      overallTension: 'Panel is considering the response.',
+      dominantConcern: 'Validating the approach.'
+    }
+  }
+}
+
+/**
+ * Generate a single panelist's question introduction
+ */
+export async function generatePanelistQuestionIntro(
+  panelist: PanelistFeedbackRequest,
+  question: string,
+  context: {
+    stageName: string
+    previousResponses?: string[]
+  }
+): Promise<{ intro: string; modifiedQuestion?: string }> {
+  const model = getGeminiModel()
+
+  const prompt = `You are ${panelist.panelistName}, ${panelist.panelistRole}.
+
+Your characteristics:
+- Primary Lens: ${panelist.primaryLens}
+- Tone: ${panelist.tone}
+- Style: ${panelist.characteristics.join(', ')}
+
+You are about to ask the entrepreneur a question during their pitch in the "${context.stageName}" stage.
+
+ORIGINAL QUESTION:
+${question}
+
+${context.previousResponses?.length ? `CONTEXT FROM PREVIOUS RESPONSES:
+${context.previousResponses.slice(-2).join('\n')}` : ''}
+
+TASK:
+1. Write a brief intro (1-2 sentences) in your character's voice setting up why you're asking this
+2. Optionally rephrase the question in your voice while keeping the core intent
+
+Respond in JSON:
+{
+  "intro": "<your intro in character>",
+  "modifiedQuestion": "<optional: question rephrased in your voice, or null to use original>"
+}`
+
+  try {
+    const result = await model.generateContent(prompt)
+    const response = result.response.text()
+
+    const jsonMatch = response.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      throw new Error('Failed to parse panelist intro')
+    }
+
+    return JSON.parse(jsonMatch[0])
+  } catch (error) {
+    console.error('Gemini panelist intro error:', error)
+    return {
+      intro: `${panelist.panelistName} leans forward with interest...`,
+    }
+  }
+}
+
 export default {
   getGeminiModel,
   evaluateOpenTextResponse,
@@ -437,4 +618,6 @@ export default {
   generateStageFeedback,
   generateReportInsights,
   generateDynamicQuestion,
+  generatePanelistReactions,
+  generatePanelistQuestionIntro,
 }

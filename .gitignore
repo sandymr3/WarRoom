@@ -66,6 +66,7 @@ Desktop.ini
 *.pid
 *.seed
 *.pid.lock
+tmpclaude-*
 
 # cache
 .cache
