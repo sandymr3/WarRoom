@@ -182,7 +182,8 @@ model Response {
   
   // AI Evaluation results
   aiEvaluation    Json?     // { score, levelAchieved, evidence, redFlags, greenFlags, followUpNeeded }
-  
+  preWrittenRemark String?  // Pre-written remark for multiple-choice options
+
   // Scoring
   rawScore        Int?
   adjustedScore   Int?      // After bonuses/penalties

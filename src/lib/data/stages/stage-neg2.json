@@ -55,10 +55,10 @@
       "branches": {
         "ifVague": {
           "action": "probe",
-          "probeQuestion": {
-            "id": "Q-2.1-PROBE",
-            "type": "open_text",
-            "questionText": "That's quite broad. Can you narrow it down? Who specifically would you serve, and what's the specific problem area?",
+                      "probeQuestion": {
+                      "id": "Q-2.1-PROBE",
+                      "type": "ai_generated_open_text",
+                      "generatedByPanelistId": "active-panelist",            "questionText": "That's quite broad. Can you narrow it down? Who specifically would you serve, and what's the specific problem area?",
             "narrativeIntro": "I need you to think deeper. Broad markets mean broad competition and unfocused products.",
             "assess": ["C1", "C4"],
             "isRequired": true,
@@ -108,7 +108,8 @@
           "action": "challenge",
           "challengeQuestion": {
             "id": "Q-2.2-CHALLENGE",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "If you try to serve everyone, you serve no one well. Who has the MOST URGENT need for your solution? Be specific.",
             "narrativeIntro": "Stop. This is one of the most common mistakes entrepreneurs make. Let me push you harder.",
             "assess": ["C1", "C4"],
@@ -179,7 +180,8 @@
           "competencyLevel": "C1_L1",
           "followUp": {
             "id": "Q-2.4A-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "Have you validated that others have the same problem? How?",
             "assess": ["C1", "C2"],
             "scoring": {
@@ -199,7 +201,8 @@
           "competencyLevel": "C1_L2",
           "followUp": {
             "id": "Q-2.4B-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "How many customers did you interview? What surprised you most?",
             "assess": ["C1", "C2"],
             "scoring": {
@@ -219,7 +222,8 @@
           "competencyLevel": "C2_L1",
           "followUp": {
             "id": "Q-2.4C-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "Have you talked to REAL customers yet? What's stopping you?",
             "assess": ["C1", "C2", "C5"],
             "isChallenge": true
@@ -233,7 +237,8 @@
           "competencyLevel": "C1_WEAK",
           "followUp": {
             "id": "Q-2.4D-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "What EVIDENCE do you have that customers actually want this? Trends don't equal demand.",
             "assess": ["C1", "C2"],
             "isChallenge": true
@@ -265,7 +270,8 @@
           "warning": "WARNING: No competitors often means no market. Be careful.",
           "followUp": {
             "id": "Q-2.5B-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "If this is such a big problem, why hasn't anyone solved it yet? What do you know that they don't?",
             "assess": ["C1", "C3"],
             "isChallenge": true
@@ -316,7 +322,8 @@
           "action": "challenge",
           "challengeQuestion": {
             "id": "Q-2.6-CHALLENGE",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "That differentiation sounds easy to copy. What's your DEFENSIBLE moat?",
             "assess": ["C1", "C3"]
           }
@@ -325,7 +332,8 @@
           "action": "challenge",
           "challengeQuestion": {
             "id": "Q-2.6-PRICE",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "Price wars lead to thin margins. What else can you offer beyond lower prices?",
             "assess": ["C1", "C6"]
           }
@@ -349,7 +357,8 @@
           "competencyLevel": "C2_L1",
           "followUp": {
             "id": "Q-2.7A-FOLLOW",
-            "type": "open_text",
+            "type": "ai_generated_open_text",
+            "generatedByPanelistId": "active-panelist",
             "questionText": "How do you stay open to new perspectives? Experts can have blind spots.",
             "assess": ["C2", "C4"]
           }

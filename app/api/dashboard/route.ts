@@ -166,9 +166,13 @@ export async function GET() {
       stats,
     })
   } catch (error) {
-    console.error('Error fetching dashboard data:', error)
+    console.error('DEBUG: Error fetching dashboard data:', error)
+    if (error instanceof Error) {
+      console.error('DEBUG: Error message:', error.message)
+      console.error('DEBUG: Error stack:', error.stack)
+    }
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
+      { error: 'Failed to fetch dashboard data', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }

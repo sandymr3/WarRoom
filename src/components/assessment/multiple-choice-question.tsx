@@ -28,9 +28,12 @@ export default function MultipleChoiceQuestion({
 
     await onSubmit({
       questionId: question.id,
-      responseData: { selectedOptionId: selectedOption },
+      responseData: { 
+        type: 'choice',
+        selectedOptionId: selectedOption 
+      },
       answeredAt: new Date()
-    })
+    } as any)
   }
 
   return (

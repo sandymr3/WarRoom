@@ -11,7 +11,7 @@ import { getStageConfig, getNextStage, getFirstQuestionOfStage } from '@/src/lib
 import { calculateAllCompetencyScores } from '@/src/lib/services/scoring-engine'
 import { applyCompoundingConsequences } from '@/src/lib/services/consequence-engine'
 import { generateStageFeedback } from '@/src/lib/gemini'
-import type { StageNumber, QuestionResponse, MistakeTriggered } from '@/src/types'
+import type { StageNumber, QuestionResponse, MistakeTriggered, MistakeCode } from '@/src/types'
 
 interface RouteParams {
   params: Promise<{ assessmentId: string }>
@@ -55,12 +55,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Get current state from Assessment-level fields (updated on each response),
     // with fallback to latest stage snapshot
     const stageSnapshot = (assessment.stages[0]?.stateSnapshot as any) || {}
-    const currentState = {
+    const currentState: any = {
       financial: assessment.financialState || stageSnapshot.financial || {},
       team: assessment.teamState || stageSnapshot.team || {},
       customers: assessment.customerState || stageSnapshot.customers || {},
       product: assessment.productState || stageSnapshot.product || {},
       market: assessment.marketState || stageSnapshot.market || {},
+      operations: (assessment as any).operationsState || stageSnapshot.operations || {
+        processCount: 0,
+        automationLevel: 'manual',
+        systemsBuilt: [],
+        founderDependency: 100
+      },
+      mistakesTriggered: assessment.mistakesTriggered.map((m: any) => m.mistakeCode as MistakeCode),
+      compoundedLosses: (assessment as any).compoundedLosses || 0,
+      decisionsLog: []
     }
     
     // Calculate competency scores for this stage

@@ -9,7 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Play, RotateCcw, CheckCircle2, Clock, LogOut, BarChart3 } from 'lucide-react'
+import { Play, RotateCcw, CheckCircle2, Clock, LogOut, BarChart3, Target, Crown, Sparkles, Zap } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface Attempt {
   id: string | null
@@ -100,76 +101,68 @@ export default function DashboardPage() {
   const canContinueAttempt1 = attempt1?.status === 'in-progress'
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">Welcome back, {user.name?.split(' ')[0] || 'User'}!</h1>
-              <p className="text-muted-foreground mt-1">Ready to assess your entrepreneurial skills?</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <Button variant="outline" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="py-6">
+      {/* Welcome Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Welcome back, {user.name?.split(' ')[0] || 'User'}!</h1>
+        <p className="text-muted-foreground mt-1">Ready to assess your entrepreneurial skills and face the panel?</p>
+      </div>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-12">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{stats.competenciesAssessed}</div>
-                <p className="text-sm text-muted-foreground mt-1">Competencies Assessed</p>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
+        <Card className="bg-card/50 backdrop-blur-sm">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Competencies</p>
+                <div className="text-2xl font-bold text-primary">{stats.competenciesAssessed}</div>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <Target className="h-5 w-5" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-card/50 backdrop-blur-sm">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Best Score</p>
+                <div className="text-2xl font-bold text-primary">
                   {stats.bestScore !== null ? stats.bestScore : '—'}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">Your Best Score</p>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
+              <div className="h-10 w-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-600">
+                <Crown className="h-5 w-5" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-card/50 backdrop-blur-sm">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Completion</p>
+                <div className="text-2xl font-bold text-primary">
                   {stats.attemptsCompleted}/{stats.totalAttempts}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">Attempts Completed</p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-600">
+                <CheckCircle2 className="h-5 w-5" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-        {/* View Results Link */}
-        {stats.attemptsCompleted > 0 && (
-          <div className="mb-8 flex justify-end">
-            <Link href="/results">
-              <Button variant="outline">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                View All Results
-              </Button>
-            </Link>
-          </div>
-        )}
-
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Assessment Attempts */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Your Assessment Attempts</h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="lg:col-span-2">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Zap className="h-5 w-5 text-primary" />
+            Your Assessment Attempts
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {attempts.map((attempt) => {
               const isCompleted = attempt.status === 'completed'
               const isInProgress = attempt.status === 'in-progress'
@@ -177,18 +170,20 @@ export default function DashboardPage() {
               const isLocked = attempt.number === 2 && attempt1?.status !== 'completed'
 
               return (
-                <Card key={attempt.number} className={isLocked ? 'opacity-60' : ''}>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle>Attempt {attempt.number}</CardTitle>
-                        <CardDescription>
-                          {isCompleted && `Completed on ${attempt.date}`}
-                          {isNotStarted && attempt.number === 1 && 'Ready to start'}
-                          {isNotStarted && attempt.number === 2 && 'Complete Attempt 1 first'}
-                          {isInProgress && 'In progress...'}
-                        </CardDescription>
+                <Card key={attempt.number} className={cn(
+                  "relative overflow-hidden transition-all hover:shadow-md",
+                  isLocked ? 'opacity-60 grayscale bg-muted/30' : 'bg-card'
+                )}>
+                  {isCompleted && (
+                    <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
+                      <div className="absolute top-2 right-[-24px] bg-green-500 text-white text-[10px] font-bold py-1 px-8 rotate-45">
+                        DONE
                       </div>
+                    </div>
+                  )}
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">Attempt {attempt.number}</CardTitle>
                       <Badge
                         variant={
                           isCompleted
@@ -197,45 +192,43 @@ export default function DashboardPage() {
                               ? 'secondary'
                               : 'outline'
                         }
+                        className="font-normal"
                       >
-                        {isCompleted && (
-                          <>
-                            <CheckCircle2 className="h-3 w-3 mr-1" />
-                            Completed
-                          </>
-                        )}
-                        {isNotStarted && (isLocked ? 'Locked' : 'Not Started')}
-                        {isInProgress && (
-                          <>
-                            <Clock className="h-3 w-3 mr-1" />
-                            In Progress
-                          </>
-                        )}
+                        {isCompleted && 'Completed'}
+                        {isNotStarted && (isLocked ? 'Locked' : 'Available')}
+                        {isInProgress && 'In Progress'}
                       </Badge>
                     </div>
+                    <CardDescription>
+                      {isCompleted && `Finished on ${attempt.date}`}
+                      {isNotStarted && attempt.number === 1 && 'Ready to begin your journey'}
+                      {isNotStarted && attempt.number === 2 && 'Unlock after Attempt 1'}
+                      {isInProgress && 'Resume where you left off'}
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-2">
                     {isCompleted && (
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Score</span>
-                          <span className="text-2xl font-bold text-primary">{attempt.score ?? '—'}</span>
+                        <div className="flex items-end justify-between">
+                          <div>
+                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Score</span>
+                            <div className="text-3xl font-bold text-primary">{attempt.score ?? '—'}</div>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Time</span>
+                            <div className="text-sm font-medium">{attempt.duration ? `${attempt.duration}m` : '—'}</div>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
-                          <span>Duration</span>
-                          <span>{attempt.duration ? `${attempt.duration} minutes` : '—'}</span>
-                        </div>
-                        <div className="flex gap-2 pt-4">
+                        <div className="flex gap-2 pt-2">
                           <Link href={`/assessment/${attempt.id}/report`} className="flex-1">
-                            <Button variant="outline" className="w-full bg-transparent">
+                            <Button variant="outline" size="sm" className="w-full">
                               View Report
                             </Button>
                           </Link>
                           {attempt.number === 1 && attempts[1]?.status === 'not-started' && (
                             <Link href="/assessment/start" className="flex-1">
-                              <Button className="w-full">
-                                Start Attempt 2
-                                <Play className="h-4 w-4 ml-2" />
+                              <Button size="sm" className="w-full">
+                                Start Next
                               </Button>
                             </Link>
                           )}
@@ -244,20 +237,18 @@ export default function DashboardPage() {
                     )}
                     {isNotStarted && (
                       <div className="space-y-4">
-                        <p className="text-sm text-muted-foreground">
-                          {isLocked
-                            ? 'You can start your second attempt after completing the first one.'
-                            : 'Take our comprehensive assessment to evaluate your entrepreneurial competencies.'}
-                        </p>
+                        <div className="h-1 bg-muted rounded-full overflow-hidden">
+                          <div className="h-full bg-primary/20 w-0" />
+                        </div>
                         {isLocked ? (
-                          <Button disabled className="w-full">
+                          <Button disabled variant="outline" size="sm" className="w-full">
                             Locked
                           </Button>
                         ) : (
                           <Link href="/assessment/start" className="block">
-                            <Button className="w-full">
+                            <Button size="sm" className="w-full group">
                               Start Assessment
-                              <Play className="h-4 w-4 ml-2" />
+                              <Play className="h-3 w-3 ml-2 group-hover:translate-x-0.5 transition-transform" />
                             </Button>
                           </Link>
                         )}
@@ -265,13 +256,13 @@ export default function DashboardPage() {
                     )}
                     {isInProgress && (
                       <div className="space-y-4">
-                        <p className="text-sm text-muted-foreground">
-                          Continue your assessment where you left off.
-                        </p>
+                        <div className="h-1 bg-muted rounded-full overflow-hidden">
+                          <div className="h-full bg-primary w-1/2" />
+                        </div>
                         <Link href={`/assessment/${attempt.id}`} className="block">
-                          <Button className="w-full">
-                            Continue Assessment
-                            <RotateCcw className="h-4 w-4 ml-2" />
+                          <Button size="sm" className="w-full group">
+                            Continue
+                            <RotateCcw className="h-3 w-3 ml-2 group-hover:rotate-180 transition-transform duration-500" />
                           </Button>
                         </Link>
                       </div>
@@ -283,44 +274,35 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Call to Action */}
-        {canStartAttempt1 && (
-          <Card className="bg-primary text-primary-foreground border-0">
-            <CardContent className="pt-8 pb-8">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold mb-2">Ready to Begin?</h3>
-                <p className="mb-6 opacity-90">
-                  Take our comprehensive assessment to evaluate your entrepreneurial competencies. It typically takes about 90 minutes.
-                </p>
-                <Link href="/assessment/start">
-                  <Button size="lg" variant="secondary">
-                    Start Assessment Now
-                  </Button>
-                </Link>
-              </div>
+        {/* Info / CTA Column */}
+        <div className="space-y-6">
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                Tips for Founders
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-3">
+              <p>• Your panel consists of conflicting archetypes. Mentors want growth, Investors want profit.</p>
+              <p>• Every decision impacts your startup state (Cash, Team, Product).</p>
+              <p>• Don't rush — deep thinking often leads to better scores.</p>
             </CardContent>
           </Card>
-        )}
 
-        {/* Continue Assessment CTA */}
-        {canContinueAttempt1 && (
-          <Card className="bg-primary text-primary-foreground border-0">
-            <CardContent className="pt-8 pb-8">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold mb-2">Continue Your Journey</h3>
-                <p className="mb-6 opacity-90">
-                  You have an assessment in progress. Pick up where you left off!
-                </p>
-                <Link href={`/assessment/${attempt1?.id}`}>
-                  <Button size="lg" variant="secondary">
-                    Continue Assessment
-                  </Button>
-                </Link>
-              </div>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Support</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              <p className="text-muted-foreground mb-4">Need help with the assessment or have questions about your results?</p>
+              <Button variant="outline" size="sm" className="w-full">
+                Contact Support
+              </Button>
             </CardContent>
           </Card>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   )
 }

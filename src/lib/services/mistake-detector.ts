@@ -95,7 +95,7 @@ function evaluateQuestionPattern(
     const allocations = response.responseData.allocations
     // Check budget patterns like "budget_allocation.team > 30"
     if (pattern.includes('budget_allocation')) {
-      return evaluateBudgetPattern(pattern, allocations)
+      return evaluateBudgetPattern(pattern, allocations as any)
     }
   }
   
@@ -115,7 +115,7 @@ function evaluateBudgetPattern(
   
   const [, category, operator, thresholdStr] = match
   const threshold = parseFloat(thresholdStr)
-  const allocation = allocations.find(a => 
+  const allocation = allocations.find((a: any) => 
     a.categoryId.toLowerCase() === category.toLowerCase()
   )
   
@@ -149,7 +149,7 @@ function evaluateConditionExpression(
   if (condition.startsWith('budgetBelow:')) {
     const [category, threshold] = condition.replace('budgetBelow:', '').split(':').map(s => s.trim())
     if (data.type === 'budget') {
-      const allocation = data.allocations.find(a => a.categoryId === category)
+      const allocation = (data.allocations as any).find((a: any) => a.categoryId === category)
       return allocation ? allocation.percentage < parseFloat(threshold) : false
     }
   }
@@ -157,7 +157,7 @@ function evaluateConditionExpression(
   if (condition.startsWith('budgetAbove:')) {
     const [category, threshold] = condition.replace('budgetAbove:', '').split(':').map(s => s.trim())
     if (data.type === 'budget') {
-      const allocation = data.allocations.find(a => a.categoryId === category)
+      const allocation = (data.allocations as any).find((a: any) => a.categoryId === category)
       return allocation ? allocation.percentage > parseFloat(threshold) : false
     }
   }

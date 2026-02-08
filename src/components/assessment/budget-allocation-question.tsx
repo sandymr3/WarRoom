@@ -53,10 +53,11 @@ export default function BudgetAllocationQuestion({
     await onSubmit({
       questionId: question.id,
       responseData: {
-        allocation: allocation.reduce((acc, item) => ({ ...acc, [item.id]: item.percent }), {})
+        type: 'budget',
+        allocations: allocation.reduce((acc, item) => ({ ...acc, [item.id]: item.percent }), {})
       },
       answeredAt: new Date()
-    })
+    } as any)
   }
 
   return (

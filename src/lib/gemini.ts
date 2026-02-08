@@ -1,4 +1,6 @@
 import { GoogleGenerativeAI, GenerativeModel, GenerationConfig } from '@google/generative-ai'
+import { Panelist } from './panelists'
+import { BusinessContext } from '../types/assessment' // Corrected import path and type name
 
 // Initialize the Gemini API client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
@@ -31,11 +33,14 @@ export interface GeminiEvaluationResponse {
 }
 
 /**
- * Evaluate an open-text response using Gemini AI
+ * Evaluate an open-text response using Gemini AI, with panelist context
  */
 export async function evaluateOpenTextResponse(
   questionText: string,
   userResponse: string,
+  panelist: Panelist, // Added panelist context
+  businessContext: BusinessContext, // Added business context
+  previousRemarks: string[], // Added previous remarks
   rubric: { criteria: string; points: number; description: string }[],
   aiConfig: {
     systemPrompt: string
@@ -48,9 +53,22 @@ export async function evaluateOpenTextResponse(
   const maxPoints = aiConfig.maxPoints || Math.max(...rubric.map(r => r.points))
   
   const prompt = `You are an expert evaluator assessing entrepreneurial competency.
+You are evaluating this response from the perspective of ${panelist.name}, a ${panelist.role}.
 
 SYSTEM CONTEXT:
 ${aiConfig.systemPrompt}
+${panelist.name}'s Primary Lens: ${panelist.primaryLens}
+${panelist.name}'s Tone: ${panelist.tone}
+${panelist.name}'s Characteristics: ${panelist.characteristics.join(', ')}
+${panelist.name}'s Guidance Style: ${panelist.guidanceStyle}
+
+ENTREPRENEUR'S BUSINESS CONTEXT:
+Industry: ${businessContext.industry || 'Not specified'}
+Problem: ${businessContext.problem || 'Not specified'}
+Solution: ${businessContext.solution || 'Not specified'}
+
+PREVIOUS REMARKS IN THIS PHASE (most recent last):
+${previousRemarks.length > 0 ? previousRemarks.join('\n') : 'No previous remarks.'}
 
 QUESTION ASKED:
 ${questionText}
@@ -69,6 +87,7 @@ INSTRUCTIONS:
 2. Evaluate against each rubric level
 3. Identify specific strengths and areas for improvement
 4. Assign a score from 0 to ${maxPoints}
+5. Frame your feedback in the tone and style of ${panelist.name}.
 
 Respond in this exact JSON format:
 {
@@ -320,18 +339,6 @@ Generate a professional assessment report in JSON:
   }
 }
 
-/**
- * Dynamically adapt a question to be more relevant to the user's specific business/industry
- * Only called when question has generate: true
- */
-export interface BusinessContext {
-  industry?: string
-  problemStatement?: string
-  targetAudience?: string
-  solution?: string
-  stage?: string
-}
-
 export interface DynamicQuestionResult {
   questionText: string
   options?: Array<{
@@ -345,6 +352,118 @@ export interface DynamicQuestionResult {
   }
 }
 
+export interface AIQuestion {
+  id: string
+  type: 'ai_generated_open_text'
+  questionText: string
+  panelistId: string
+  context: string
+  assess?: string[]
+  stage?: number
+  scoring?: {
+    rubric: { criteria: string; points: number; description: string }[]
+    maxPoints?: number
+  }
+  aiEvaluation?: {
+    systemPrompt: string
+    lookFor: string[]
+  }
+}
+
+/**
+ * Generate a personalized open-ended question from a specific panelist
+ */
+export async function generatePanelistOpenEndedQuestion(
+  panelist: Panelist,
+  businessContext: BusinessContext,
+  stageName: string,
+  previousRemarks: string[]
+): Promise<AIQuestion> {
+  const model = getGeminiModel()
+  
+  const prompt = `You are ${panelist.name}, a ${panelist.role}.
+Primary Lens: ${panelist.primaryLens}
+Tone: ${panelist.tone}
+Characteristics: ${panelist.characteristics.join(', ')}
+
+BUSINESS CONTEXT:
+Industry: ${businessContext.industry || 'Not specified'}
+Problem: ${businessContext.problem || 'Not specified'}
+Solution: ${businessContext.solution || 'Not specified'}
+
+CURRENT ASSESSMENT STAGE: ${stageName}
+
+PREVIOUS REMARKS (most recent last):
+${previousRemarks.length > 0 ? previousRemarks.join('\n') : 'No previous remarks.'}
+
+TASK:
+As ${panelist.name}, ask the entrepreneur ONE insightful, challenging open-ended question that probes their thinking, strategy, or readiness for the ${stageName} stage. 
+Reference their specific business context and the current stage.
+Your question should be framed through your unique lens and tone.
+
+Respond in this exact JSON format:
+{
+  "questionText": "<your question here>",
+  "context": "<brief explanation of why you are asking this from your perspective>",
+  "lookFor": ["<specific indicator 1 to look for in their answer>", "<indicator 2>", "<indicator 3>"]
+}`
+
+  try {
+    const result = await model.generateContent(prompt)
+    const response = result.response.text()
+    
+    const jsonMatch = response.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      throw new Error('Failed to parse JSON')
+    }
+    
+    const parsed = JSON.parse(jsonMatch[0])
+    
+    return {
+      id: `ai_q_${panelist.id}_${Date.now()}`,
+      type: 'ai_generated_open_text',
+      questionText: parsed.questionText,
+      panelistId: panelist.id,
+      context: parsed.context,
+      assess: ['C1'], // Default to foundational competency
+      stage: 0, // Default
+      scoring: {
+        rubric: [
+          { criteria: 'Strategic Alignment', points: 10, description: 'Directly addresses the core of the challenge posed.' },
+          { criteria: 'Depth of Thought', points: 5, description: 'Shows consideration of second-order effects.' }
+        ],
+        maxPoints: 15
+      },
+      aiEvaluation: {
+        systemPrompt: `You are evaluating a response from the perspective of ${panelist.name}.`,
+        lookFor: parsed.lookFor || []
+      }
+    }
+  } catch (error) {
+    console.error('Error generating AI question:', error)
+    return {
+      id: `ai_q_fallback_${Date.now()}`,
+      type: 'ai_generated_open_text',
+      questionText: `Given your focus on ${businessContext.industry || 'your industry'}, what is your primary strategy for success in this ${stageName} stage?`,
+      panelistId: panelist.id,
+      context: 'Fallback question due to generation error.',
+      assess: ['C1'],
+      scoring: {
+        rubric: [{ criteria: 'Clarity', points: 10, description: 'Clear explanation.' }],
+        maxPoints: 10
+      },
+      aiEvaluation: {
+        systemPrompt: 'Evaluate for clarity and strategic alignment.',
+        lookFor: ['Strategic clarity', 'Industry awareness']
+      }
+    }
+  }
+}
+
+/**
+ * Dynamically adapt a question to be more relevant to the user's specific business/industry
+ * Only called when question has generate: true
+ */
 export async function generateDynamicQuestion(
   originalQuestion: {
     questionText: string
@@ -355,7 +474,7 @@ export async function generateDynamicQuestion(
   businessContext: BusinessContext
 ): Promise<DynamicQuestionResult> {
   // If no meaningful business context, return original
-  if (!businessContext.industry && !businessContext.problemStatement) {
+  if (!businessContext.industry && !businessContext.problem) {
     return {
       questionText: originalQuestion.questionText,
       options: originalQuestion.options,
@@ -372,7 +491,7 @@ export async function generateDynamicQuestion(
 
 BUSINESS CONTEXT:
 - Industry: ${businessContext.industry || 'Not specified'}
-- Problem they're solving: ${businessContext.problemStatement || 'Not specified'}
+- Problem they're solving: ${businessContext.problem || 'Not specified'}
 - Target audience: ${businessContext.targetAudience || 'Not specified'}
 - Their solution: ${businessContext.solution || 'Not specified'}
 

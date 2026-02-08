@@ -5,17 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Question, QuestionResponse, QuestionOption } from '@/src/types'
+import { Question, QuestionOption, MistakeCode } from '@/src/types'
 import { AlertCircle, Clock, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface ExtendedOption extends QuestionOption {
+interface ExtendedOption extends Omit<QuestionOption, 'triggersMistake'> {
   points?: number
   competencyLevel?: string
   insight?: string
   warning?: string
   stateImpact?: Record<string, any>
-  triggersMistake?: string
+  triggersMistake?: MistakeCode | string
 }
 
 interface ScenarioQuestionProps {
@@ -29,7 +29,7 @@ interface ScenarioQuestionProps {
     }
     isDynamic?: boolean
   }
-  onSubmit: (response: QuestionResponse) => Promise<void>
+  onSubmit: (response: any) => Promise<void>
   isSubmitting: boolean
   showConsequencePreview?: boolean
 }

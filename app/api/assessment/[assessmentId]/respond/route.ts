@@ -1,8 +1,3 @@
-/**
- * Response Submission API Route
- * Handle submitting answers and triggering evaluations
- */
-
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import prisma from '@/src/lib/prisma'
@@ -12,8 +7,9 @@ import { scoreMultipleChoiceResponse, scoreBudgetAllocation } from '@/src/lib/se
 import { checkForMistakeTrigger, createMistakeTriggered, getMistakeImmediateImpact } from '@/src/lib/services/mistake-detector'
 import { applyMistakeImmediateConsequence } from '@/src/lib/services/consequence-engine'
 import { createInitialState, applyConsequence } from '@/src/lib/services/state-manager'
-import { evaluateOpenTextResponse } from '@/src/lib/gemini'
-import type { ResponseData, MistakeCode, StageNumber } from '@/src/types'
+import { evaluateOpenTextResponse, AIQuestion } from '@/src/lib/gemini' // Import AIQuestion
+import { getPanelistById } from '@/src/lib/panelists' // Import getPanelistById
+import type { ResponseData, MistakeCode, StageNumber, AIEvaluationResult, BusinessContext } from '@/src/types' // Import BusinessContext
 
 interface RouteParams {
   params: Promise<{ assessmentId: string }>
@@ -30,14 +26,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     
     const { assessmentId } = await params
     const body = await request.json()
-    const { questionId, responseData, responseTimeSeconds } = body
+    const { questionId, responseData, responseTimeSeconds, aiEvaluation: clientAIEvaluation, preWrittenRemark: clientPreWrittenRemark } = body // Extract client-side AI/pre-written data
     
-    // Validate assessment ownership
+    // Validate assessment ownership and fetch all necessary relations
     const assessment = await prisma.assessment.findUnique({
       where: { id: assessmentId },
       include: {
         stages: { orderBy: { stageNumber: 'desc' }, take: 1 },
-        responses: true,
+        responses: { orderBy: { createdAt: 'asc' } }, // Order by creation to get previous remarks
         mistakesTriggered: true,
       },
     })
@@ -59,74 +55,106 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     
     // Get question details
     const question = getQuestionById(questionId)
-    if (!question) {
+    // If it's an AI-generated question, it won't be in question-engine by ID directly
+    const isAiGeneratedQuestion = (question as any as AIQuestion)?.type === 'ai_generated_open_text'
+    if (!question && !isAiGeneratedQuestion) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 })
     }
     
+    // Determine active panelist for AI evaluations/remarks
+    const selectedPanelistIds = assessment.selectedPanelists as string[] || []
+    const activePanelist = selectedPanelistIds.length > 0 
+      ? getPanelistById(selectedPanelistIds[assessment.responses.length % selectedPanelistIds.length]) 
+      : null
+
+    // Prepare business context
+    const businessContext: BusinessContext = assessment.businessContext as BusinessContext || {}
+
+    // Prepare previous remarks for AI context
+    const previousRemarks = assessment.responses.map(r => (r.aiEvaluation as any)?.feedback || r.preWrittenRemark || '').filter(Boolean)
+    
     // Calculate points based on response type
     let pointsAwarded = 0
-    let aiEvaluation = null
+    let aiEvaluationResult: AIEvaluationResult | null = null
+    let preWrittenRemarkResult: string | null = null
     
     const typedResponseData = responseData as ResponseData
     
-    switch (typedResponseData.type) {
-      case 'choice':
-        if (question.options) {
-          pointsAwarded = scoreMultipleChoiceResponse(
-            typedResponseData.selectedOptionId,
-            question.options
-          )
-        }
-        break
-      
-      case 'text':
-        // Use AI evaluation for open text
-        if (question.scoring?.rubric && question.aiEvaluation) {
-          try {
-            const evaluation = await evaluateOpenTextResponse(
-              question.questionText,
-              typedResponseData.value,
-              question.scoring.rubric,
-              question.aiEvaluation
+    // Use client-side evaluation if provided (e.g., for AI-generated questions evaluated in useAssessment)
+    if (clientAIEvaluation) {
+      aiEvaluationResult = clientAIEvaluation as AIEvaluationResult
+      pointsAwarded = clientAIEvaluation.score
+    } else if (clientPreWrittenRemark) {
+      preWrittenRemarkResult = clientPreWrittenRemark
+      // For pre-written remarks, points are usually embedded in the question option
+      if (typedResponseData.type === 'choice' && question?.options) {
+        const selectedOption = question.options.find(o => o.id === typedResponseData.selectedOptionId)
+        pointsAwarded = selectedOption?.points || 0
+      }
+    } else {
+      // Perform server-side evaluation for static questions
+      switch (typedResponseData.type) {
+        case 'choice':
+          if (question?.options) {
+            pointsAwarded = scoreMultipleChoiceResponse(
+              typedResponseData.selectedOptionId,
+              question.options
             )
-            pointsAwarded = evaluation.score
-            aiEvaluation = {
-              score: evaluation.score,
-              maxScore: evaluation.maxScore,
-              feedback: evaluation.feedback,
-              criteriaMatched: evaluation.criteriaMatched,
-              strengths: evaluation.strengths,
-              areasForImprovement: evaluation.areasForImprovement,
-              evaluatedAt: new Date(),
-              modelUsed: 'gemini-1.5-flash',
-            }
-          } catch (error) {
-            console.error('AI evaluation failed:', error)
-            // Fallback to middle score
-            pointsAwarded = 5
           }
-        }
-        break
-      
-      case 'budget':
-        if (question.categories) {
-          const idealRanges = question.categories.map(c => ({
-            categoryId: c.id,
-            min: c.recommendedRange?.min || 0,
-            max: c.recommendedRange?.max || 100,
-            weight: c.scoringWeight || 1,
-          }))
-          pointsAwarded = scoreBudgetAllocation(typedResponseData.allocations, idealRanges)
-        }
-        break
-      
-      case 'numeric':
-        // Basic scoring for numeric inputs
-        pointsAwarded = 5 // Default middle score
-        break
-      
-      default:
-        pointsAwarded = 5
+          break
+        
+        case 'text':
+          // Only evaluate if it's a static open_text question and has AI config
+          if (question?.scoring?.rubric && question?.aiEvaluation && !isAiGeneratedQuestion && activePanelist) {
+            try {
+              const evaluation = await evaluateOpenTextResponse(
+                question.questionText,
+                typedResponseData.value as string,
+                activePanelist,
+                businessContext,
+                previousRemarks,
+                question.scoring.rubric,
+                question.aiEvaluation
+              )
+              pointsAwarded = evaluation.score
+              aiEvaluationResult = {
+                score: evaluation.score,
+                maxScore: evaluation.maxScore,
+                feedback: evaluation.feedback,
+                criteriaMatched: evaluation.criteriaMatched,
+                strengths: evaluation.strengths,
+                areasForImprovement: evaluation.areasForImprovement,
+                evaluatedAt: new Date(),
+                modelUsed: 'gemini-1.5-flash',
+              }
+            } catch (error) {
+              console.error('AI evaluation failed:', error)
+              pointsAwarded = 5 // Fallback to middle score
+            }
+          } else {
+            pointsAwarded = 5 // Default for simple open text without AI config
+          }
+          break
+        
+        case 'budget':
+          if (question?.categories) {
+            const idealRanges = question.categories.map(c => ({
+              categoryId: c.id,
+              min: c.recommendedRange?.min || 0,
+              max: c.recommendedRange?.max || 100,
+              weight: c.scoringWeight || 1,
+            }))
+            pointsAwarded = scoreBudgetAllocation(typedResponseData.allocations as any, idealRanges)
+          }
+          break
+        
+        case 'numeric':
+          pointsAwarded = 5 // Default middle score
+          break
+        
+        default:
+          pointsAwarded = 5
+      }
     }
     
     // Check for mistake triggers
@@ -137,10 +165,10 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         questionId,
         assessmentId,
         stageNumber: assessment.currentStage as StageNumber,
-        responseType: question.type as any,
+        responseType: (question?.type || 'open_text') as any,
         responseData: typedResponseData,
         pointsAwarded,
-        competenciesAssessed: question.assess || [],
+        competenciesAssessed: question?.assess || [],
         answeredAt: new Date(),
         responseTimeSeconds,
       },
@@ -149,7 +177,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     
     // Also check if option triggers a mistake
     let optionTriggeredMistake: MistakeCode | null = null
-    if (typedResponseData.type === 'choice' && question.options) {
+    if (typedResponseData.type === 'choice' && question?.options) {
       const selectedOption = question.options.find(
         o => o.id === typedResponseData.selectedOptionId
       )
@@ -167,11 +195,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         assessmentId,
         stageId: currentStageRecord?.id || '',
         questionId,
-        questionType: question.type,
+        questionType: (question?.type || 'open_text'), // Use actual question type
         responseData: typedResponseData as any,
-        aiEvaluation: aiEvaluation as any,
+        aiEvaluation: aiEvaluationResult as any, // Store AI evaluation result
+        preWrittenRemark: preWrittenRemarkResult, // Store pre-written remark
         rawScore: pointsAwarded,
-        competenciesAssessed: question.assess || [],
+        competenciesAssessed: question?.assess || [],
         answeredAt: new Date(),
         durationSeconds: responseTimeSeconds,
       },
@@ -217,7 +246,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Apply option state impact to simulation state
-    if (typedResponseData.type === 'choice' && question.options) {
+    if (typedResponseData.type === 'choice' && question?.options) {
       const selectedOption = question.options.find(
         o => o.id === typedResponseData.selectedOptionId
       )
@@ -235,7 +264,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       fullState = mistakeResult.newState
     }
 
-    // Get next question
+    // Get next question. Pass the isAiGeneratedQuestion flag so questionEngine knows how to handle it.
     const nextQuestion = getNextQuestion(
       questionId,
       assessment.currentStage as StageNumber,
@@ -245,7 +274,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         responseData: r.responseData as ResponseData,
         competenciesAssessed: (r.competenciesAssessed as string[]) || [],
       })) as any,
-      fullState
+      fullState,
+      isAiGeneratedQuestion ? (question as any as AIQuestion) : undefined // Pass the AIQuestion if applicable
     )
 
     // Update assessment with next question AND current simulation state
@@ -268,7 +298,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({
       response,
       pointsAwarded,
-      aiEvaluation,
+      aiEvaluation: aiEvaluationResult, // Return AI evaluation to client
+      preWrittenRemark: preWrittenRemarkResult, // Return pre-written remark to client
       mistakeTriggered: mistakeRecord,
       consequenceApplied,
       nextQuestion,

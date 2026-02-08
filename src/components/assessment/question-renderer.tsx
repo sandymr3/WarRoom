@@ -1,7 +1,9 @@
 'use client'
 
-import { Question, QuestionResponse } from '@/src/types/question'
+import { Question, QuestionResponse, QuestionType } from '@/src/types/question'
 import { AssessmentState } from '@/src/types/state'
+import { AIQuestion, generatePanelistQuestionIntro } from '@/src/lib/gemini' // Import AIQuestion and intro generator
+import { getPanelistById, Panelist } from '@/src/lib/panelists' // Import Panelist types
 import OpenTextQuestion from './open-text-question'
 import MultipleChoiceQuestion from './multiple-choice-question'
 import ScenarioQuestion from './scenario-question'
@@ -10,13 +12,17 @@ import SliderQuestion from './slider-question'
 import CalculationQuestion from './calculation-question'
 import ReflectionQuestion from './reflection-question'
 import OutcomeQuestion from './outcome-question'
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion' // For animations
 
 interface QuestionRendererProps {
-  question: Question
+  question: Question | AIQuestion
   onSubmit: (response: QuestionResponse) => Promise<void>
   isSubmitting: boolean
   state?: AssessmentState
   responses?: any[]
+  currentStageName?: string
+  previousRemarks?: string[]
 }
 
 // Interpolate template variables in text
@@ -52,7 +58,7 @@ function interpolateText(text: string, state?: AssessmentState, responses?: any[
     // Calculate CAC from responses if available
     const marketingSpend = 5000 // Default from scenario
     const newCustomers = state.customers.total || 50
-    const cac = Math.round(marketingSpend / newCustomers)
+    const cac = newCustomers > 0 ? Math.round(marketingSpend / newCustomers) : 0
     values.cac = cac
     
     // Calculate margin
@@ -92,25 +98,65 @@ export default function QuestionRenderer({
   onSubmit,
   isSubmitting,
   state,
-  responses
+  responses,
+  currentStageName,
+  previousRemarks
 }: QuestionRendererProps) {
+  const [panelistIntro, setPanelistIntro] = useState<string | null>(null)
+  const [panelistName, setPanelistName] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchPanelistIntro() {
+      if ((question as AIQuestion).type === 'ai_generated_open_text') {
+        const aiQuestion = question as AIQuestion;
+        const panelist = getPanelistById(aiQuestion.panelistId);
+        if (panelist && currentStageName && previousRemarks) {
+          setPanelistName(panelist.name);
+          const introResult = await generatePanelistQuestionIntro(
+            { // PanelistFeedbackRequest type
+              panelistId: panelist.id,
+              panelistName: panelist.name,
+              panelistRole: panelist.role,
+              primaryLens: panelist.primaryLens,
+              characteristics: panelist.characteristics,
+              challengeQuestions: panelist.challengeQuestions,
+              tone: panelist.tone,
+              guidanceStyle: panelist.guidanceStyle,
+            },
+            aiQuestion.questionText, // Pass the already generated question text
+            {
+              stageName: currentStageName,
+              previousResponses: previousRemarks
+            }
+          );
+          setPanelistIntro(introResult.intro);
+        }
+      } else {
+        setPanelistIntro(null);
+        setPanelistName(null);
+      }
+    }
+    fetchPanelistIntro();
+  }, [question, currentStageName, previousRemarks]);
+
   // Interpolate template variables in question text
   const interpolatedQuestion = {
     ...question,
     questionText: interpolateText(question.questionText, state, responses),
-    helpText: question.helpText ? interpolateText(question.helpText, state, responses) : undefined,
+    helpText: (question as any).helpText ? interpolateText((question as any).helpText, state, responses) : undefined,
     narrativeIntro: (question as any).narrativeIntro 
       ? interpolateText((question as any).narrativeIntro, state, responses) 
       : undefined
   }
   
   const renderQuestion = () => {
-    switch (interpolatedQuestion.type) {
+    switch (interpolatedQuestion.type as QuestionType) { // Cast to QuestionType
       case 'open_text':
+      case 'ai_generated_open_text': // Handle AI-generated as open text
         return (
           <OpenTextQuestion
-            question={interpolatedQuestion}
-            onSubmit={onSubmit}
+            question={interpolatedQuestion as any}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -118,8 +164,8 @@ export default function QuestionRenderer({
       case 'multiple_choice':
         return (
           <MultipleChoiceQuestion
-            question={interpolatedQuestion}
-            onSubmit={onSubmit}
+            question={interpolatedQuestion as any}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -127,8 +173,8 @@ export default function QuestionRenderer({
       case 'scenario':
         return (
           <ScenarioQuestion
-            question={interpolatedQuestion}
-            onSubmit={onSubmit}
+            question={interpolatedQuestion as any}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -136,8 +182,8 @@ export default function QuestionRenderer({
       case 'budget_allocation':
         return (
           <BudgetAllocationQuestion
-            question={interpolatedQuestion}
-            onSubmit={onSubmit}
+            question={interpolatedQuestion as any}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -147,7 +193,7 @@ export default function QuestionRenderer({
         return (
           <SliderQuestion
             question={interpolatedQuestion as any}
-            onSubmit={onSubmit}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -156,7 +202,7 @@ export default function QuestionRenderer({
         return (
           <CalculationQuestion
             question={interpolatedQuestion as any}
-            onSubmit={onSubmit}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -165,7 +211,7 @@ export default function QuestionRenderer({
         return (
           <ReflectionQuestion
             question={interpolatedQuestion as any}
-            onSubmit={onSubmit}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -174,7 +220,7 @@ export default function QuestionRenderer({
         return (
           <OutcomeQuestion
             question={interpolatedQuestion as any}
-            onSubmit={onSubmit}
+            onSubmit={onSubmit as any}
             isSubmitting={isSubmitting}
           />
         )
@@ -186,13 +232,25 @@ export default function QuestionRenderer({
 
   return (
     <div className="space-y-6">
+      {/* Panelist Intro for AI Questions */}
+      {panelistIntro && panelistName && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-card p-4 rounded-lg shadow-sm mb-6 border border-l-4 border-primary/50 text-sm"
+        >
+          <p className="font-semibold text-primary mb-1">{panelistName} says:</p>
+          <p className="text-muted-foreground italic">{panelistIntro}</p>
+        </motion.div>
+      )}
+
       {/* Question header */}
       <div className="border-b border-border pb-6">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm font-medium text-muted-foreground">Question {interpolatedQuestion.id}</span>
-          {interpolatedQuestion.stage !== undefined && (
+          {(interpolatedQuestion as any).stage !== undefined && ( // Cast to Question for stage access
             <span className="badge-primary">
-              {interpolatedQuestion.stage >= 0 ? `Stage ${interpolatedQuestion.stage}` : `Pre-Stage ${Math.abs(interpolatedQuestion.stage)}`}
+              {(interpolatedQuestion as any).stage >= 0 ? `Stage ${(interpolatedQuestion as any).stage}` : `Pre-Stage ${Math.abs((interpolatedQuestion as any).stage)}`}
             </span>
           )}
         </div>

@@ -1,16 +1,19 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import type {
   Question,
   QuestionResponse,
   StageNumber,
   StageConfig,
-  ConsequenceItem
+  ConsequenceItem,
+  QuestionType // Import QuestionType
 } from '@/src/types'
-import { Assessment } from '@/src/types/assessment'
+import { Assessment, BusinessContext } from '@/src/types/assessment' // Import BusinessContext
 import { AssessmentState } from '@/src/types/state'
 import * as questionEngine from '@/src/lib/services/question-engine'
+import { generatePanelistOpenEndedQuestion, evaluateOpenTextResponse, AIQuestion } from '@/src/lib/gemini' // Import AI generation functions
+import { ALL_PANELISTS, getPanelistById, getPanelistsByIds, Panelist } from '@/src/lib/panelists' // Import panelist data
 
 // Default initial state
 const defaultInitialState: AssessmentState = {
@@ -33,16 +36,16 @@ const defaultInitialState: AssessmentState = {
 
 interface SubmitResult {
   type: 'next_question' | 'stage_complete' | 'assessment_complete'
-  question?: Question
-  stage?: number
+  question?: Question | AIQuestion // Question can now be AIQuestion
   consequences?: ConsequenceItem[]
   stageData?: any
+  stage?: StageNumber
 }
 
 export function useAssessment(assessmentId: string) {
   const [currentStage, setCurrentStage] = useState<StageNumber>(-2)
   const [stageConfig, setStageConfig] = useState<StageConfig | null>(null)
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
+  const [currentQuestion, setCurrentQuestion] = useState<Question | AIQuestion | null>(null) // currentQuestion can be AIQuestion
   const [responses, setResponses] = useState<QuestionResponse[]>([])
   const [questionHistory, setQuestionHistory] = useState<string[]>([])
   const [currentState, setCurrentState] = useState<AssessmentState>(defaultInitialState)
@@ -57,6 +60,17 @@ export function useAssessment(assessmentId: string) {
     totalDurationMinutes: 0,
     lastActivityAt: new Date()
   })
+
+  // Derive selected panelists from assessment object
+  const selectedPanelistIds = useMemo(() => {
+    if (assessment?.selectedPanelists && Array.isArray(assessment.selectedPanelists)) {
+      return assessment.selectedPanelists as string[]
+    }
+    // Fallback: This should ideally be loaded from the assessment data itself
+    return ALL_PANELISTS.slice(0, 6).map(p => p.id)
+  }, [assessment?.selectedPanelists])
+
+  const selectedPanelists = useMemo(() => getPanelistsByIds(selectedPanelistIds), [selectedPanelistIds])
 
   // Helper: map API state fields to local AssessmentState
   const mapApiStateToLocal = useCallback((data: any): AssessmentState => {
@@ -196,18 +210,46 @@ export function useAssessment(assessmentId: string) {
   useEffect(() => {
     if (!hasLoadedFromServer) return
 
-    const loadStage = async () => {
+    const loadStageAndQuestion = async () => {
       try {
         const config = questionEngine.getStageConfig(currentStage)
         setStageConfig(config)
 
         // Only get first question if we don't have a current question
         if (!currentQuestion) {
-          const firstQuestion = questionEngine.getFirstQuestionOfStage(currentStage)
-          setCurrentQuestion(firstQuestion)
-          if (firstQuestion) {
+          let nextQuestion: Question | AIQuestion | null = null
+          const firstQuestionOfStage = questionEngine.getFirstQuestionOfStage(currentStage)
+
+          if (firstQuestionOfStage?.type === 'ai_generated_open_text') {
+            // Select an active panelist dynamically (e.g., first one, or rotate)
+            const activePanelist = selectedPanelists[responses.length % selectedPanelists.length] || selectedPanelists[0]
+            if (activePanelist && assessment.businessContext) {
+              const previousRemarks = responses.map(r => r.aiEvaluation?.feedback || r.preWrittenRemark || '').filter(Boolean)
+              nextQuestion = await generatePanelistOpenEndedQuestion(
+                activePanelist,
+                assessment.businessContext,
+                config.stage.name,
+                previousRemarks
+              )
+            } else {
+              // Fallback if no panelist or business context
+              console.warn("Could not generate AI question: Missing panelist or business context. Falling back to static question.")
+              nextQuestion = {
+                id: `ai_q_fallback_${Date.now()}`,
+                questionText: "How would you address a critical challenge in your business, considering the current stage?",
+                type: 'ai_generated_open_text',
+                panelistId: 'fallback',
+                context: 'Fallback due to missing context'
+              }
+            }
+          } else {
+            nextQuestion = firstQuestionOfStage
+          }
+          
+          setCurrentQuestion(nextQuestion)
+          if (nextQuestion) {
             setQuestionHistory(prev =>
-              prev.includes(firstQuestion.id) ? prev : [...prev, firstQuestion.id]
+              prev.includes(nextQuestion.id) ? prev : [...prev, nextQuestion.id]
             )
           }
         }
@@ -217,12 +259,12 @@ export function useAssessment(assessmentId: string) {
           currentStage
         }))
       } catch (error) {
-        console.error('Error loading stage:', error)
+        console.error('Error loading stage or generating AI question:', error)
       }
     }
 
-    loadStage()
-  }, [currentStage, hasLoadedFromServer, currentQuestion])
+    loadStageAndQuestion()
+  }, [currentStage, hasLoadedFromServer, currentQuestion, selectedPanelists, assessment.businessContext, responses])
 
   // Get stage progress
   const getStageProgress = useCallback(() => {
@@ -234,9 +276,38 @@ export function useAssessment(assessmentId: string) {
 
   // Submit answer via backend API and get next question
   const submitAnswer = useCallback(
-    async (response: Omit<QuestionResponse, 'assessmentId' | 'stageNumber' | 'responseType' | 'pointsAwarded' | 'competenciesAssessed' | 'responseTimeSeconds'>): Promise<SubmitResult> => {
+    async (response: Omit<QuestionResponse, 'assessmentId' | 'stageNumber' | 'responseType' | 'pointsAwarded' | 'competenciesAssessed' | 'responseTimeSeconds' | 'aiEvaluation' | 'preWrittenRemark'>): Promise<SubmitResult> => {
       setIsLoading(true)
       try {
+        if (!currentQuestion) throw new Error("No current question to submit answer for.")
+
+        let aiEvaluationResult = null
+        let preWrittenRemark = null
+
+        const activePanelist = selectedPanelists[responses.length % selectedPanelists.length] || selectedPanelists[0]
+        if (!activePanelist) {
+          console.warn("No active panelist found for remark generation.")
+        }
+
+        if (currentQuestion.type === 'ai_generated_open_text') {
+          // AI-generated open-text question: evaluate with Gemini
+          if (activePanelist && assessment.businessContext) {
+            const previousRemarks = responses.map(r => r.aiEvaluation?.feedback || r.preWrittenRemark || '').filter(Boolean)
+            aiEvaluationResult = await evaluateOpenTextResponse(
+              currentQuestion.questionText,
+              String((response.responseData as any).value), // Ensure value is string for open text
+              activePanelist,
+              assessment.businessContext,
+              previousRemarks,
+              currentQuestion.scoring?.rubric || [], // Use question-specific rubric
+              currentQuestion.aiEvaluation || { systemPrompt: "Evaluate the user's response to an entrepreneurial question.", lookFor: [] }
+            )
+          }
+        } else if (currentQuestion.options && (response.responseData as any).selectedOptionId) {
+          // Multiple-choice/scenario: Look for pre-written remark in judges.json
+          preWrittenRemark = activePanelist?.remarks?.[currentQuestion.id]?.[(response.responseData as any).selectedOptionId]
+        }
+        
         // POST to the backend respond API
         const apiResponse = await fetch(`/api/assessment/${assessmentId}/respond`, {
           method: 'POST',
@@ -244,7 +315,9 @@ export function useAssessment(assessmentId: string) {
           body: JSON.stringify({
             questionId: response.questionId,
             responseData: response.responseData,
-            responseTimeSeconds: 0,
+            responseTimeSeconds: 0, // Placeholder, actual calculation needed
+            aiEvaluation: aiEvaluationResult, // Pass AI evaluation results
+            preWrittenRemark: preWrittenRemark, // Pass pre-written remark
           }),
         })
 
@@ -261,9 +334,20 @@ export function useAssessment(assessmentId: string) {
           assessmentId,
           stageNumber: currentStage,
           responseType: currentQuestion?.type || 'open_text',
-          pointsAwarded: data.pointsAwarded || 0,
-          competenciesAssessed: currentQuestion?.assess || [],
-          responseTimeSeconds: 0
+          pointsAwarded: data.pointsAwarded || aiEvaluationResult?.score || 0, // Use AI score if available
+          competenciesAssessed: (currentQuestion?.assess as any) || [],
+          responseTimeSeconds: 0, // Placeholder
+          aiEvaluation: aiEvaluationResult ? { 
+            score: aiEvaluationResult.score,
+            maxScore: aiEvaluationResult.maxScore,
+            feedback: aiEvaluationResult.feedback,
+            criteriaMatched: aiEvaluationResult.criteriaMatched,
+            strengths: aiEvaluationResult.strengths,
+            areasForImprovement: aiEvaluationResult.areasForImprovement,
+            evaluatedAt: new Date(),
+            modelUsed: 'gemini-1.5-flash'
+          } : undefined,
+          preWrittenRemark: preWrittenRemark || undefined
         }
 
         // Update local responses
@@ -344,14 +428,56 @@ export function useAssessment(assessmentId: string) {
 
         // Next question from API
         if (data.nextQuestion) {
-          setCurrentQuestion(data.nextQuestion)
-          setQuestionHistory(prev =>
-            prev.includes(data.nextQuestion.id) ? prev : [...prev, data.nextQuestion.id]
-          )
-          return {
-            type: 'next_question',
-            question: data.nextQuestion,
-            consequences
+          // If the next question is an AI-generated one, generate it here
+          if (data.nextQuestion.type === 'ai_generated_open_text') {
+            const nextPanelist = selectedPanelists[responses.length % selectedPanelists.length] || selectedPanelists[0]
+            if (nextPanelist && assessment.businessContext) {
+              const previousRemarks = [...responses, fullResponse].map(r => r.aiEvaluation?.feedback || r.preWrittenRemark || '').filter(Boolean)
+              const generatedQuestion = await generatePanelistOpenEndedQuestion(
+                nextPanelist,
+                assessment.businessContext,
+                stageConfig?.stage.name || 'Current Stage',
+                previousRemarks
+              )
+              setCurrentQuestion(generatedQuestion)
+              setQuestionHistory(prev =>
+                prev.includes(generatedQuestion.id) ? prev : [...prev, generatedQuestion.id]
+              )
+              return {
+                type: 'next_question',
+                question: generatedQuestion,
+                consequences
+              }
+            } else {
+              console.warn("Could not generate AI question for next question: Missing panelist or business context. Falling back to static question.")
+              // Fallback to a static open_text question
+              const fallbackQuestion: Question = {
+                id: `ai_q_fallback_${Date.now()}`,
+                questionText: "How would you address a critical challenge in your business, considering the current stage?",
+                type: 'open_text',
+                assess: [],
+                order: 999
+              }
+              setCurrentQuestion(fallbackQuestion)
+              setQuestionHistory(prev =>
+                prev.includes(fallbackQuestion.id) ? prev : [...prev, fallbackQuestion.id]
+              )
+              return {
+                type: 'next_question',
+                question: fallbackQuestion,
+                consequences
+              }
+            }
+          } else {
+            setCurrentQuestion(data.nextQuestion)
+            setQuestionHistory(prev =>
+              prev.includes(data.nextQuestion.id) ? prev : [...prev, data.nextQuestion.id]
+            )
+            return {
+              type: 'next_question',
+              question: data.nextQuestion,
+              consequences
+            }
           }
         }
 
@@ -368,7 +494,7 @@ export function useAssessment(assessmentId: string) {
         setIsLoading(false)
       }
     },
-    [currentQuestion, currentStage, assessmentId]
+    [currentQuestion, currentStage, assessmentId, selectedPanelists, assessment.businessContext, responses, stageConfig?.stage.name]
   )
 
   // Advance to next stage (called after stage transition UI)
@@ -456,7 +582,7 @@ export function useAssessment(assessmentId: string) {
     }
 
     const previousQuestionId = questionHistory[currentIndex - 1]
-    const previousQuestion = questionEngine.getQuestionById(previousQuestionId, currentStage)
+    const previousQuestion = questionEngine.getQuestionById(previousQuestionId)
 
     if (previousQuestion) {
       setCurrentQuestion(previousQuestion)

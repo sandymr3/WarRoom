@@ -17,6 +17,7 @@ import type {
   FullAssessmentState,
   MistakeCode 
 } from '@/src/types'
+import { AIQuestion } from '@/src/lib/gemini'
 
 // Stage data map
 const stageDataMap: Record<StageNumber, StageConfig> = {
@@ -68,20 +69,37 @@ export function getNextQuestion(
   currentQuestionId: string,
   stageNumber: StageNumber,
   responses: QuestionResponse[],
-  state: FullAssessmentState
+  state: FullAssessmentState,
+  aiQuestion?: AIQuestion // New optional parameter
 ): Question | null {
   const questions = getStageQuestions(stageNumber)
-  const currentIndex = questions.findIndex(q => q.id === currentQuestionId)
   
-  if (currentIndex === -1) {
-    return questions[0] || null
+  // Find the index of the last answered static question
+  let lastStaticQuestionIndex = -1
+  if (responses.length > 0) {
+    const lastResponse = responses[responses.length - 1]
+    const staticQ = getQuestionById(lastResponse.questionId)
+    if (staticQ) {
+      lastStaticQuestionIndex = questions.findIndex(q => q.id === staticQ.id)
+    } else if (lastResponse.responseType === 'ai_generated_open_text') {
+      // If the last response was to an AI-generated question, we need to find the STATIC question
+      // that *triggered* this AI question, or the static question that would have come before it.
+      // This is complex, but for simplicity, we'll try to find the previous static question.
+      const prevStaticResponse = responses.slice(0, -1).reverse().find(r => getQuestionById(r.questionId))
+      if (prevStaticResponse) {
+        lastStaticQuestionIndex = questions.findIndex(q => q.id === prevStaticResponse.questionId)
+      } else {
+        // If no previous static response, assume we just finished the stage intro and look for the first question
+        lastStaticQuestionIndex = -1 // Start from beginning of stage
+      }
+    }
   }
+
+  const currentQuestionInConfig = getQuestionById(currentQuestionId) || aiQuestion // Get the template question if AI generated
   
-  const currentQuestion = questions[currentIndex]
-  
-  // Check for branch logic on current question
-  if (currentQuestion.branchLogic) {
-    for (const branch of currentQuestion.branchLogic) {
+  // If current question has branch logic, evaluate it first
+  if ((currentQuestionInConfig as any)?.branchLogic) {
+    for (const branch of (currentQuestionInConfig as any).branchLogic) {
       if (evaluateCondition(branch.condition, responses, state)) {
         const targetQuestion = questions.find(q => q.id === branch.goToQuestionId)
         if (targetQuestion) {
@@ -90,16 +108,20 @@ export function getNextQuestion(
       }
     }
   }
-  
-  // Get the last response to check for follow-up
-  const lastResponse = responses.find(r => r.questionId === currentQuestionId)
-  if (lastResponse && currentQuestion.followUp) {
-    // Follow-up questions are handled in the response flow
-    // Return null to indicate we need to show follow-up first
+
+  // If current question has a follow-up, and it hasn't been answered, return that
+  // (This assumes follow-ups are returned by getQuestionById for static questions)
+  if ((currentQuestionInConfig as any)?.followUp && !responses.some(r => r.questionId === (currentQuestionInConfig as any).followUp?.id)) {
+    // Note: The frontend is responsible for showing the followUp from the currentQuestion object
+    // For now, this engine will just return the next sequential question.
+    // The previous implementation for followUp in getNextQuestion was commented out.
+    // If followUps are actual separate Question objects in the config, they should be in the 'questions' array.
   }
   
-  // Find next applicable question
-  for (let i = currentIndex + 1; i < questions.length; i++) {
+  const startIndex = lastStaticQuestionIndex !== -1 ? lastStaticQuestionIndex + 1 : 0
+
+  // Find the next applicable static question
+  for (let i = startIndex; i < questions.length; i++) {
     const nextQuestion = questions[i]
     
     // Skip if a similar question has already been answered in previous stages
@@ -116,6 +138,12 @@ export function getNextQuestion(
       continue
     }
     
+    // If it's an AI-generated question template, return it
+    if (nextQuestion.type === 'ai_generated_open_text') {
+      return nextQuestion
+    }
+
+    // Return the next static question
     return nextQuestion
   }
   

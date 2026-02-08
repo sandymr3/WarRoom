@@ -5,6 +5,16 @@ export type AssessmentStatus =
   | 'completed' 
   | 'abandoned'
 
+export interface BusinessContext {
+  industry?: string
+  customerSegment?: string
+  problem?: string
+  solution?: string
+  targetAudience?: string
+  stage?: string // Current stage of the assessment
+  // Add other relevant business context fields as needed
+}
+
 export interface Assessment {
   id: string
   userId: string
@@ -12,12 +22,8 @@ export interface Assessment {
   status: AssessmentStatus
   currentStage: number
   currentQuestionId?: string
-  businessContext?: {
-    industry?: string
-    customerSegment?: string
-    problem?: string
-    solution?: string
-  }
+  businessContext?: BusinessContext // Use the new interface
+  selectedPanelists?: string[] // Added for tracking selected panelists
   startedAt?: Date
   completedAt?: Date
   totalDurationMinutes: number

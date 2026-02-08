@@ -278,7 +278,7 @@ function getResponseSummary(response: QuestionResponse): string {
     case 'choice':
       return `Selected: ${data.selectedOptionId}`
     case 'budget':
-      return `Budget allocation: ${data.allocations.map(a => `${a.categoryId}: ${a.percentage}%`).join(', ')}`
+      return `Budget allocation: ${(data.allocations as any).map((a: any) => `${a.categoryId}: ${a.percentage}%`).join(', ')}`
     case 'calculation':
       return `Calculated: ${data.result}`
     case 'numeric':

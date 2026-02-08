@@ -1,15 +1,15 @@
 import { Question } from '@/src/types/question'
 
 export const sampleQuestions: Question[] = [
-  {
+  ({
     id: 'Q-1',
     type: 'open_text',
     questionText: 'What industry or market are you interested in?',
     helpText: 'Be as specific as possible. Include the problem you are solving.',
     stage: -2,
     competencies: ['C1']
-  },
-  {
+  } as any),
+  ({
     id: 'Q-2',
     type: 'multiple_choice',
     questionText: 'How did you identify this problem?',
@@ -22,8 +22,8 @@ export const sampleQuestions: Question[] = [
       { id: 'C', text: 'Market research', points: 8 },
       { id: 'D', text: 'Observation of others', points: 4 }
     ]
-  },
-  {
+  } as any),
+  ({
     id: 'Q-3',
     type: 'scenario',
     questionText: 'A major customer wants 50% more capacity in 30 days. You have limited resources.',
@@ -36,14 +36,14 @@ export const sampleQuestions: Question[] = [
       { id: 'C', text: 'Negotiate for 45 days and phase the expansion', points: 10 },
       { id: 'D', text: 'Ask them to find another supplier', points: 2 }
     ]
-  },
-  {
+  } as any),
+  ({
     id: 'Q-4',
     type: 'budget_allocation',
     questionText: 'Allocate your $50,000 budget across these categories:',
     stage: 1,
     competencies: ['C5', 'C6']
-  }
+  } as any)
 ]
 
 export const competencies = [

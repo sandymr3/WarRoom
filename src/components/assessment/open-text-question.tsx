@@ -26,9 +26,13 @@ export default function OpenTextQuestion({
 
     await onSubmit({
       questionId: question.id,
-      responseData: { text: response },
+      responseData: { 
+        type: 'text',
+        value: response,
+        wordCount: response.trim().split(/\s+/).length
+      },
       answeredAt: new Date()
-    })
+    } as any)
   }
 
   return (

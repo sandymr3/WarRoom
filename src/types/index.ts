@@ -8,6 +8,8 @@ export * from './question'
 export * from './state'
 export * from './report'
 
+import { Question, ResponseData } from './question'
+
 // ============================================
 // COMPETENCY TYPES
 // ============================================
@@ -174,224 +176,6 @@ export interface MediaAsset {
   transcript?: string;
   thumbnailUrl?: string;
   duration?: number; // in seconds for video/audio
-}
-
-// ============================================
-// QUESTION TYPES (EXTENDED)
-// ============================================
-
-export type ExtendedQuestionType = 
-  | 'open_text' 
-  | 'multiple_choice' 
-  | 'scenario' 
-  | 'budget_allocation'
-  | 'calculation'
-  | 'number_input'
-  | 'slider'
-  | 'ranking'
-  | 'reflection';
-
-export interface Question {
-  id: string;
-  type: ExtendedQuestionType;
-  questionText: string;
-  helpText?: string;
-  contextText?: string;
-  scenarioContext?: string;
-  assess: CompetencyCode[];
-  order: number;
-  
-  // Media support
-  media?: MediaAsset;
-  
-  // Options for choice-based questions
-  options?: QuestionOption[];
-  
-  // For open text
-  minLength?: number;
-  maxLength?: number;
-  placeholder?: string;
-  
-  // For numeric inputs
-  min?: number;
-  max?: number;
-  step?: number;
-  unit?: string;
-  inputType?: 'slider' | 'number';
-  
-  // For budget allocation
-  totalBudget?: number;
-  categories?: BudgetCategory[];
-  
-  // For calculations
-  formula?: string;
-  inputs?: CalculationInput[];
-  
-  // Scoring & AI Evaluation
-  scoring?: ScoringRubric;
-  aiEvaluation?: AIEvaluationConfig;
-  
-  // Branching & Conditions
-  condition?: QuestionCondition;
-  branchLogic?: BranchLogic[];
-  followUp?: FollowUpQuestion;
-  
-  // Dynamic context
-  dynamicContext?: boolean;
-  basedOnMistakes?: MistakeCode[];
-  
-  // Time constraints
-  timeLimit?: number; // in seconds
-  
-  // Legacy support
-  stage?: number;
-  categoryId?: string;
-  competencies?: string[];
-}
-
-export interface QuestionOption {
-  id: string;
-  text: string;
-  points?: number;
-  signal?: string;
-  achievesLevel?: string;
-  warning?: string;
-  note?: string;
-  triggersMistake?: MistakeCode;
-  consequence?: Record<string, any>;
-  followUp?: FollowUpQuestion;
-}
-
-export interface BudgetCategory {
-  id: string;
-  name: string;
-  description?: string;
-  minPercentage?: number;
-  maxPercentage?: number;
-  recommendedRange?: { min: number; max: number };
-  scoringWeight?: number;
-}
-
-export interface CalculationInput {
-  id: string;
-  label: string;
-  defaultValue?: number;
-  min?: number;
-  max?: number;
-}
-
-export interface ScoringRubric {
-  rubric: RubricLevel[];
-  maxPoints?: number;
-}
-
-export interface RubricLevel {
-  criteria: string;
-  points: number;
-  description: string;
-  keywords?: string[];
-}
-
-export interface AIEvaluationConfig {
-  systemPrompt: string;
-  lookFor: string[];
-  scoringGuidelines?: string;
-  maxTokens?: number;
-  temperature?: number;
-}
-
-export interface QuestionCondition {
-  type: 'previous_answer' | 'state_check' | 'mistake_triggered' | 'competency_level';
-  questionId?: string;
-  answerIds?: string[];
-  stateKey?: string;
-  stateValue?: any;
-  mistakeCode?: MistakeCode;
-  competencyCode?: CompetencyCode;
-  levelRequired?: CompetencyLevel;
-}
-
-export interface BranchLogic {
-  condition: QuestionCondition;
-  goToQuestionId: string;
-  skipQuestions?: string[];
-}
-
-export interface FollowUpQuestion {
-  condition?: 'always' | 'specific_answer';
-  answerTrigger?: string[];
-  questionText: string;
-  type: ExtendedQuestionType;
-  assess?: CompetencyCode[];
-  minLength?: number;
-  maxLength?: number;
-}
-
-// ============================================
-// RESPONSE TYPES
-// ============================================
-
-export interface QuestionResponse {
-  id?: string;
-  assessmentId: string;
-  questionId: string;
-  stageNumber: StageNumber;
-  responseType: ExtendedQuestionType;
-  responseData: ResponseData;
-  aiEvaluation?: AIEvaluationResult;
-  pointsAwarded: number;
-  competenciesAssessed: CompetencyCode[];
-  mistakesTriggered?: MistakeCode[];
-  answeredAt: Date;
-  responseTimeSeconds: number;
-}
-
-export type ResponseData = 
-  | TextResponseData
-  | ChoiceResponseData
-  | BudgetResponseData
-  | CalculationResponseData
-  | NumericResponseData;
-
-export interface TextResponseData {
-  type: 'text';
-  value: string;
-  wordCount: number;
-}
-
-export interface ChoiceResponseData {
-  type: 'choice';
-  selectedOptionId: string;
-  selectedOptionIds?: string[]; // for multi-select
-}
-
-export interface BudgetResponseData {
-  type: 'budget';
-  allocations: { categoryId: string; amount: number; percentage: number }[];
-  totalAllocated: number;
-}
-
-export interface CalculationResponseData {
-  type: 'calculation';
-  inputs: Record<string, number>;
-  result: number;
-  formula: string;
-}
-
-export interface NumericResponseData {
-  type: 'numeric';
-  value: number;
-}
-
-export interface AIEvaluationResult {
-  score: number;
-  maxScore: number;
-  feedback: string;
-  criteriaMatched: string[];
-  strengths: string[];
-  areasForImprovement: string[];
-  evaluatedAt: Date;
-  modelUsed: string;
 }
 
 // ============================================
@@ -706,6 +490,13 @@ export interface MistakeDisplay {
   name: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   compoundingNote?: string;
+}
+
+export interface StageMetric {
+  label: string;
+  value: string | number;
+  change?: string;
+  changeType?: 'positive' | 'negative' | 'neutral';
 }
 
 export interface StageMetricDisplay {
