@@ -503,8 +503,8 @@ export default function WarRoomSimulation() {
 
                         {/* Pitch Template - Collapsible */}
                         <motion.details className="pitch-template" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                            <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: '#d1d5db' }}>📝 Pitch Template Guide (tap to expand)</summary>
-                            <div className="template-text" style={{ marginTop: '0.8rem' }}>
+                            <summary className="cursor-pointer font-bold text-sm text-foreground/80 select-none">📝 Pitch Template Guide (tap to expand)</summary>
+                            <div className="template-text">
                                 <p>Hello Sharks, my name is <strong>[NAME]</strong> and I am the founder of <strong>[BUSINESS]</strong>.</p>
                                 <p><em>(The Problem)</em> Today, [TARGET CUSTOMER] struggles with [PROBLEM].</p>
                                 <p><em>(The Solution)</em> I created [PRODUCT], which [VALUE PROP].</p>
@@ -526,6 +526,8 @@ export default function WarRoomSimulation() {
                                         </>
                                     )}
                                     <motion.button
+                                        type="button"
+                                        aria-label={pitchRecorder.isRecording ? 'Stop recording pitch' : pitchRecorder.audioBlob ? 'Record pitch again' : 'Start recording pitch'}
                                         className={`mic-button ${pitchRecorder.isRecording ? 'active' : ''} ${pitchRecorder.audioBlob ? 'done' : ''}`}
                                         onClick={pitchRecorder.isRecording ? pitchRecorder.stopRecording : pitchRecorder.startRecording}
                                         whileHover={{ scale: 1.05 }}
@@ -593,16 +595,17 @@ export default function WarRoomSimulation() {
                                         <ul>{pitchAnalysis.weaknesses.map((w, i) => <li key={i}>{w}</li>)}</ul>
                                     </div>
                                 )}
-                                <motion.button className="submit-pitch-btn" onClick={handleContinueFromPitch} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                                <motion.button type="button" className="submit-pitch-btn" onClick={handleContinueFromPitch} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                                     Continue to Investor Questions
                                 </motion.button>
                             </motion.div>
                         )}
 
-                        {error && <div className="error-msg">{error}</div>}
+                        {error && <div className="error-message">{error}</div>}
 
                         {!pitchAnalysis && !isAnalyzing && pitchRecorder.audioBlob && (
                             <motion.button
+                                type="button"
                                 className="submit-pitch-btn"
                                 onClick={handleSubmitPitchAudio}
                                 disabled={isSubmitting}
@@ -656,11 +659,11 @@ export default function WarRoomSimulation() {
                                 <div className="investor-reaction">
                                     <span className="reaction-label">
                                         💬 {currentInvestor.name} responds:
-                                        {isPlayingAudio && <span style={{ marginLeft: '10px', fontSize: '0.85em', color: '#10b981', fontWeight: 'normal' }}>🔊 Playing...</span>}
+                                        {isPlayingAudio && <span className="ml-2.5 text-sm text-emerald-600 dark:text-emerald-400 font-normal">🔊 Playing…</span>}
                                     </span>
                                     <p>{currentInvestorReaction}</p>
                                 </div>
-                                <motion.button className="respond-btn" onClick={handleContinueToNextInvestor} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                                <motion.button type="button" className="respond-btn" onClick={handleContinueToNextInvestor} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                                     {currentInvestorIndex < investors.length - 1 ? `Continue to Next Investor` : `View Panel Decisions`}
                                 </motion.button>
                             </motion.div>
@@ -685,6 +688,8 @@ export default function WarRoomSimulation() {
                                             </>
                                         )}
                                         <motion.button
+                                            type="button"
+                                            aria-label={responseRecorder.isRecording ? 'Stop recording response' : responseRecorder.audioBlob ? 'Record response again' : 'Start recording response'}
                                             className={`mic-button ${responseRecorder.isRecording ? 'active' : ''} ${responseRecorder.audioBlob ? 'done' : ''}`}
                                             onClick={responseRecorder.isRecording ? responseRecorder.stopRecording : responseRecorder.startRecording}
                                             whileHover={{ scale: 1.05 }}
@@ -707,10 +712,10 @@ export default function WarRoomSimulation() {
                                     )}
                                 </div>
 
-                                {error && <div className="error-msg">{error}</div>}
+                                {error && <div className="error-message">{error}</div>}
 
                                 {responseRecorder.audioBlob && (
-                                    <motion.button className="respond-btn" onClick={handleRespondToInvestorAudio} disabled={isSubmitting} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                                    <motion.button type="button" className="respond-btn" onClick={handleRespondToInvestorAudio} disabled={isSubmitting} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                                         {isSubmitting ? 'Analyzing Response...' : 'Submit Response'}
                                     </motion.button>
                                 )}
@@ -758,8 +763,7 @@ export default function WarRoomSimulation() {
                                 {offers.map((offer, i) => (
                                     <motion.div
                                         key={i}
-                                        className="scorecard"
-                                        style={{ borderColor: '#10b98144', cursor: 'pointer' }}
+                                        className="scorecard border-emerald-500/25"
                                         initial={{ opacity: 0, y: 30, rotateX: -10 }}
                                         animate={{ opacity: 1, y: 0, rotateX: 0 }}
                                         transition={{ delay: 0.3 + i * 0.15, duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
@@ -767,8 +771,7 @@ export default function WarRoomSimulation() {
                                     >
                                         <div className="sc-header">
                                             <motion.div
-                                                className="sc-avatar"
-                                                style={{ borderColor: '#10b981' }}
+                                                className="sc-avatar border-emerald-500/60"
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
                                                 transition={{ delay: 0.5 + i * 0.15, type: 'spring', stiffness: 300 }}
@@ -777,7 +780,7 @@ export default function WarRoomSimulation() {
                                             </motion.div>
                                             <div>
                                                 <h3 className="sc-name">{offer.investorName}</h3>
-                                                <span className="sc-decision" style={{ color: '#10b981' }}>
+                                                <span className="sc-decision text-emerald-600 dark:text-emerald-400">
                                                     🔥 OFFER RECEIVED
                                                 </span>
                                             </div>
@@ -787,11 +790,11 @@ export default function WarRoomSimulation() {
                                             <span>📊 For {offer.equity}% equity</span>
                                         </div>
                                         <div className="sc-investor-reaction">
-                                            <p>"{offer.message}"</p>
+                                            <p>&ldquo;{offer.message}&rdquo;</p>
                                         </div>
-                                        <div style={{ marginTop: '1rem', textAlign: 'center', color: '#10b981', fontWeight: 'bold' }}>
+                                        <p className="mt-4 text-center text-sm font-bold text-emerald-600 dark:text-emerald-400">
                                             Click to Negotiate →
-                                        </div>
+                                        </p>
                                     </motion.div>
                                 ))}
                                 {offers.length === 0 && (
@@ -808,35 +811,25 @@ export default function WarRoomSimulation() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                             >
-                                <div className="neg-header" style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div className="neg-header">
+                                    <div className="flex justify-between items-center">
                                         <h3>Negotiating with {selectedOffer.investorName}</h3>
-                                        <div style={{
-                                            padding: '0.3rem 0.8rem',
-                                            borderRadius: '20px',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 700,
-                                            letterSpacing: '1px',
-                                            background: negRound >= MAX_NEG_ROUNDS - 1 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                                            color: negRound >= MAX_NEG_ROUNDS - 1 ? '#ef4444' : '#60a5fa',
-                                            border: `1px solid ${negRound >= MAX_NEG_ROUNDS - 1 ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
-                                        }}>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-widest ${negRound >= MAX_NEG_ROUNDS - 1 ? 'bg-destructive/15 text-destructive border border-destructive/30' : 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'}`}>
                                             ROUND {Math.min(negRound + 1, MAX_NEG_ROUNDS)} / {MAX_NEG_ROUNDS}
-                                        </div>
+                                        </span>
                                     </div>
                                     <p>Current Offer: ${selectedOffer.capital.toLocaleString()} for {selectedOffer.equity}%</p>
                                 </div>
 
-                                <div className="neg-history" style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="neg-history">
                                     {negHistory.map((item, idx) => (
-                                        <div key={idx} style={{ 
-                                            padding: '1rem', 
-                                            borderRadius: '12px', 
-                                            background: item.type === 'user' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                                            alignSelf: item.type === 'user' ? 'flex-end' : 'flex-start',
-                                            maxWidth: '80%'
-                                        }}>
-                                            <strong style={{ display: 'block', marginBottom: '0.3rem', color: item.type === 'user' ? '#60a5fa' : '#34d399' }}>{item.sender}</strong>
+                                        <div
+                                            key={idx}
+                                            className={`message-bubble ${item.type}`}
+                                        >
+                                            <strong className={`message-sender ${item.type === 'user' ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                                                {item.sender}
+                                            </strong>
                                             {item.msg}
                                         </div>
                                     ))}
@@ -844,40 +837,33 @@ export default function WarRoomSimulation() {
 
                                 {/* Voice instruction banner */}
                                 {negRound < MAX_NEG_ROUNDS && (
-                                    <div style={{
-                                        padding: '0.8rem 1.2rem',
-                                        borderRadius: '12px',
-                                        marginBottom: '1rem',
-                                        background: negRound >= MAX_NEG_ROUNDS - 1
-                                            ? 'rgba(239, 68, 68, 0.08)'
-                                            : 'rgba(59, 130, 246, 0.08)',
-                                        border: `1px solid ${negRound >= MAX_NEG_ROUNDS - 1 ? 'rgba(239,68,68,0.2)' : 'rgba(59,130,246,0.2)'}`,
-                                    }}>
+                                    <div className={`p-3 rounded-xl mb-4 text-sm ${negRound >= MAX_NEG_ROUNDS - 1 ? 'bg-destructive/8 border border-destructive/20' : 'bg-blue-500/8 border border-blue-500/20'}`}>
                                         {negRound >= MAX_NEG_ROUNDS - 1 ? (
-                                            <p style={{ fontSize: '0.85rem', color: '#f87171', fontWeight: 600, margin: 0 }}>
-                                                🔴 <strong>Final Round!</strong> Say <em>"I accept this deal"</em> to secure it, or <em>"I walk away"</em> to reject.
+                                            <p className="text-destructive font-semibold m-0">
+                                                🔴 <strong>Final Round!</strong> Say <em>&ldquo;I accept this deal&rdquo;</em> to secure it, or <em>&ldquo;I walk away&rdquo;</em> to reject.
                                             </p>
                                         ) : (
-                                            <p style={{ fontSize: '0.85rem', color: '#93c5fd', margin: 0 }}>
-                                                🎙️ Speak your counter-offer, or say <em>"I accept"</em> / <em>"I walk away"</em> to finalize.
+                                            <p className="text-blue-600 dark:text-blue-400 m-0">
+                                                🎙️ Speak your counter-offer, or say <em>&ldquo;I accept&rdquo;</em> / <em>&ldquo;I walk away&rdquo;</em> to finalize.
                                             </p>
                                         )}
                                     </div>
                                 )}
 
-                                <div className="neg-controls" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginTop: '1rem', width: '100%' }}>
-                                    <div className="recording-zone" style={{ padding: '1rem', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', background: 'rgba(255,255,255,0.02)' }}>
-                                        <p className="rec-hint" style={{ fontSize: '0.8rem', marginBottom: '1rem' }}>
+                                <div className="neg-controls flex flex-col gap-3 mt-4 w-full">
+                                    <div className="recording-zone">
+                                        <p className="rec-hint mb-4">
                                             {negRound >= MAX_NEG_ROUNDS - 1
                                                 ? 'This is your final round — say "I accept this deal" or "I walk away"'
-                                                : 'Speak your counter offer (e.g., "I\'d like $1.2M for 25% equity because...")'
+                                                : 'Speak your counter offer (e.g., "I\'d like $1.2M for 25% equity because…")'
                                             }
                                         </p>
-                                        
-                                        <div className="mic-button-wrapper" style={{ width: '100px', height: '100px' }}>
-                                            <button 
+
+                                        <div className="mic-button-wrapper">
+                                            <button
+                                                type="button"
+                                                aria-label={negotiationRecorder.isRecording ? 'Stop recording negotiation' : 'Start recording negotiation'}
                                                 className={`mic-button ${negotiationRecorder.isRecording ? 'active' : ''}`}
-                                                style={{ width: '80px', height: '80px', fontSize: '2rem' }}
                                                 onClick={negotiationRecorder.isRecording ? negotiationRecorder.stopRecording : negotiationRecorder.startRecording}
                                                 disabled={isNegVoiceSubmitting || negRound >= MAX_NEG_ROUNDS}
                                             >
@@ -888,7 +874,7 @@ export default function WarRoomSimulation() {
                                         {negotiationRecorder.isRecording ? (
                                             <div className="recording-status">
                                                 <div className="rec-dot" />
-                                                <span className="rec-text">RECORDING... {Math.max(0, 15 - negotiationRecorder.recordingTime)}s</span>
+                                                <span className="rec-text">RECORDING… {Math.max(0, 15 - negotiationRecorder.recordingTime)}s</span>
                                             </div>
                                         ) : negotiationRecorder.audioBlob ? (
                                             <div className="recording-status">
@@ -896,7 +882,7 @@ export default function WarRoomSimulation() {
                                             </div>
                                         ) : negRound >= MAX_NEG_ROUNDS ? (
                                             <div className="recording-status">
-                                                <span style={{ color: '#f87171', fontSize: '0.85rem' }}>⏱️ All rounds exhausted — offer expired</span>
+                                                <span className="text-sm text-destructive">⏱️ All rounds exhausted — offer expired</span>
                                             </div>
                                         ) : (
                                             <div className="recording-status">
@@ -911,32 +897,26 @@ export default function WarRoomSimulation() {
                                         )}
 
                                         {negotiationRecorder.audioBlob && !negotiationRecorder.isRecording && negRound < MAX_NEG_ROUNDS && (
-                                            <motion.button 
-                                                className="respond-btn" 
-                                                style={{ marginTop: '1rem', background: negRound >= MAX_NEG_ROUNDS - 1 ? '#ef4444' : '#3b82f6' }}
-                                                onClick={handleNegotiateAudio} 
+                                            <motion.button
+                                                type="button"
+                                                className={`respond-btn mt-4 ${negRound >= MAX_NEG_ROUNDS - 1 ? 'bg-destructive hover:bg-destructive/90' : ''}`}
+                                                onClick={handleNegotiateAudio}
                                                 disabled={isNegVoiceSubmitting}
                                                 initial={{ scale: 0.9, opacity: 0 }}
                                                 animate={{ scale: 1, opacity: 1 }}
                                             >
-                                                {isNegVoiceSubmitting ? 'Analyzing...' : negRound >= MAX_NEG_ROUNDS - 1 ? 'Submit Final Decision' : 'Submit Voice Counter'}
+                                                {isNegVoiceSubmitting ? 'Analyzing…' : negRound >= MAX_NEG_ROUNDS - 1 ? 'Submit Final Decision' : 'Submit Voice Counter'}
                                             </motion.button>
                                         )}
                                     </div>
 
                                     {/* Walk Away Button */}
                                     <motion.button
-                                        className="respond-btn"
-                                        style={{ 
-                                            background: 'transparent', 
-                                            border: '1px solid rgba(239,68,68,0.4)', 
-                                            color: '#f87171',
-                                            fontSize: '0.85rem',
-                                            padding: '0.6rem 1.2rem',
-                                        }}
+                                        type="button"
+                                        className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-sm font-bold text-destructive border border-destructive/40 bg-transparent hover:bg-destructive/10 active:bg-destructive/20 transition-all disabled:opacity-50"
                                         onClick={handleRejectDeal}
                                         disabled={isNegVoiceSubmitting}
-                                        whileHover={{ scale: 1.02, borderColor: 'rgba(239,68,68,0.8)' }}
+                                        whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         Walk Away from This Offer
@@ -950,11 +930,11 @@ export default function WarRoomSimulation() {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
-                                style={{ textAlign: 'center', padding: '2rem', background: 'rgba(239,68,68,0.1)', borderRadius: '16px', border: '1px solid rgba(239,68,68,0.3)', marginBottom: '1.5rem' }}
+                                className="text-center p-8 bg-destructive/10 rounded-2xl border border-destructive/30 mb-6"
                             >
-                                <h3 style={{ fontSize: '1.5rem', color: '#f87171', marginBottom: '0.5rem' }}>🚶 Walked Away</h3>
-                                <p style={{ color: '#fca5a5', fontSize: '1rem' }}>You walked away from <strong>{walkedAwayInvestor}</strong>&apos;s offer.</p>
-                                <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginTop: '0.5rem' }}>Select another offer to continue negotiating, or walk away from all offers.</p>
+                                <h3 className="text-2xl text-destructive font-bold mb-2">🚶 Walked Away</h3>
+                                <p className="text-destructive/80 text-base">You walked away from <strong>{walkedAwayInvestor}</strong>&apos;s offer.</p>
+                                <p className="text-muted-foreground text-sm mt-2">Select another offer to continue negotiating, or walk away from all offers.</p>
                             </motion.div>
                         )}
 
@@ -962,24 +942,28 @@ export default function WarRoomSimulation() {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                style={{ textAlign: 'center', padding: '3rem', background: 'rgba(16,185,129,0.1)', borderRadius: '16px', border: '1px solid #10b981', position: 'relative', overflow: 'hidden' }}
+                                className="deal-accepted text-center"
                             >
-                                <h2 style={{ fontSize: '2.5rem', color: '#10b981', marginBottom: '1.5rem', fontWeight: 'bold' }}>Deal Secured! 🎉</h2>
-                                <div style={{ fontSize: '1.2rem', marginBottom: '2rem', background: 'rgba(255,255,255,0.05)', padding: '2rem', borderRadius: '12px' }}>
-                                    <p style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>Congratulations! You finalized a deal with <strong style={{ color: 'white' }}>{acceptedDealTerms?.investorName || selectedOffer?.investorName}</strong>.</p>
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1.5rem' }}>
-                                        <div style={{ textAlign: 'center' }}>
-                                            <div style={{ fontSize: '0.9rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px' }}>Investment</div>
-                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#34d399' }}>${(acceptedDealTerms?.capital || selectedOffer?.capital || 0).toLocaleString()}</div>
-                                        </div>
-                                        <div style={{ width: '1px', background: 'rgba(255,255,255,0.2)' }}></div>
-                                        <div style={{ textAlign: 'center' }}>
-                                            <div style={{ fontSize: '0.9rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px' }}>Equity</div>
-                                            <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#60a5fa' }}>{acceptedDealTerms?.equity || selectedOffer?.equity}%</div>
-                                        </div>
+                                <h2 className="deal-accepted-title">Deal Secured! 🎉</h2>
+                                <p className="deal-accepted-subtitle">
+                                    Congratulations! You finalized a deal with{' '}
+                                    <strong className="text-foreground">{acceptedDealTerms?.investorName || selectedOffer?.investorName}</strong>.
+                                </p>
+                                <div className="deal-terms">
+                                    <div className="deal-term">
+                                        <span className="deal-term-label">Investment</span>
+                                        <span className="deal-term-value text-4xl font-extrabold">
+                                            ${(acceptedDealTerms?.capital || selectedOffer?.capital || 0).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="deal-term">
+                                        <span className="deal-term-label">Equity Given</span>
+                                        <span className="deal-term-value text-4xl font-extrabold">
+                                            {acceptedDealTerms?.equity || selectedOffer?.equity}%
+                                        </span>
                                     </div>
                                 </div>
-                                <button className="final-report-btn" onClick={handleEndSimulation} style={{ position: 'relative', zIndex: 10 }}>
+                                <button type="button" className="final-report-btn mt-6" onClick={handleEndSimulation}>
                                     Complete Simulation and View Report
                                 </button>
                             </motion.div>
@@ -987,6 +971,7 @@ export default function WarRoomSimulation() {
 
                         {!selectedOffer && !dealFinalized && (
                             <motion.button
+                                type="button"
                                 className="final-report-btn"
                                 onClick={handleEndSimulation}
                                 whileHover={{ scale: 1.03 }}
@@ -994,7 +979,6 @@ export default function WarRoomSimulation() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.5 + offers.length * 0.15 }}
-                                style={{ marginTop: '2rem' }}
                             >
                                 Walk Away from All Offers
                             </motion.button>

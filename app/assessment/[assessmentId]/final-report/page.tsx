@@ -1,12 +1,44 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import api from '@/src/lib/api'
 import { CompetencyRadarChart } from '@/components/competency-radar-chart'
-import type { EvaluationReport, RankedCompetency, InvestorScorecard, CompetencyCode, UserResponseEntry, StageName } from '@/src/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import {
+  Loader2,
+  ArrowLeft,
+  Users,
+  DollarSign,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Star,
+  BarChart3,
+  Target,
+  Calendar,
+  MessageSquare,
+  ChevronRight,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+import type {
+  EvaluationReport,
+  RankedCompetency,
+  InvestorScorecard,
+  CompetencyCode,
+  UserResponseEntry,
+} from '@/src/types'
+
+// ============================================
+// CONSTANTS
+// ============================================
 
 const COMP_COLORS: Record<string, string> = {
   C1: '#6366f1', C2: '#8b5cf6', C3: '#f59e0b', C4: '#10b981',
@@ -14,9 +46,46 @@ const COMP_COLORS: Record<string, string> = {
   C9: '#14b8a6',
 }
 
+const CATEGORY_STYLES: Record<string, { badge: string; bar: string }> = {
+  NATURAL_DOMINANT: {
+    badge: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30',
+    bar: 'bg-emerald-500',
+  },
+  STRONG: {
+    badge: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30',
+    bar: 'bg-blue-500',
+  },
+  FUNCTIONAL: {
+    badge: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30',
+    bar: 'bg-amber-500',
+  },
+  DEVELOPMENT_REQUIRED: {
+    badge: 'bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30',
+    bar: 'bg-orange-500',
+  },
+  HIGH_RISK: {
+    badge: 'bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30',
+    bar: 'bg-red-500',
+  },
+}
+
 function stageLabel(s: string) {
   return s.replace('STAGE_', '').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
 }
+
+// ============================================
+// MAIN PAGE
+// ============================================
+
+type TabId = 'deal' | 'competency' | 'analysis' | 'responses' | 'deepdive'
+
+const TABS: { id: TabId; emoji: string; label: string; shortLabel: string }[] = [
+  { id: 'deal',       emoji: '🦈', label: 'Deal Summary',      shortLabel: 'Deal'     },
+  { id: 'competency', emoji: '📊', label: 'Competency Profile', shortLabel: 'Skills'   },
+  { id: 'analysis',   emoji: '🧠', label: 'AI Analysis',        shortLabel: 'Analysis' },
+  { id: 'responses',  emoji: '📝', label: 'Your Responses',     shortLabel: 'Answers'  },
+  { id: 'deepdive',   emoji: '🔍', label: 'Deep Dive',          shortLabel: 'Stages'   },
+]
 
 export default function FinalReportPage() {
   const params = useParams()
@@ -24,141 +93,112 @@ export default function FinalReportPage() {
   const [report, setReport] = useState<EvaluationReport | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [activePage, setActivePage] = useState<1 | 2 | 3 | 4 | 5>(1)
+  const [activeTab, setActiveTab] = useState<TabId>('deal')
 
   useEffect(() => {
     api.assessments
       .getReport(assessmentId)
       .then((r) => setReport(r))
-      .catch((err) => setError(err.message))
+      .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false))
   }, [assessmentId])
 
   if (loading) {
     return (
-      <div className="report-loading">
-        <div className="loader-text">Loading your saved evaluation report...</div>
-        <style jsx>{`.report-loading { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a1a; color: #c4b5fd; font-size: 1.2rem; }`}</style>
-      </div>
-    )
-  }
-  if (error || !report) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a1a', color: '#fca5a5' }}>
-        <div style={{ textAlign: 'center' }}>
-          <p>{error || 'Report not found'}</p>
-          <Link href="/" style={{ color: '#a5b4fc' }}>← Return Home</Link>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading your evaluation report…</p>
         </div>
       </div>
     )
   }
 
+  if (error || !report) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background">
+        <p className="text-destructive text-lg">{error || 'Report not found'}</p>
+        <Link href="/dashboard">
+          <Button variant="outline">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Return Home
+          </Button>
+        </Link>
+      </div>
+    )
+  }
+
   return (
-    <div className="report-page">
-      <header className="report-header">
-        <Link href="/" className="back-link">← Dashboard</Link>
-        <h1>Evaluation Report</h1>
-        <p className="subtitle">{report.entrepreneurType} • {report.organizationalRole}</p>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b bg-card/80 backdrop-blur-md">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Dashboard
+            </Button>
+          </Link>
+          <div className="text-center flex-1">
+            <h1 className="text-lg font-bold tracking-tight">Evaluation Report</h1>
+            <p className="text-xs text-muted-foreground truncate">
+              {report.entrepreneurType} • {report.organizationalRole}
+            </p>
+          </div>
+          <div className="w-24" />
+        </div>
       </header>
 
-      {/* Page Tabs */}
-      <nav className="page-tabs">
-        <button className={`tab ${activePage === 1 ? 'active' : ''}`} onClick={() => setActivePage(1)}>
-          🦈 Deal Summary
-        </button>
-        <button className={`tab ${activePage === 2 ? 'active' : ''}`} onClick={() => setActivePage(2)}>
-          📊 Competency Profile
-        </button>
-        <button className={`tab ${activePage === 3 ? 'active' : ''}`} onClick={() => setActivePage(3)}>
-          🧠 AI Analysis
-        </button>
-        <button className={`tab ${activePage === 4 ? 'active' : ''}`} onClick={() => setActivePage(4)}>
-          📝 Your Responses
-        </button>
-        <button className={`tab ${activePage === 5 ? 'active' : ''}`} onClick={() => setActivePage(5)}>
-          🔍 Deep Dive
-        </button>
-      </nav>
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        {/* Tab Bar */}
+        <div
+          role="tablist"
+          aria-label="Report sections"
+          className="bg-muted rounded-lg p-1 flex w-full mb-8 gap-0.5"
+        >
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              role="tab"
+              type="button"
+              aria-selected={activeTab === tab.id}
+              aria-controls={`tab-panel-${tab.id}`}
+              id={`tab-${tab.id}`}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                'flex-1 flex flex-col items-center gap-0.5 px-2 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200',
+                activeTab === tab.id
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
+              )}
+            >
+              <span className="text-base leading-none">{tab.emoji}</span>
+              <span className="hidden sm:block">{tab.label}</span>
+              <span className="sm:hidden">{tab.shortLabel}</span>
+            </button>
+          ))}
+        </div>
 
-      <main className="report-content">
+        {/* Tab Content */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activePage}
-            initial={{ opacity: 0, y: 10 }}
+            key={activeTab}
+            id={`tab-panel-${activeTab}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${activeTab}`}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
           >
-            {activePage === 1 && <DealPage report={report} />}
-            {activePage === 2 && <CompetencyPage report={report} />}
-            {activePage === 3 && <AIAnalysisPage report={report} />}
-            {activePage === 4 && <UserResponsesPage report={report} />}
-            {activePage === 5 && <DeepDivePage report={report} />}
+            {activeTab === 'deal'       && <DealPage report={report} />}
+            {activeTab === 'competency' && <CompetencyPage report={report} />}
+            {activeTab === 'analysis'   && <AIAnalysisPage report={report} />}
+            {activeTab === 'responses'  && <UserResponsesPage report={report} />}
+            {activeTab === 'deepdive'   && <DeepDivePage report={report} />}
           </motion.div>
         </AnimatePresence>
       </main>
-
-      <style jsx>{`
-        .report-page {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 100%);
-          color: #e0e0e0;
-          padding: 2rem;
-        }
-        .report-header {
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-        .back-link {
-          color: #8b8bcc;
-          text-decoration: none;
-          font-size: 0.85rem;
-          display: inline-block;
-          margin-bottom: 1rem;
-        }
-        h1 {
-          font-size: 2rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, #fff, #c4b5fd);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 0.5rem;
-        }
-        .subtitle {
-          color: #a5b4fc;
-          font-size: 1rem;
-          font-weight: 500;
-        }
-
-        .page-tabs {
-          display: flex;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-bottom: 2rem;
-        }
-        .tab {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          color: #9ca3af;
-          padding: 0.7rem 1.5rem;
-          border-radius: 10px;
-          cursor: pointer;
-          font-size: 0.9rem;
-          font-weight: 600;
-          transition: all 0.2s;
-        }
-        .tab:hover { background: rgba(255,255,255,0.08); }
-        .tab.active {
-          background: rgba(139,92,246,0.15);
-          border-color: #8b5cf6;
-          color: #c4b5fd;
-        }
-
-        .report-content {
-          max-width: 900px;
-          margin: 0 auto;
-        }
-      `}</style>
     </div>
   )
 }
@@ -170,121 +210,136 @@ export default function FinalReportPage() {
 function DealPage({ report }: { report: EvaluationReport }) {
   const deal = report.dealSummary
 
+  const stats = [
+    {
+      value: deal?.totalInvestors ?? 0,
+      label: 'Investors Faced',
+      icon: Users,
+      highlight: false,
+    },
+    {
+      value: deal?.dealsOffered ?? 0,
+      label: 'Deals Offered',
+      icon: TrendingUp,
+      highlight: true,
+    },
+  ]
+
   return (
-    <div className="deal-page">
-      <div className="deal-stats">
-        {[
-          { value: deal?.totalInvestors || 0, label: 'Investors Faced', highlight: false },
-          { value: deal?.dealsOffered || 0, label: 'Deals Offered', highlight: true },
-        ].map((stat, i) => (
+    <div className="space-y-8">
+      {/* Stat Cards */}
+      <div className="flex gap-4 justify-center flex-wrap">
+        {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
-            className={`stat-card ${stat.highlight ? 'highlight' : ''}`}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: i * 0.15, type: 'spring', stiffness: 200 }}
+            transition={{ delay: i * 0.12, type: 'spring', stiffness: 200 }}
+            whileHover={{ scale: 1.03 }}
           >
-            <div className="stat-value">{stat.value}</div>
-            <div className="stat-label">{stat.label}</div>
+            <Card className={cn(
+              'w-48 text-center transition-all',
+              stat.highlight && 'border-emerald-500/40 bg-emerald-500/5'
+            )}>
+              <CardContent className="pt-6 pb-5">
+                <stat.icon className={cn(
+                  'h-6 w-6 mx-auto mb-2',
+                  stat.highlight ? 'text-emerald-500' : 'text-muted-foreground'
+                )} />
+                <div className={cn(
+                  'text-4xl font-extrabold',
+                  stat.highlight ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'
+                )}>
+                  {stat.value}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1 font-medium uppercase tracking-wider">
+                  {stat.label}
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         ))}
       </div>
 
+      {/* Investor Scorecards */}
       {deal?.investorResults && deal.investorResults.length > 0 && (
-        <div className="investor-results">
-          <h3>Investor Scorecards</h3>
-          {deal.investorResults.map((sc: any, i: number) => (
-            <motion.div
-              key={i}
-              className="scorecard"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + i * 0.1 }}
-            >
-              <div className="sc-header">
-                <strong>{sc.investorName || sc.investor_name}</strong>
-                <span className={`deal-badge ${(sc.dealDecision || sc.deal_decision) === 'WALK_OUT' ? 'walkout' : 'deal'}`}>
-                  {sc.dealDecision || sc.deal_decision}
-                </span>
-              </div>
-              <div className="sc-scores">
-                <span>Primary: {sc.primaryScore || sc.primary_score}/5</span>
-                <span>Bias Trait: {sc.biasTraitScore || sc.bias_trait_score}/5</span>
-                {sc.redFlag && <span className="red-flag">🚩 Red Flag</span>}
-              </div>
-              {sc.investorReaction && (
-                <blockquote>&ldquo;{sc.investorReaction || sc.investor_reaction}&rdquo;</blockquote>
-              )}
-            </motion.div>
-          ))}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <Star className="h-5 w-5 text-amber-500" />
+            Investor Scorecards
+          </h2>
+          {deal.investorResults.map((sc: any, i: number) => {
+            const decision = sc.dealDecision || sc.deal_decision
+            const isWalkout = decision === 'WALK_OUT'
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 + i * 0.08 }}
+              >
+                <Card className={cn(
+                  'transition-all',
+                  isWalkout ? 'border-destructive/30' : 'border-emerald-500/30'
+                )}>
+                  <CardContent className="pt-4 pb-4">
+                    {/* Header row */}
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-amber-500/20 border border-primary/30 flex items-center justify-center font-bold text-primary flex-shrink-0">
+                          {(sc.investorName || sc.investor_name || '?').charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-foreground">
+                            {sc.investorName || sc.investor_name}
+                          </p>
+                          {sc.redFlag && (
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <AlertTriangle className="h-3 w-3 text-destructive" />
+                              <span className="text-xs text-destructive font-semibold">Red Flag</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          'shrink-0',
+                          isWalkout
+                            ? 'bg-destructive/10 text-destructive border-destructive/30'
+                            : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
+                        )}
+                      >
+                        {isWalkout ? (
+                          <><XCircle className="h-3 w-3 mr-1" /> Walk Out</>
+                        ) : (
+                          <><CheckCircle2 className="h-3 w-3 mr-1" /> {decision?.replace(/_/g, ' ')}</>
+                        )}
+                      </Badge>
+                    </div>
+
+                    {/* Scores row */}
+                    <div className="flex gap-4 text-xs text-muted-foreground mb-3">
+                      <span>Primary Score: <strong className="text-foreground">{sc.primaryScore ?? sc.primary_score ?? '—'}/5</strong></span>
+                      <span>Bias Trait: <strong className="text-foreground">{sc.biasTraitScore ?? sc.bias_trait_score ?? '—'}/5</strong></span>
+                      {sc.biasTraitName && (
+                        <span className="italic">{sc.biasTraitName}</span>
+                      )}
+                    </div>
+
+                    {/* Reaction quote */}
+                    {sc.investorReaction && (
+                      <blockquote className="border-l-2 border-border pl-3 text-sm text-muted-foreground italic leading-relaxed">
+                        &ldquo;{sc.investorReaction || sc.investor_reaction}&rdquo;
+                      </blockquote>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
+          })}
         </div>
       )}
-
-      <style jsx>{`
-        .deal-page { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .deal-stats {
-          display: flex;
-          gap: 1.5rem;
-          justify-content: center;
-          margin-bottom: 2rem;
-        }
-        .stat-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px;
-          padding: 2rem 3rem;
-          text-align: center;
-        }
-        .stat-card.highlight {
-          border-color: rgba(16,185,129,0.3);
-          background: rgba(16,185,129,0.05);
-        }
-        .stat-value { font-size: 2.5rem; font-weight: 800; color: white; }
-        .stat-label { font-size: 0.85rem; color: #9ca3af; margin-top: 0.3rem; }
-
-        .investor-results h3 { color: white; margin-bottom: 1rem; }
-        .scorecard {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 12px;
-          padding: 1.2rem;
-          margin-bottom: 0.8rem;
-        }
-        .sc-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 0.5rem;
-        }
-        .sc-header strong { color: white; }
-        .deal-badge {
-          font-size: 0.75rem;
-          font-weight: 600;
-          padding: 0.2rem 0.6rem;
-          border-radius: 6px;
-        }
-        .deal-badge.deal { background: rgba(16,185,129,0.15); color: #34d399; }
-        .deal-badge.walkout { background: rgba(239,68,68,0.15); color: #fca5a5; }
-        .sc-scores {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.85rem;
-          color: #9ca3af;
-          margin-bottom: 0.5rem;
-        }
-        .red-flag { color: #ef4444; font-weight: 600; }
-        blockquote {
-          background: rgba(255,255,255,0.02);
-          border-left: 2px solid rgba(255,255,255,0.1);
-          padding: 0.6rem 1rem;
-          border-radius: 0 6px 6px 0;
-          font-style: italic;
-          color: #9ca3af;
-          font-size: 0.9rem;
-          margin: 0;
-        }
-      `}</style>
     </div>
   )
 }
@@ -296,225 +351,154 @@ function DealPage({ report }: { report: EvaluationReport }) {
 function CompetencyPage({ report }: { report: EvaluationReport }) {
   const ranking = report.competencyRanking || []
   const spiderData = report.spiderChartData || {}
-
-  // Simple bar chart representation since we can't use recharts in server component
-  const maxVal = 3
+  // Max score for bar chart (competency scale is 0–3)
+  const MAX_SCORE = 3
 
   return (
-    <div className="comp-page">
+    <div className="space-y-8">
       {/* Archetype */}
-      <div className="archetype-section">
-        <div className="archetype-badge">{report.entrepreneurType}</div>
-        <p className="archetype-role">Organizational Role: <strong>{report.organizationalRole}</strong></p>
+      <div className="text-center space-y-3">
+        <div className="inline-block px-6 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300">
+          {report.entrepreneurType}
+        </div>
+        {report.organizationalRole && (
+          <p className="text-sm text-muted-foreground">
+            Organizational Role: <strong className="text-foreground">{report.organizationalRole}</strong>
+          </p>
+        )}
         {report.archetypeNarrative && (
-          <p className="archetype-narrative">{report.archetypeNarrative}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            {report.archetypeNarrative}
+          </p>
         )}
       </div>
 
       {/* Radar Chart */}
-      <div className="radar-chart bg-neutral-950 p-6 rounded-2xl mb-8 border border-neutral-800">
-         <h3 className="text-xl font-bold mb-4">Competency Radar</h3>
-         <CompetencyRadarChart spiderData={spiderData} competencyRanking={ranking} />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            Competency Radar
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CompetencyRadarChart spiderData={spiderData} competencyRanking={ranking} />
+        </CardContent>
+      </Card>
 
-      {/* Spider Chart (bar representation) */}
-      <div className="spider-chart">
-        <h3>Competency Profile</h3>
-        {ranking.map((comp: RankedCompetency) => (
-          <div key={comp.code} className="bar-row">
-            <div className="bar-label">
-              <span className="comp-code" style={{ color: COMP_COLORS[comp.code] || '#8b5cf6' }}>
-                {comp.code}
-              </span>
-              <span className="comp-name">{comp.name}</span>
-            </div>
-            <div className="bar-track">
-              <div
-                className="bar-fill"
-                style={{
-                  width: `${(comp.weightedAverage / maxVal) * 100}%`,
-                  background: COMP_COLORS[comp.code] || '#8b5cf6',
-                }}
-              />
-            </div>
-            <div className="bar-value">{comp.weightedAverage.toFixed(2)}</div>
-            <span className={`cat-badge cat-${comp.category.toLowerCase().replace(/_/g, '-')}`}>
-              {comp.category.replace(/_/g, ' ')}
-            </span>
-          </div>
-        ))}
-      </div>
+      {/* Competency Profile Bars */}
+      {ranking.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Target className="h-4 w-4 text-primary" />
+              Competency Profile
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {ranking.map((comp: RankedCompetency) => {
+              const pct = Math.min((comp.weightedAverage / MAX_SCORE) * 100, 100)
+              const styles = CATEGORY_STYLES[comp.category] || CATEGORY_STYLES.FUNCTIONAL
+              return (
+                <div key={comp.code} className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 w-52 shrink-0">
+                    <span
+                      className="text-xs font-bold w-6 shrink-0"
+                      style={{ color: COMP_COLORS[comp.code] || '#8b5cf6' }}
+                    >
+                      {comp.code}
+                    </span>
+                    <span className="text-xs text-muted-foreground truncate">{comp.name}</span>
+                  </div>
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                    <motion.div
+                      className={cn('h-full rounded-full', styles.bar)}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+                    />
+                  </div>
+                  <span className="text-xs font-mono font-bold w-8 text-right text-foreground">
+                    {comp.weightedAverage.toFixed(2)}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className={cn('text-[10px] px-1.5 py-0 whitespace-nowrap hidden sm:inline-flex shrink-0', styles.badge)}
+                  >
+                    {comp.category.replace(/_/g, ' ')}
+                  </Badge>
+                </div>
+              )
+            })}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Role Fit */}
       {report.roleFitMap && (
-        <div className="role-fit">
-          <h3>Role Fit Analysis</h3>
-          <div className="role-card">
-            <div className="role-name">{report.roleFitMap.role}</div>
-            <p>{report.roleFitMap.bestEnvironment}</p>
-            <div className="dominant-comps">
-              {report.roleFitMap.dominantCompetencies?.map((c: CompetencyCode) => (
-                <span key={c} className="dom-comp" style={{ borderColor: COMP_COLORS[c] }}>
-                  {c}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Star className="h-4 w-4 text-amber-500" />
+              Role Fit Analysis
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-base font-bold text-foreground mb-1">{report.roleFitMap.role}</p>
+            <p className="text-sm text-muted-foreground mb-3">{report.roleFitMap.bestEnvironment}</p>
+            {report.roleFitMap.dominantCompetencies?.length > 0 && (
+              <div className="flex gap-2 flex-wrap">
+                {report.roleFitMap.dominantCompetencies.map((c: CompetencyCode) => (
+                  <span
+                    key={c}
+                    className="px-2 py-0.5 rounded-md text-xs font-bold border"
+                    style={{
+                      borderColor: COMP_COLORS[c] || '#8b5cf6',
+                      color: COMP_COLORS[c] || '#8b5cf6',
+                      background: `${COMP_COLORS[c] || '#8b5cf6'}18`,
+                    }}
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       {/* Action Plan */}
-      {report.actionPlan && report.actionPlan.length > 0 && (
-        <div className="action-plan">
-          <h3>Action Plan</h3>
-          {report.actionPlan.map((item, i) => (
-            <div key={i} className="action-item">
-              <div className="action-comp">{item.competency}</div>
-              <p>{item.action}</p>
-              <span className="target">{item.targetDate}</span>
-            </div>
-          ))}
-        </div>
+      {report.actionPlan?.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              Action Plan
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {report.actionPlan.map((item, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border/30">
+                <div className="h-6 w-6 rounded-full bg-amber-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-xs font-bold text-amber-600 dark:text-amber-400">{i + 1}</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide mb-0.5">
+                    {item.competency}
+                  </p>
+                  <p className="text-sm text-foreground/80 leading-relaxed">{item.action}</p>
+                  {item.targetDate && (
+                    <div className="flex items-center gap-1 mt-1">
+                      <Calendar className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">{item.targetDate}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
       )}
-
-      <style jsx>{`
-        .comp-page { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .archetype-section {
-          text-align: center;
-          margin-bottom: 2.5rem;
-        }
-        .archetype-badge {
-          display: inline-block;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
-          color: white;
-          padding: 0.6rem 2rem;
-          border-radius: 12px;
-          font-size: 1.3rem;
-          font-weight: 700;
-          margin-bottom: 0.8rem;
-        }
-        .archetype-role {
-          color: #9ca3af;
-          font-size: 1rem;
-          margin-bottom: 1rem;
-        }
-        .archetype-role strong { color: #c4b5fd; }
-        .archetype-narrative {
-          color: #d1d5db;
-          line-height: 1.6;
-          max-width: 700px;
-          margin: 0 auto;
-          font-size: 0.95rem;
-        }
-
-        .spider-chart {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 16px;
-          padding: 1.5rem;
-          margin-bottom: 2rem;
-        }
-        .spider-chart h3, .role-fit h3, .action-plan h3 {
-          color: white;
-          font-size: 1.1rem;
-          margin-bottom: 1rem;
-        }
-        .bar-row {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          margin-bottom: 0.7rem;
-        }
-        .bar-label {
-          width: 200px;
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-        }
-        .comp-code { font-weight: 700; font-size: 0.85rem; width: 28px; }
-        .comp-name { font-size: 0.8rem; color: #d1d5db; }
-        .bar-track {
-          flex: 1;
-          height: 8px;
-          background: rgba(255,255,255,0.06);
-          border-radius: 4px;
-          overflow: hidden;
-        }
-        .bar-fill {
-          height: 100%;
-          border-radius: 4px;
-          transition: width 0.6s ease;
-        }
-        .bar-value {
-          width: 40px;
-          text-align: right;
-          font-weight: 600;
-          font-size: 0.85rem;
-          color: white;
-        }
-        .cat-badge {
-          font-size: 0.65rem;
-          padding: 0.15rem 0.5rem;
-          border-radius: 6px;
-          font-weight: 600;
-          white-space: nowrap;
-          width: 130px;
-          text-align: center;
-        }
-        .cat-natural-dominant { background: rgba(16,185,129,0.12); color: #34d399; }
-        .cat-strong { background: rgba(59,130,246,0.12); color: #60a5fa; }
-        .cat-functional { background: rgba(245,158,11,0.12); color: #fbbf24; }
-        .cat-development-required { background: rgba(239,68,68,0.12); color: #fca5a5; }
-        .cat-high-risk { background: rgba(239,68,68,0.2); color: #ef4444; }
-
-        .role-fit { margin-bottom: 2rem; }
-        .role-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 12px;
-          padding: 1.5rem;
-        }
-        .role-name {
-          font-size: 1.2rem;
-          font-weight: 700;
-          color: #c4b5fd;
-          margin-bottom: 0.5rem;
-        }
-        .role-card p { color: #9ca3af; font-size: 0.9rem; margin-bottom: 0.8rem; }
-        .dominant-comps { display: flex; gap: 0.4rem; }
-        .dom-comp {
-          border: 1px solid;
-          padding: 0.15rem 0.5rem;
-          border-radius: 6px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #a5b4fc;
-        }
-
-        .action-plan { margin-bottom: 2rem; }
-        .action-item {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 10px;
-          padding: 1rem 1.2rem;
-          margin-bottom: 0.6rem;
-        }
-        .action-comp {
-          font-weight: 600;
-          color: #f59e0b;
-          font-size: 0.85rem;
-          margin-bottom: 0.3rem;
-        }
-        .action-item p { color: #d1d5db; font-size: 0.9rem; margin: 0 0 0.3rem 0; }
-        .target { font-size: 0.75rem; color: #6b7280; }
-
-        @media (max-width: 768px) {
-          .bar-label { width: 120px; }
-          .cat-badge { display: none; }
-        }
-      `}</style>
     </div>
   )
 }
@@ -526,9 +510,12 @@ function CompetencyPage({ report }: { report: EvaluationReport }) {
 function AIAnalysisPage({ report }: { report: EvaluationReport }) {
   const analysis = report.detailedAnalysis || ''
 
-  // Parse markdown-like headings and bullet points for rendering
   const renderAnalysis = (text: string) => {
-    if (!text) return <p className="no-data">No detailed analysis available.</p>
+    if (!text) {
+      return (
+        <p className="text-center text-muted-foreground py-8">No detailed analysis available.</p>
+      )
+    }
 
     const lines = text.split('\n')
     const elements: React.ReactNode[] = []
@@ -537,99 +524,45 @@ function AIAnalysisPage({ report }: { report: EvaluationReport }) {
     for (const line of lines) {
       const trimmed = line.trim()
       if (!trimmed) {
-        elements.push(<br key={key++} />)
+        elements.push(<div key={key++} className="h-2" />)
       } else if (trimmed.startsWith('## ')) {
         elements.push(
-          <h3 key={key++} className="analysis-heading">{trimmed.replace('## ', '')}</h3>
+          <h3 key={key++} className="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-5 mb-2 pb-1 border-b border-indigo-500/20 first:mt-0">
+            {trimmed.replace('## ', '')}
+          </h3>
         )
       } else if (trimmed.startsWith('- ')) {
         elements.push(
-          <div key={key++} className="analysis-bullet">
-            <span className="bullet">•</span>
+          <div key={key++} className="flex gap-2 py-0.5 text-sm text-foreground/80 leading-relaxed">
+            <span className="text-indigo-500 font-bold shrink-0 mt-0.5">•</span>
             <span>{trimmed.replace('- ', '')}</span>
           </div>
         )
       } else {
-        elements.push(<p key={key++} className="analysis-text">{trimmed}</p>)
+        elements.push(
+          <p key={key++} className="text-sm text-foreground/80 leading-relaxed my-1">
+            {trimmed}
+          </p>
+        )
       }
     }
     return <>{elements}</>
   }
 
   return (
-    <div className="analysis-page">
-      <div className="analysis-header">
-        <h2>🧠 Detailed AI Evaluation</h2>
-        <p className="analysis-subtitle">
+    <div className="space-y-6">
+      <div className="text-center space-y-1">
+        <h2 className="text-xl font-bold">🧠 Detailed AI Evaluation</h2>
+        <p className="text-sm text-muted-foreground">
           Comprehensive analysis of your simulation journey — strengths, weaknesses, and actionable insights
         </p>
       </div>
 
-      <div className="analysis-content">
-        {renderAnalysis(analysis)}
-      </div>
-
-      <style jsx>{`
-        .analysis-page { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .analysis-header {
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-        .analysis-header h2 {
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: white;
-          margin-bottom: 0.5rem;
-        }
-        .analysis-subtitle {
-          color: #9ca3af;
-          font-size: 0.9rem;
-        }
-
-        .analysis-content {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 16px;
-          padding: 2rem;
-        }
-        .analysis-heading {
-          font-size: 1.15rem;
-          font-weight: 700;
-          color: #c4b5fd;
-          margin: 1.5rem 0 0.6rem 0;
-          padding-bottom: 0.4rem;
-          border-bottom: 1px solid rgba(196, 181, 253, 0.15);
-        }
-        .analysis-heading:first-child {
-          margin-top: 0;
-        }
-        .analysis-bullet {
-          display: flex;
-          gap: 0.6rem;
-          padding: 0.3rem 0;
-          font-size: 0.95rem;
-          color: #d1d5db;
-          line-height: 1.6;
-        }
-        .bullet {
-          color: #8b5cf6;
-          font-weight: 700;
-          flex-shrink: 0;
-        }
-        .analysis-text {
-          font-size: 0.95rem;
-          color: #d1d5db;
-          line-height: 1.6;
-          margin: 0.3rem 0;
-        }
-        .no-data {
-          color: #6b7280;
-          text-align: center;
-          padding: 3rem;
-        }
-      `}</style>
+      <Card>
+        <CardContent className="pt-6 pb-6">
+          {renderAnalysis(analysis)}
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -641,7 +574,6 @@ function AIAnalysisPage({ report }: { report: EvaluationReport }) {
 function UserResponsesPage({ report }: { report: EvaluationReport }) {
   const responses = report.userResponses || []
 
-  // Group responses by stage
   const grouped: Record<string, UserResponseEntry[]> = {}
   for (const r of responses) {
     const stage = r.stageName || 'Unknown'
@@ -649,16 +581,10 @@ function UserResponsesPage({ report }: { report: EvaluationReport }) {
     grouped[stage].push(r)
   }
 
-  const stageOrder = [
-    'STAGE_NEG2_IDEATION', 'STAGE_NEG1_VISION', 'STAGE_0_COMMITMENT',
-    'STAGE_1_VALIDATION', 'STAGE_2A_GROWTH', 'STAGE_2B_EXPANSION',
-    'STAGE_3_SCALE', 'STAGE_WARROOM_PREP',
-  ]
-
-  const sortedStages = Object.keys(grouped);
+  const sortedStages = Object.keys(grouped)
 
   const getResponseText = (entry: any): string => {
-      if (entry.selectedOptionText) return entry.selectedOptionText;
+    if (entry.selectedOptionText) return entry.selectedOptionText
     if (!entry.response) return '(no response)'
     if (entry.response.text) return entry.response.text
     if (entry.response.selectedOptionId) return `Selected: ${entry.response.selectedOptionId}`
@@ -670,166 +596,86 @@ function UserResponsesPage({ report }: { report: EvaluationReport }) {
     return JSON.stringify(entry.response)
   }
 
-  const getProficiencyBadge = (p: number | null) => {
-    if (p === null || p === undefined) return null
-    const colors: Record<number, { bg: string; text: string; label: string }> = {
-      1: { bg: 'rgba(239,68,68,0.12)', text: '#fca5a5', label: 'P1 — Developing' },
-      2: { bg: 'rgba(245,158,11,0.12)', text: '#fbbf24', label: 'P2 — Strong' },
-      3: { bg: 'rgba(16,185,129,0.12)', text: '#34d399', label: 'P3 — Advanced' },
-    }
-    const c = colors[p] || colors[1]
-    return (
-      <span style={{ background: c.bg, color: c.text, padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 600 }}>
-        {c.label}
-      </span>
-    )
+  const proficiencyConfig: Record<number, { className: string; label: string }> = {
+    1: { className: 'bg-destructive/10 text-destructive border-destructive/30', label: 'P1 — Developing' },
+    2: { className: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30', label: 'P2 — Strong' },
+    3: { className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30', label: 'P3 — Advanced' },
   }
 
   return (
-    <div className="responses-page">
-      <div className="responses-header">
-        <h2>📝 Your Responses</h2>
-        <p className="responses-subtitle">
+    <div className="space-y-8">
+      <div className="text-center space-y-1">
+        <h2 className="text-xl font-bold">📝 Your Responses</h2>
+        <p className="text-sm text-muted-foreground">
           All your answers throughout the simulation, grouped by stage
         </p>
       </div>
 
       {sortedStages.length === 0 && (
-        <div className="no-data">No responses recorded.</div>
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground text-sm">
+            No responses recorded.
+          </CardContent>
+        </Card>
       )}
 
       {sortedStages.map((stageName) => (
-        <div key={stageName} className="stage-group">
-          <div className="stage-header">
-            <span className="stage-badge">{stageLabel(stageName)}</span>
-            <span className="response-count">{grouped[stageName].length} responses</span>
+        <div key={stageName} className="space-y-3">
+          {/* Stage header */}
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/30 font-bold">
+              {stageLabel(stageName)}
+            </Badge>
+            <span className="text-xs text-muted-foreground">{grouped[stageName].length} responses</span>
+            <Separator className="flex-1" />
           </div>
 
+          {/* Response cards */}
           {grouped[stageName].map((entry, i) => (
-            <div key={i} className="response-card">
-              <div className="response-question">
-                <span className="q-type">{entry.questionType.replace(/_/g, ' ')}</span>
-                <p>{entry.questionText}</p>
-              </div>
-              <div className="response-answer">
-                <span className="answer-label">Your Answer:</span>
-                <p>{getResponseText(entry)}</p>
-              </div>
-              <div className="response-footer">
-                {getProficiencyBadge(entry.proficiency)}
-                {entry.aiFeedback && entry.aiFeedback.feedback && (
-                  <span className="ai-feedback-text">
-                    💡 {typeof entry.aiFeedback.feedback === 'string' ? entry.aiFeedback.feedback : ''}
+            <Card key={i} className="bg-card/50">
+              <CardContent className="pt-4 pb-4">
+                {/* Question */}
+                <div className="mb-3">
+                  <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                    {entry.questionType.replace(/_/g, ' ')}
                   </span>
-                )}
-              </div>
-            </div>
+                  <p className="text-sm font-semibold text-foreground mt-0.5 leading-snug">
+                    {entry.questionText}
+                  </p>
+                </div>
+
+                {/* Answer */}
+                <div className="border-l-2 border-indigo-500/30 pl-3 bg-muted/20 py-2 rounded-r-md mb-3">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide block mb-0.5">
+                    Your Answer
+                  </span>
+                  <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
+                    {getResponseText(entry)}
+                  </p>
+                </div>
+
+                {/* Footer: proficiency + feedback */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {entry.proficiency != null && proficiencyConfig[entry.proficiency] && (
+                    <Badge
+                      variant="outline"
+                      className={cn('text-xs', proficiencyConfig[entry.proficiency].className)}
+                    >
+                      {proficiencyConfig[entry.proficiency].label}
+                    </Badge>
+                  )}
+                  {entry.aiFeedback?.feedback && typeof entry.aiFeedback.feedback === 'string' && (
+                    <span className="text-xs text-muted-foreground italic flex items-center gap-1">
+                      <MessageSquare className="h-3 w-3 shrink-0" />
+                      {entry.aiFeedback.feedback}
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       ))}
-
-      <style jsx>{`
-        .responses-page { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .responses-header {
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-        .responses-header h2 {
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: white;
-          margin-bottom: 0.5rem;
-        }
-        .responses-subtitle {
-          color: #9ca3af;
-          font-size: 0.9rem;
-        }
-
-        .stage-group {
-          margin-bottom: 2rem;
-        }
-        .stage-header {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-bottom: 0.8rem;
-        }
-        .stage-badge {
-          background: rgba(99,102,241,0.15);
-          color: #a5b4fc;
-          padding: 0.25rem 0.8rem;
-          border-radius: 8px;
-          font-size: 0.8rem;
-          font-weight: 700;
-        }
-        .response-count {
-          font-size: 0.8rem;
-          color: #6b7280;
-        }
-
-        .response-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 12px;
-          padding: 1rem 1.2rem;
-          margin-bottom: 0.6rem;
-        }
-        .response-question {
-          margin-bottom: 0.6rem;
-        }
-        .q-type {
-          font-size: 0.7rem;
-          font-weight: 600;
-          color: #8b5cf6;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .response-question p {
-          font-size: 0.9rem;
-          color: #e0e0e0;
-          font-weight: 600;
-          margin: 0.2rem 0 0 0;
-        }
-        .response-answer {
-          background: rgba(255,255,255,0.02);
-          border-left: 2px solid rgba(99,102,241,0.3);
-          padding: 0.5rem 0.8rem;
-          border-radius: 0 6px 6px 0;
-          margin-bottom: 0.5rem;
-        }
-        .answer-label {
-          font-size: 0.7rem;
-          font-weight: 600;
-          color: #6b7280;
-          display: block;
-          margin-bottom: 0.2rem;
-        }
-        .response-answer p {
-          font-size: 0.85rem;
-          color: #d1d5db;
-          line-height: 1.5;
-          margin: 0;
-          white-space: pre-wrap;
-        }
-        .response-footer {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          flex-wrap: wrap;
-        }
-        .ai-feedback-text {
-          font-size: 0.8rem;
-          color: #9ca3af;
-          font-style: italic;
-        }
-        .no-data {
-          text-align: center;
-          color: #6b7280;
-          padding: 3rem;
-        }
-      `}</style>
     </div>
   )
 }
@@ -842,71 +688,71 @@ function DeepDivePage({ report }: { report: EvaluationReport }) {
   const narrations = report.stageNarrations || []
 
   return (
-    <div className="deep-dive">
-      <h3>Stage-by-Stage Journey</h3>
-      {narrations.map((n, i) => (
-        <div key={i} className="stage-narration">
-          <div className="sn-header">
-            <span className="sn-badge">Stage {n.stageNumber}</span>
-            <span className="sn-name">{n.stage}</span>
-            <span className="sn-count">{n.questionsAnswered} questions</span>
-          </div>
-          {n.decisions && n.decisions.length > 0 && (
-            <div className="sn-decisions">
-              <strong>Key Decisions:</strong>
-              <ul>{n.decisions.map((d, j) => <li key={j}>{d}</li>)}</ul>
-            </div>
-          )}
-          {n.scoringRationale && (
-            <p className="scoring-rationale">{n.scoringRationale}</p>
-          )}
-        </div>
-      ))}
+    <div className="space-y-6">
+      <div className="text-center space-y-1">
+        <h2 className="text-xl font-bold">🔍 Stage-by-Stage Journey</h2>
+        <p className="text-sm text-muted-foreground">
+          How your decisions shaped each stage of your entrepreneurial simulation
+        </p>
+      </div>
 
-      <style jsx>{`
-        .deep-dive { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        h3 { color: white; margin-bottom: 1.5rem; }
-        .stage-narration {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 12px;
-          padding: 1.2rem;
-          margin-bottom: 0.8rem;
-        }
-        .sn-header {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          margin-bottom: 0.6rem;
-        }
-        .sn-badge {
-          background: rgba(99,102,241,0.15);
-          color: #a5b4fc;
-          padding: 0.15rem 0.6rem;
-          border-radius: 6px;
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-        .sn-name { color: white; font-weight: 600; font-size: 0.95rem; }
-        .sn-count { color: #6b7280; font-size: 0.8rem; }
-        .sn-decisions {
-          font-size: 0.9rem;
-          color: #d1d5db;
-        }
-        .sn-decisions strong { color: #a5b4fc; font-size: 0.85rem; }
-        .sn-decisions ul {
-          margin: 0.3rem 0 0 1.2rem;
-          padding: 0;
-        }
-        .sn-decisions li { margin-bottom: 0.2rem; }
-        .scoring-rationale {
-          font-size: 0.85rem;
-          color: #9ca3af;
-          font-style: italic;
-          margin: 0.5rem 0 0 0;
-        }
-      `}</style>
+      {narrations.length === 0 && (
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground text-sm">
+            No stage narrations available.
+          </CardContent>
+        </Card>
+      )}
+
+      {narrations.map((n, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.06, duration: 0.3 }}
+        >
+          <Card>
+            <CardContent className="pt-4 pb-4">
+              {/* Stage header */}
+              <div className="flex items-center gap-3 mb-3 flex-wrap">
+                <Badge variant="outline" className="bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/30 font-bold">
+                  Stage {n.stageNumber}
+                </Badge>
+                <span className="text-sm font-semibold text-foreground">
+                  {stageLabel(n.stage)}
+                </span>
+                <span className="text-xs text-muted-foreground ml-auto">
+                  {n.questionsAnswered} questions answered
+                </span>
+              </div>
+
+              {/* Decisions */}
+              {n.decisions && n.decisions.length > 0 && (
+                <div className="mb-3">
+                  <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-1">
+                    Key Decisions
+                  </p>
+                  <ul className="space-y-0.5 pl-3">
+                    {n.decisions.map((d, j) => (
+                      <li key={j} className="text-sm text-foreground/80 leading-relaxed flex items-start gap-1.5">
+                        <span className="text-muted-foreground mt-1 shrink-0">›</span>
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Scoring rationale */}
+              {n.scoringRationale && (
+                <p className="text-xs text-muted-foreground italic leading-relaxed border-t border-border/30 pt-2 mt-2">
+                  {n.scoringRationale}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
     </div>
   )
 }

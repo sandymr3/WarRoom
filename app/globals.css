@@ -43,6 +43,10 @@
   --warning-foreground: oklch(0.145 0 0);
   --info: oklch(0.57 0.2 260);
   --info-foreground: oklch(0.985 0 0);
+  /* Brand accent – indigo/violet, used consistently across all pages */
+  --brand-accent: oklch(0.55 0.22 264);
+  --brand-accent-foreground: oklch(0.985 0 0);
+  --brand-accent-muted: oklch(0.55 0.22 264 / 0.15);
 }
 
 .dark {
@@ -84,6 +88,9 @@
   --warning-foreground: oklch(0.985 0 0);
   --info: oklch(0.44 0.18 260);
   --info-foreground: oklch(0.985 0 0);
+  --brand-accent: oklch(0.62 0.22 264);
+  --brand-accent-foreground: oklch(0.985 0 0);
+  --brand-accent-muted: oklch(0.62 0.22 264 / 0.15);
 }
 
 @theme inline {
@@ -131,6 +138,9 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-foreground: var(--brand-accent-foreground);
+  --color-brand-accent-muted: var(--brand-accent-muted);
 }
 
 @layer base {
@@ -1036,4 +1046,223 @@
   .offers-grid {
     @apply grid-cols-1;
   }
+}
+
+/* ============================================ */
+/* WAR ROOM — MISSING CLASSES (ADDITIONS)       */
+/* ============================================ */
+
+/* Phase description text */
+.phase-desc {
+  @apply text-base leading-relaxed text-muted-foreground mb-6;
+}
+
+/* Pitch template collapsible */
+.pitch-template {
+  @apply p-4 rounded-xl border border-border/40 bg-muted/20 mb-6 text-sm;
+}
+
+.template-text {
+  @apply mt-3;
+}
+
+.template-text p {
+  @apply text-muted-foreground leading-relaxed mb-2 last:mb-0;
+}
+
+/* Pitch analysis panel */
+.analysis-panel {
+  @apply mt-8 p-6 rounded-xl border border-border/50 bg-card shadow-sm;
+}
+
+.analysis-scores {
+  @apply grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6;
+}
+
+.analysis-transcript {
+  @apply mt-4 p-4 rounded-lg bg-muted/30 border border-border/40;
+}
+
+.analysis-label {
+  @apply block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1;
+}
+
+.analysis-transcript p {
+  @apply text-sm text-foreground leading-relaxed mt-1;
+}
+
+.analysis-list {
+  @apply mt-4 p-4 rounded-lg border;
+}
+
+.analysis-list.strengths {
+  @apply bg-emerald-500/5 border-emerald-500/20;
+}
+
+.analysis-list.weaknesses {
+  @apply bg-amber-500/5 border-amber-500/20;
+}
+
+.analysis-list ul {
+  @apply mt-2 space-y-1 pl-4;
+}
+
+.analysis-list li {
+  @apply text-sm leading-relaxed;
+}
+
+/* Recording status row */
+.recording-status {
+  @apply flex items-center gap-2 mt-2 min-h-6;
+}
+
+.rec-dot {
+  @apply inline-block w-2 h-2 rounded-full bg-red-500 flex-shrink-0;
+  animation: danger-pulse-dot 1.2s ease-in-out infinite;
+}
+
+.rec-text {
+  @apply text-sm font-semibold text-red-600 dark:text-red-400;
+}
+
+.rec-done {
+  @apply text-sm font-semibold text-emerald-600 dark:text-emerald-400;
+}
+
+.rec-hint {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Countdown progress bar */
+.countdown-bar {
+  @apply w-full h-1.5 bg-muted rounded-full overflow-hidden mt-3;
+}
+
+.countdown-fill {
+  @apply h-full bg-primary rounded-full transition-[width] duration-1000 ease-linear;
+}
+
+/* Analyzing state */
+.analyzing-state {
+  @apply flex flex-col items-center gap-3 py-10 text-center;
+}
+
+.analyzing-state h3 {
+  @apply text-lg font-bold text-foreground;
+}
+
+.analyzing-state p {
+  @apply text-sm text-muted-foreground;
+}
+
+.analyzing-spinner {
+  @apply w-10 h-10 rounded-full border-4 border-muted border-t-primary;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Pulse rings for mic recording */
+.pulse-ring {
+  @apply absolute rounded-full border-2 border-primary/30;
+  animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.ring-1 {
+  @apply w-[120%] h-[120%];
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  @apply w-[150%] h-[150%];
+  animation-delay: 0.3s;
+}
+
+.ring-3 {
+  @apply w-[180%] h-[180%];
+  animation-delay: 0.6s;
+}
+
+/* Investor Q&A phase */
+.investor-qa-phase {
+  @apply max-w-4xl mx-auto;
+}
+
+.investor-counter {
+  @apply text-sm font-semibold text-muted-foreground mb-4 tracking-wide;
+}
+
+.investor-bio {
+  @apply text-sm text-muted-foreground leading-relaxed mt-2;
+}
+
+.question-label {
+  @apply text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 block;
+}
+
+.question-text {
+  @apply text-lg leading-relaxed text-foreground font-medium;
+}
+
+/* Scorecards grid (deal results) */
+.scorecards-grid {
+  @apply grid gap-4 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.scorecard {
+  @apply p-5 rounded-xl border-2 bg-gradient-to-br from-card to-muted/20 cursor-pointer;
+  @apply hover:shadow-lg hover:-translate-y-1 transition-all duration-300;
+}
+
+.sc-header {
+  @apply flex items-center gap-4 mb-4;
+}
+
+.sc-avatar {
+  @apply w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold;
+  @apply bg-gradient-to-br from-primary/20 to-yellow-500/20 border-2 flex-shrink-0;
+}
+
+.sc-name {
+  @apply text-base font-bold text-foreground;
+}
+
+.sc-decision {
+  @apply text-sm font-semibold;
+}
+
+.sc-deal {
+  @apply flex flex-col gap-1 mt-3 p-3 rounded-lg bg-muted/30 text-sm font-medium;
+}
+
+.sc-investor-reaction {
+  @apply mt-3 p-3 rounded-lg bg-muted/20 border border-border/30 text-sm text-muted-foreground italic;
+}
+
+.no-scorecards {
+  @apply col-span-full text-center py-10 text-muted-foreground text-sm;
+}
+
+/* Negotiation room layout helpers */
+.neg-header {
+  @apply mb-6 p-4 rounded-xl bg-card/50 border border-border/40;
+}
+
+.neg-header h3 {
+  @apply text-base font-bold text-foreground;
+}
+
+.neg-header p {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+.neg-history {
+  @apply mb-6 flex flex-col gap-3 max-h-80 overflow-y-auto;
+}
+
+/* Walkout warning */
+.walkout-warning {
+  @apply mt-4 p-3 rounded-lg border border-destructive/20 bg-destructive/5 text-xs text-muted-foreground;
+}
+
+.walkout-warning span {
+  @apply font-bold text-destructive;
 }
