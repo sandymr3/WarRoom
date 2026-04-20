@@ -99,7 +99,7 @@ export default function FinalReportPage() {
     api.assessments
       .getReport(assessmentId)
       .then((r) => setReport(r))
-      .catch((err: any) => setError(err.message))
+      .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
   }, [assessmentId])
 
