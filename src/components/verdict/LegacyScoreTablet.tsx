@@ -75,7 +75,7 @@ export function LegacyScoreTablet({
         background:
           'linear-gradient(135deg, #2a2520 0%, #1a1208 50%, #14100c 100%)',
         boxShadow:
-          '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(58,48,28,0.6), inset 0 1px 0 rgba(201,162,39,0.18)',
+          '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(58,48,28,0.6), inset 0 1px 0 rgba(179,144,62,0.18)',
       }}
       role="status"
       aria-label={`${label}: ${Math.round(display)} of ${outOf}`}
@@ -86,7 +86,7 @@ export function LegacyScoreTablet({
         className="absolute -right-3 -top-3 flex h-14 w-14 items-center justify-center rounded-full"
         style={{
           background:
-            'radial-gradient(circle at 35% 30%, #c23b3b 0%, #8b1a1a 55%, #5c1010 100%)',
+            'radial-gradient(circle at 35% 30%, #8e3644 0%, #5c1a24 55%, #5c1010 100%)',
           boxShadow:
             '0 6px 18px rgba(0,0,0,0.6), inset 0 -3px 6px rgba(0,0,0,0.5), inset 0 3px 4px rgba(255,255,255,0.18)',
         }}
@@ -104,7 +104,7 @@ export function LegacyScoreTablet({
         <span
           className="font-display text-6xl font-bold tabular-nums tracking-wider text-[color:var(--color-warroom-gold-bright)] sm:text-7xl"
           style={{
-            textShadow: '0 0 36px rgba(232,200,74,0.45), 0 2px 0 rgba(0,0,0,0.6)',
+            textShadow: '0 0 36px rgba(217,180,95,0.45), 0 2px 0 rgba(0,0,0,0.6)',
           }}
         >
           {display}
@@ -130,7 +130,7 @@ export function LegacyScoreTablet({
         className="mx-auto mt-5 h-px w-32"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(201,162,39,0.55), transparent)',
+            'linear-gradient(90deg, transparent, rgba(179,144,62,0.55), transparent)',
         }}
       />
     </motion.div>

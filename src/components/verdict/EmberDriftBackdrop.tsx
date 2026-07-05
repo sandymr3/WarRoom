@@ -35,7 +35,7 @@ export function EmberDriftBackdrop({ density = 80, className }: EmberDriftBackdr
         className="absolute inset-x-0 top-0 h-2/3"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 0%, rgba(201,162,39,0.12) 0%, transparent 60%)',
+            'radial-gradient(ellipse at 50% 0%, rgba(179,144,62,0.12) 0%, transparent 60%)',
         }}
       />
     </div>

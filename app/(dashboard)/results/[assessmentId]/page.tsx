@@ -42,15 +42,15 @@ import type {
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const STAGE_LABELS: Record<string, string> = {
-  STAGE_NEG2_IDEATION: 'Ideation',
-  STAGE_NEG1_VISION: 'Vision',
-  STAGE_0_COMMITMENT: 'Commitment',
-  STAGE_1_VALIDATION: 'Validation',
-  STAGE_2A_GROWTH: 'Growth',
-  STAGE_2B_EXPANSION: 'Expansion',
-  STAGE_3_SCALE: 'Scale',
-  STAGE_WARROOM_PREP: 'War Room Prep',
-  STAGE_4_WARROOM: 'War Room',
+  STAGE_NEG2_IDEATION: 'The Opening',
+  STAGE_NEG1_VISION: 'Development',
+  STAGE_0_COMMITMENT: 'The Castling',
+  STAGE_1_VALIDATION: 'The Exchange',
+  STAGE_2A_GROWTH: 'The Middlegame',
+  STAGE_2B_EXPANSION: 'Seizing the Center',
+  STAGE_3_SCALE: 'The Promotion',
+  STAGE_WARROOM_PREP: 'The Adjournment',
+  STAGE_4_WARROOM: 'The Grand Board',
 }
 
 const CATEGORY_TONES: Record<string, { label: string; text: string; bg: string; border: string }> = {
@@ -727,7 +727,7 @@ export default function SimulationResultPage() {
       <div className="flex justify-center gap-4 pb-6">
         <Link href="/dashboard">
           <WarRoomCTA size="sm" variant="ghost" icon={ArrowLeft}>
-            The Great Hall
+            The Study
           </WarRoomCTA>
         </Link>
         {isInProgress && (

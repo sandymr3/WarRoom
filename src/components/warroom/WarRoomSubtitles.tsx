@@ -52,7 +52,7 @@ export function WarRoomSubtitles({ cues, elapsedMs }: WarRoomSubtitlesProps) {
               className="font-display text-2xl tracking-[0.08em] text-zinc-100 sm:text-3xl md:text-4xl"
               style={{
                 textShadow:
-                  '0 0 24px rgba(201,162,39,0.45), 0 0 4px rgba(0,0,0,0.85), 0 2px 12px rgba(0,0,0,0.95)',
+                  '0 0 24px rgba(179,144,62,0.45), 0 0 4px rgba(0,0,0,0.85), 0 2px 12px rgba(0,0,0,0.95)',
               }}
             >
               {renderStaggered(active.cue.text, reducedMotion)}

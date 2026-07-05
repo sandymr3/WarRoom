@@ -39,18 +39,18 @@ const LEVELS = [
   {
     id: 1 as const,
     badge: 'L1',
-    title: 'Student of the Realm',
+    title: 'Student of the Game',
     subtitle:
       'For students & early-career professionals exploring entrepreneurship.',
     features: ['Guided scenarios', 'Foundational questions', '~85 minutes total'],
-    sigil: '⚔',
+    sigil: '♙',
   },
   {
     id: 2 as const,
     badge: 'L2',
-    title: 'Commander of the Realm',
+    title: 'Grandmaster Path',
     subtitle:
-      'For mid-level managers & experienced professionals ready for the full gauntlet.',
+      'For mid-level managers & experienced professionals ready for the full tournament.',
     features: ['Complex scenarios', 'Advanced pressure', '~85 minutes total'],
     sigil: '♛',
   },
@@ -68,15 +68,15 @@ const FEATURES = [
   {
     glyph: 'M3',
     title: '3 Mentor Lifelines',
-    desc: 'Consult the Mindset Architect, the Sales Commander, the Brand Pioneer, and four more world-class mentors when you need guidance.',
+    desc: 'Consult the Mindset Architect, the Knight of Hustle, the Brand Pioneer, and four more world-class mentors when you need guidance.',
     icon: Users,
     tone: 'verdant' as const,
     accent: 'var(--color-warroom-verdant)',
   },
   {
     glyph: 'WR',
-    title: 'Investor War Room',
-    desc: 'Pitch to seven investors — the Master of Coin, the Hand of Execution, the Mother of Instinct. Negotiate your deal.',
+    title: 'The Grand Board',
+    desc: 'Pitch to seven investors — the Queen of Coin, the Rook of Execution, the Blindfold Master. Negotiate your deal.',
     icon: Crown,
     tone: 'crimson' as const,
     accent: 'var(--color-warroom-crimson)',
@@ -147,7 +147,7 @@ export default function SimulationStartPage() {
         className="pointer-events-none fixed inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 110% 55% at 50% 0%, rgba(201,162,39,0.07) 0%, transparent 65%)',
+            'radial-gradient(ellipse 110% 55% at 50% 0%, rgba(179,144,62,0.07) 0%, transparent 65%)',
         }}
       />
 
@@ -168,7 +168,7 @@ export default function SimulationStartPage() {
           className="text-[10px] uppercase tracking-[0.14em] text-[color:var(--color-warroom-gold)]"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          The Trial
+          The Match
         </span>
       </nav>
 
@@ -188,7 +188,7 @@ export default function SimulationStartPage() {
 
           <div className="flex justify-center mb-5">
             <SigilBadge tone="gold" icon={Swords}>
-              KK&apos;s War Room 2.0
+              The Gambit 2.0
             </SigilBadge>
           </div>
 
@@ -256,7 +256,7 @@ export default function SimulationStartPage() {
                   className={cn(
                     'h-full p-6 transition-all duration-300',
                     level === item.id
-                      ? 'ring-1 ring-[color:var(--color-warroom-gold)]/40 shadow-[0_0_32px_-8px_rgba(201,162,39,0.55)]'
+                      ? 'ring-1 ring-[color:var(--color-warroom-gold)]/40 shadow-[0_0_32px_-8px_rgba(179,144,62,0.55)]'
                       : '',
                   )}
                 >
@@ -504,7 +504,7 @@ export default function SimulationStartPage() {
                 Terms &amp; Conditions
               </Link>
               <span className="text-[color:var(--color-warroom-ivory)]">
-                {' '}of the War Room.
+                {' '}of the Gambit.
               </span>
             </p>
           </motion.div>
@@ -535,7 +535,7 @@ export default function SimulationStartPage() {
               onClick={handleStart}
               className="w-full justify-center"
             >
-              {isStarting ? 'Preparing the War Room…' : 'Enter the Trial'}
+              {isStarting ? 'Preparing the board…' : 'Begin the Match'}
             </WarRoomCTA>
 
             {!acceptedTerms && (

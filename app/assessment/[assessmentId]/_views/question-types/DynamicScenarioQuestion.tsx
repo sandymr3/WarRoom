@@ -49,8 +49,8 @@ export function DynamicScenarioQuestion({
       <div className="text-center py-8 space-y-3">
         <div className="dynamic-scenario-border rounded-xl">
           <div className="p-5 text-sm text-center">
-            <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-[color:var(--color-warroom-crimson-bright,#c23b3b)]" />
-            <p className="text-[color:var(--color-warroom-crimson-bright,#c23b3b)]">{dynamicScenarioError || 'Failed to generate scenario.'}</p>
+            <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-[color:var(--color-warroom-crimson-bright,#8e3644)]" />
+            <p className="text-[color:var(--color-warroom-crimson-bright,#8e3644)]">{dynamicScenarioError || 'Failed to generate scenario.'}</p>
           </div>
         </div>
         <Button variant="outline" onClick={onRetryScenario}>Retry scenario generation</Button>
@@ -78,7 +78,7 @@ export function DynamicScenarioQuestion({
               className={cn(
                 'w-full text-left px-4 py-3 rounded-xl border transition-all text-sm',
                 isSelected
-                  ? 'border-[color:var(--color-warroom-gold)] bg-[color:var(--color-warroom-gold)]/5 font-bold shadow-[0_0_12px_rgba(201,162,39,0.15)]'
+                  ? 'border-[color:var(--color-warroom-gold)] bg-[color:var(--color-warroom-gold)]/5 font-bold shadow-[0_0_12px_rgba(179,144,62,0.15)]'
                   : 'border-[color:var(--color-warroom-gold)]/20 hover:border-[color:var(--color-warroom-gold)]/50 hover:bg-[color:var(--color-warroom-gold)]/5',
               )}
             >
@@ -104,7 +104,7 @@ export function DynamicScenarioQuestion({
             <div className="space-y-3">
               <div className="dynamic-scenario-border rounded-xl">
                 <div className="p-4 text-sm">
-                  <div className="flex items-center gap-2 mb-2"><AlertTriangle className="h-4 w-4 text-[color:var(--color-warroom-crimson-bright,#c23b3b)]" /><span className="font-bold text-[color:var(--color-warroom-crimson-bright,#c23b3b)]">Follow-up Scenario Failed</span></div>
+                  <div className="flex items-center gap-2 mb-2"><AlertTriangle className="h-4 w-4 text-[color:var(--color-warroom-crimson-bright,#8e3644)]" /><span className="font-bold text-[color:var(--color-warroom-crimson-bright,#8e3644)]">Follow-up Scenario Failed</span></div>
                   <p className="text-foreground/80">{followupError}</p>
                 </div>
               </div>

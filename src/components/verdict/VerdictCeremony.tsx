@@ -75,7 +75,7 @@ export function VerdictCeremony({
   const archetypeName = report?.entrepreneurType?.trim() || 'The Unseen Founder'
   const archetypeNarrative =
     report?.archetypeNarrative?.trim() ||
-    'The council saw what could not yet be named. Your story is still being written.'
+    'The Board saw what could not yet be named. Your story is still being written.'
 
   // Fire ravens_wings on opening curtain
   useEffect(() => {
@@ -121,7 +121,7 @@ export function VerdictCeremony({
   const showScore = actIndex >= ACT_ORDER.indexOf('score')
   const showShare = actIndex >= ACT_ORDER.indexOf('share')
 
-  const shareText = `The council has rendered its verdict. I am ${archetypeName}. Legacy score: ${legacyScore}/100. — KK's War Room`
+  const shareText = `The Board has rendered its verdict. I am ${archetypeName}. Legacy score: ${legacyScore}/100. — The Gambit`
 
   return (
     <div className={cn('relative min-h-screen w-full overflow-hidden bg-[color:var(--color-warroom-black)] text-foreground', className)}>
@@ -136,11 +136,11 @@ export function VerdictCeremony({
           className="text-center"
         >
           <p className="font-display text-[0.65rem] uppercase tracking-[0.32em] text-[color:var(--color-warroom-gold)]/70">
-            The Council Has Returned
+            The Board Has Returned
           </p>
           <h1
             className="mt-2 font-display text-4xl font-bold uppercase tracking-wider text-[color:var(--color-warroom-gold-bright)] sm:text-5xl"
-            style={{ textShadow: '0 0 38px rgba(232,200,74,0.45)' }}
+            style={{ textShadow: '0 0 38px rgba(217,180,95,0.45)' }}
           >
             The Verdict
           </h1>
@@ -171,7 +171,7 @@ export function VerdictCeremony({
             className="flex w-full flex-col items-center gap-4"
           >
             <p className="font-display text-[0.6rem] uppercase tracking-[0.22em] text-foreground/55">
-              The council records its votes
+              The Board records its votes
             </p>
             <VoteTallyBoard investors={investors} scorecards={scorecards} />
           </motion.section>
@@ -208,7 +208,7 @@ export function VerdictCeremony({
                 'transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                 'border-[color:var(--color-warroom-gold)]/55 text-[color:var(--color-warroom-gold)]',
-                'hover:border-[color:var(--color-warroom-gold)] hover:bg-[color:var(--color-warroom-obsidian)]/70 hover:shadow-[0_0_22px_rgba(201,162,39,0.4)]',
+                'hover:border-[color:var(--color-warroom-gold)] hover:bg-[color:var(--color-warroom-obsidian)]/70 hover:shadow-[0_0_22px_rgba(179,144,62,0.4)]',
               )}
             >
               Read the full report <span aria-hidden>→</span>

@@ -192,7 +192,7 @@ export default function ProfilePage() {
           ) : state.user?.name ? (
             <h1
               className="font-display text-3xl font-bold tracking-wider text-foreground sm:text-4xl"
-              style={{ textShadow: '0 0 24px rgba(201,162,39,0.25)' }}
+              style={{ textShadow: '0 0 24px rgba(179,144,62,0.25)' }}
             >
               {state.user.name}
             </h1>
@@ -231,7 +231,7 @@ export default function ProfilePage() {
           <section className="flex flex-col gap-4">
             <div className="flex items-baseline justify-between px-1">
               <SigilBadge icon={Award} tone="gold">
-                <LoreTip tip={LORE.sigil}>Sigils</LoreTip>
+                <LoreTip tip={LORE.sigil}>Norms</LoreTip>
               </SigilBadge>
               <span className="font-display text-[0.55rem] uppercase tracking-[0.18em] text-foreground/40">
                 {progression.sigils.length} / {SIGILS.length} earned

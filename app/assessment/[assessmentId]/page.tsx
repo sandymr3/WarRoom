@@ -66,19 +66,19 @@ export default function SimulationPage() {
       <div className="text-center space-y-4">
         <div className="flex justify-center animate-torch-glow"><Flame className="h-9 w-9" style={{ color: 'var(--color-warroom-gold)' }} /></div>
         <div className="w-8 h-8 mx-auto" style={{ border: '2px solid color-mix(in srgb, var(--color-warroom-gold) 20%, transparent)', borderTopColor: 'var(--color-warroom-gold)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <p className="text-xs" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-warroom-gold)', letterSpacing: '0.15em' }}>SUMMONING THE COUNCIL...</p>
+        <p className="text-xs" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-warroom-gold)', letterSpacing: '0.15em' }}>SETTING UP THE BOARD...</p>
       </div>
     </div>
   )
   if (error) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: 'var(--color-warroom-void)' }}>
       <p style={{ color: 'var(--color-warroom-crimson-bright)', fontFamily: 'var(--font-display)' }}>{error}</p>
-      <button onClick={() => router.push('/dashboard')} style={{ background: 'color-mix(in srgb, var(--color-warroom-gold) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--color-warroom-gold) 30%, transparent)', color: 'var(--color-warroom-gold)', padding: '8px 20px', borderRadius: '3px', fontFamily: 'var(--font-display)', fontSize: '0.75rem', letterSpacing: '0.1em', cursor: 'pointer' }}>Return to the Keep</button>
+      <button onClick={() => router.push('/dashboard')} style={{ background: 'color-mix(in srgb, var(--color-warroom-gold) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--color-warroom-gold) 30%, transparent)', color: 'var(--color-warroom-gold)', padding: '8px 20px', borderRadius: '3px', fontFamily: 'var(--font-display)', fontSize: '0.75rem', letterSpacing: '0.1em', cursor: 'pointer' }}>Return to the Study</button>
     </div>
   )
   if (!state || !simulation) return null
 
-  const accent = STAGE_THEMES[simulation.currentStage] || '#c9a227'
+  const accent = STAGE_THEMES[simulation.currentStage] || '#b3903e'
   const narration = STAGE_NARRATIVES[simulation.currentStage]
   const mentorTip = STAGE_MENTOR_TIPS[simulation.currentStage]
   const stageIdx = STAGE_ORDER.indexOf(simulation.currentStage as StageName)
@@ -97,9 +97,9 @@ export default function SimulationPage() {
         <div className="w-full max-w-4xl space-y-8">
           <div className="text-center space-y-3">
             <div className="flex justify-center"><Crown className="h-8 w-8" style={{ color: 'var(--color-warroom-gold)' }} /></div>
-            <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-warroom-ivory)', letterSpacing: '0.06em' }}>Assemble the War Council</h1>
+            <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-warroom-ivory)', letterSpacing: '0.06em' }}>Assemble the Board</h1>
             <div className="h-px max-w-sm mx-auto" style={{ background: 'linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-warroom-gold) 40%, transparent), transparent)' }} />
-            <p style={{ color: 'var(--color-warroom-smoke)', fontSize: '0.85rem', letterSpacing: '0.04em' }}>Choose wisely, Lord Commander. Their counsel will shape your fate.</p>
+            <p style={{ color: 'var(--color-warroom-smoke)', fontSize: '0.85rem', letterSpacing: '0.04em' }}>Choose wisely, challenger. Their counsel will shape your game.</p>
           </div>
           <CharacterPicker mentors={mentors} leaders={[]} investors={[]} onConfirm={handleCharacterConfirm} loading={settingCharacters} />
         </div>

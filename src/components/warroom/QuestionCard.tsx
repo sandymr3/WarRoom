@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { investorDisplayName } from '@/src/lib/helpers'
 import { QuestionWordReveal } from './QuestionWordReveal'
 
 // ============================================================
@@ -62,7 +63,7 @@ export function QuestionCard({
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={cn(
         'relative overflow-hidden rounded-md border border-[color:var(--color-warroom-gold)]/30 bg-card/80 p-5 backdrop-blur-sm',
-        'shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(201,162,39,0.1)]',
+        'shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(179,144,62,0.1)]',
         'noise-overlay',
         className,
       )}
@@ -82,7 +83,7 @@ export function QuestionCard({
         className="pointer-events-none absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(201,162,39,0.55), transparent)',
+            'linear-gradient(90deg, transparent, rgba(179,144,62,0.55), transparent)',
         }}
       />
 
@@ -101,7 +102,7 @@ export function QuestionCard({
       <header className="mb-3 flex items-center justify-between gap-3">
         <div className="flex flex-col">
           <span className="font-display text-[0.6rem] uppercase tracking-[0.22em] text-[color:var(--color-warroom-gold)]/90">
-            {label ?? `${investorName} asks`}
+            {label ?? `${investorDisplayName(investorName)} asks`}
           </span>
         </div>
         {audioSlot && <div className="flex-shrink-0">{audioSlot}</div>}

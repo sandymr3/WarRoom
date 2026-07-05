@@ -186,14 +186,14 @@ export default function ResultsPage() {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            The Legacy Scroll
+            The Annotated Games
           </h1>
         </div>
         <p
           className="text-sm text-[color:var(--color-warroom-smoke)] mb-4"
           style={{ fontFamily: 'var(--font-body, serif)' }}
         >
-          Detailed breakdown of all your simulation campaigns.
+          Detailed breakdown of all your simulation matches.
         </p>
         <GoldDivider variant="line" />
       </motion.div>

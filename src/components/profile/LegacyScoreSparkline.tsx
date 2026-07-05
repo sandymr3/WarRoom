@@ -80,10 +80,10 @@ export function LegacyScoreSparkline({
   const latestTone = latest.score >= 80
     ? '#34d399'
     : latest.score >= 60
-      ? '#e8c84a'
+      ? '#d9b45f'
       : latest.score >= 40
-        ? '#c9a227'
-        : '#c23b3b'
+        ? '#b3903e'
+        : '#8e3644'
 
   return (
     <svg
@@ -97,8 +97,8 @@ export function LegacyScoreSparkline({
       <defs>
         <linearGradient id="legacySpark" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#8b6914" />
-          <stop offset="50%" stopColor="#c9a227" />
-          <stop offset="100%" stopColor="#e8c84a" />
+          <stop offset="50%" stopColor="#b3903e" />
+          <stop offset="100%" stopColor="#d9b45f" />
         </linearGradient>
       </defs>
 
@@ -125,7 +125,7 @@ export function LegacyScoreSparkline({
       {points.map((p, i) => {
         const isLast = i === points.length - 1
         const r = isLast ? 4 : 2.6
-        const fill = isLast ? latestTone : '#c9a227'
+        const fill = isLast ? latestTone : '#b3903e'
         const clickable = !!onSelectRun
         return (
           <g

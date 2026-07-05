@@ -90,7 +90,7 @@ function computeGeometry(
       x,
       y,
       state,
-      color: STAGE_THEMES[stage] ?? '#c9a227',
+      color: STAGE_THEMES[stage] ?? '#b3903e',
       label: NARRATION_STAGE_LABELS[i] ?? stage,
       narrative: STAGE_NARRATIVES[stage] ?? null,
     }
@@ -133,7 +133,7 @@ export function WarMap({
     <div
       className={cn('relative w-full', className)}
       role="group"
-      aria-label="Trial progression map"
+      aria-label="Match progression map"
     >
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -143,12 +143,12 @@ export function WarMap({
         <defs>
           <linearGradient id="warmapProgress" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#8b6914" />
-            <stop offset="50%" stopColor="#c9a227" />
-            <stop offset="100%" stopColor="#e8c84a" />
+            <stop offset="50%" stopColor="#b3903e" />
+            <stop offset="100%" stopColor="#d9b45f" />
           </linearGradient>
           <radialGradient id="warmapGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stopColor="#e8c84a" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#c9a227" stopOpacity="0" />
+            <stop offset="0%" stopColor="#d9b45f" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#b3903e" stopOpacity="0" />
           </radialGradient>
         </defs>
 
@@ -221,8 +221,8 @@ function WarMapNode({ node, reducedMotion, onClick }: WarMapNodeProps) {
   const isCompleted = state === 'completed'
 
   const radius = isCurrent ? 9 : 6
-  const fill = isCompleted ? '#c9a227' : isCurrent ? color : '#5a5048'
-  const stroke = isCompleted ? '#e8c84a' : isCurrent ? '#e8c84a' : '#3d3530'
+  const fill = isCompleted ? '#b3903e' : isCurrent ? color : '#5a5048'
+  const stroke = isCompleted ? '#d9b45f' : isCurrent ? '#d9b45f' : '#3d3530'
   const ariaLabel = narrative ? `${narrative.title} (${state})` : `${label} (${state})`
 
   return (

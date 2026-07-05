@@ -5,6 +5,7 @@ import type { Investor } from '@/src/types'
 import { InvestorPortraitMedia } from './InvestorPortraitMedia'
 import { DispositionMeter } from './DispositionMeter'
 import { investorPortraitSrc } from '@/src/lib/investorAssets'
+import { investorDisplayName } from '@/src/lib/helpers'
 import {
   useInvestorPortraitState,
   type Sentiment,
@@ -63,7 +64,7 @@ export function ActiveInvestor({
     return (
       <aside className={cn('flex h-full items-center justify-center text-foreground/50', className)}>
         <span className="font-display text-sm uppercase tracking-[0.2em]">
-          The chamber stands silent…
+          The board stands silent…
         </span>
       </aside>
     )
@@ -80,7 +81,7 @@ export function ActiveInvestor({
           the left of the chamber. */}
       <InvestorPortraitMedia
         investorId={investor.id}
-        name={investor.name}
+        name={investorDisplayName(investor.name)}
         state={portrait.state}
         assetKey={portrait.assetKey}
         sentiment={portrait.sentiment}
@@ -106,7 +107,7 @@ export function ActiveInvestor({
         style={{ background: 'linear-gradient(to top, rgba(8,6,4,0.92) 35%, rgba(8,6,4,0.55) 70%, transparent)' }}
       >
         <h2 className="font-display text-2xl font-semibold leading-tight tracking-wide text-white drop-shadow">
-          {investor.name}
+          {investorDisplayName(investor.name)}
         </h2>
         <div className="flex flex-wrap items-center gap-2">
           {investor.primary_lens && (

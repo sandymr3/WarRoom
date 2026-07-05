@@ -8,7 +8,7 @@ import api from '@/src/lib/api'
 import { useAudioRecorder } from '@/src/hooks/useAudioRecorder'
 import { useMicPermission } from '@/src/hooks/useMicPermission'
 import { MicPermissionDialog } from '@/components/MicPermissionDialog'
-import { normalizeVoiceSlug as sharedNormalizeVoiceSlug } from '@/src/lib/helpers'
+import { normalizeVoiceSlug as sharedNormalizeVoiceSlug, investorDisplayName } from '@/src/lib/helpers'
 import type {
     AssessmentState,
     Investor,
@@ -464,7 +464,7 @@ export default function WarRoomSimulation() {
                 setInvestors(finalList)
                 setPhase('PITCH')
             } catch (err: unknown) {
-                setError(err instanceof Error ? err.message : 'Failed to load War Room data')
+                setError(err instanceof Error ? err.message : 'Failed to load Grand Board data')
                 setPhase('PITCH') // Still show pitch even if load fails
             }
         }
@@ -621,7 +621,7 @@ export default function WarRoomSimulation() {
 
             // No follow-up — show immediate reaction
             setCurrentInvestorReaction(
-                result.scorecard.investorReaction || `${investor.name} has considered your response.`
+                result.scorecard.investorReaction || `${investorDisplayName(investor.name)} has considered your response.`
             )
             if (result.audioBase64 && !isVoiceLineMuted()) {
                 if (audioRef.current) audioRef.current.pause()
@@ -666,7 +666,7 @@ export default function WarRoomSimulation() {
                 responseRecorder.audioBlob
             )
             setCurrentInvestorReaction(
-                result.scorecard.investorReaction || `${investor.name} has considered your follow-up.`
+                result.scorecard.investorReaction || `${investorDisplayName(investor.name)} has considered your follow-up.`
             )
             setResponseTranscription(result.transcription)
             setFollowupPhase('followup_answered')
@@ -849,7 +849,7 @@ export default function WarRoomSimulation() {
                                 ⚜
                             </span>
                             <p className="font-display text-xs uppercase tracking-[0.32em] text-[color:var(--color-warroom-gold)]/85">
-                                The council retires to deliberate
+                                The Board retires to deliberate
                             </p>
                         </div>
                     </motion.div>
@@ -925,7 +925,7 @@ export default function WarRoomSimulation() {
                     >
                         <motion.div className="phase-badge" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1, type: 'spring' }}>PHASE 1 — YOUR PITCH</motion.div>
                         <motion.h2 className="phase-title" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
-                            Record Your 1-Minute War Room Pitch
+                            Record Your 1-Minute Grand Board Pitch
                         </motion.h2>
                         <motion.p className="phase-desc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
                             You are standing before the investor panel. Tap the microphone and deliver your pitch out loud.
@@ -934,16 +934,16 @@ export default function WarRoomSimulation() {
 
                         {/* Pitch Template - Collapsible */}
                         <motion.details className="pitch-template" open={!!preparedPitch} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                            <summary className="pitch-template-summary">{preparedPitch ? 'Your prepared War Room pitch' : 'Pitch Template Guide (tap to expand)'}</summary>
+                            <summary className="pitch-template-summary">{preparedPitch ? 'Your prepared Grand Board pitch' : 'Pitch Template Guide (tap to expand)'}</summary>
                             <div className="template-text" style={{ marginTop: '0.8rem' }}>
                                 {preparedPitch ? (
                                     <>
-                                        <p className="template-helper-label">Using your saved War Room prep pitch:</p>
+                                        <p className="template-helper-label">Using your saved Adjournment prep pitch:</p>
                                         <pre className="template-user-pitch" style={{ whiteSpace: 'pre-wrap' }}>{preparedPitch}</pre>
                                     </>
                                 ) : (
                                     <>
-                                        <p>Hello Sharks, my name is <strong>[NAME]</strong> and I am the founder of <strong>[BUSINESS]</strong>.</p>
+                                        <p>Hello, members of the Board, my name is <strong>[NAME]</strong> and I am the founder of <strong>[BUSINESS]</strong>.</p>
                                         <p><em>(The Problem)</em> Today, [TARGET CUSTOMER] struggles with [PROBLEM].</p>
                                         <p><em>(The Solution)</em> I created [PRODUCT], which [VALUE PROP].</p>
                                         <p><em>(Why Different)</em> Unlike [COMPETITORS], we [DIFFERENTIATION].</p>
@@ -1296,9 +1296,9 @@ export default function WarRoomSimulation() {
                                                     alignSelf: 'flex-start',
                                                     padding: '0.4rem 0.85rem',
                                                     borderRadius: '4px',
-                                                    border: '1px solid rgba(201,162,39,0.5)',
-                                                    background: 'rgba(201,162,39,0.12)',
-                                                    color: '#c9a227',
+                                                    border: '1px solid rgba(179,144,62,0.5)',
+                                                    background: 'rgba(179,144,62,0.12)',
+                                                    color: '#b3903e',
                                                     fontSize: '0.85rem',
                                                     cursor: 'pointer',
                                                 }}
@@ -1388,12 +1388,12 @@ export default function WarRoomSimulation() {
                                     >
                                         {/* Photo on top */}
                                         <div className="offer-portrait">
-                                            <span className="offer-portrait-fallback" aria-hidden>{offer.investorName?.charAt(0) ?? '?'}</span>
+                                            <span className="offer-portrait-fallback" aria-hidden>{investorDisplayName(offer.investorName ?? '').charAt(0) || '?'}</span>
                                             {offer.investorId && (
                                                 // eslint-disable-next-line @next/next/no-img-element
                                                 <img
                                                     src={investorPortraitSrc({ id: offer.investorId })}
-                                                    alt={offer.investorName}
+                                                    alt={investorDisplayName(offer.investorName)}
                                                     loading="lazy"
                                                     decoding="async"
                                                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
@@ -1403,7 +1403,7 @@ export default function WarRoomSimulation() {
                                         </div>
                                         {/* Offer below */}
                                         <div className="offer-body">
-                                            <h3 className="offer-name">{offer.investorName}</h3>
+                                            <h3 className="offer-name">{investorDisplayName(offer.investorName)}</h3>
                                             <div className="offer-deal">
                                                 <span>${(offer.capital || 0).toLocaleString()}</span>
                                                 <span>{offer.equity}% equity</span>
@@ -1431,7 +1431,7 @@ export default function WarRoomSimulation() {
                             >
                                 <div className="neg-header" style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <h3>Negotiating with {selectedOffer.investorName}</h3>
+                                        <h3>Negotiating with {investorDisplayName(selectedOffer.investorName)}</h3>
                                         <div style={{
                                             padding: '0.3rem 0.8rem',
                                             borderRadius: '20px',
@@ -1457,7 +1457,7 @@ export default function WarRoomSimulation() {
                                             alignSelf: item.type === 'user' ? 'flex-end' : 'flex-start',
                                             maxWidth: '80%'
                                         }}>
-                                            <strong style={{ display: 'block', marginBottom: '0.3rem', color: item.type === 'user' ? '#60a5fa' : '#34d399' }}>{item.sender}</strong>
+                                            <strong style={{ display: 'block', marginBottom: '0.3rem', color: item.type === 'user' ? '#60a5fa' : '#34d399' }}>{item.type === 'investor' ? investorDisplayName(item.sender) : item.sender}</strong>
                                             {item.msg}
                                         </div>
                                     ))}
@@ -1555,7 +1555,7 @@ export default function WarRoomSimulation() {
                                                 </motion.button>
                                                 <motion.button 
                                                     className="respond-btn" 
-                                                    style={{ flex: 2, background: negRound >= MAX_NEG_ROUNDS - 1 ? '#c23b3b' : '#c9a227' }}
+                                                    style={{ flex: 2, background: negRound >= MAX_NEG_ROUNDS - 1 ? '#8e3644' : '#b3903e' }}
                                                     onClick={handleNegotiateAudio} 
                                                     disabled={isNegVoiceSubmitting}
                                                     initial={{ scale: 0.9, opacity: 0 }}
@@ -1598,7 +1598,7 @@ export default function WarRoomSimulation() {
                                 style={{ textAlign: 'center', padding: '2rem', background: 'rgba(239,68,68,0.1)', borderRadius: '16px', border: '1px solid rgba(239,68,68,0.3)', marginBottom: '1.5rem' }}
                             >
                                 <h3 style={{ fontSize: '1.5rem', color: '#f87171', marginBottom: '0.5rem' }}>Walked Away</h3>
-                                <p style={{ color: '#fca5a5', fontSize: '1rem' }}>You walked away from <strong>{walkedAwayInvestor}</strong>&apos;s offer.</p>
+                                <p style={{ color: '#fca5a5', fontSize: '1rem' }}>You walked away from <strong>{investorDisplayName(walkedAwayInvestor ?? '')}</strong>&apos;s offer.</p>
                                 <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginTop: '0.5rem' }}>Select another offer to continue negotiating, or walk away from all offers.</p>
                             </motion.div>
                         )}
@@ -1611,7 +1611,7 @@ export default function WarRoomSimulation() {
                             >
                                 <h2 style={{ fontSize: '2.5rem', color: '#10b981', marginBottom: '1.5rem', fontWeight: 'bold' }}>Deal Secured!</h2>
                                 <div style={{ fontSize: '1.2rem', marginBottom: '2rem', background: 'rgba(255,255,255,0.05)', padding: '2rem', borderRadius: '12px' }}>
-                                    <p style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>Congratulations! You finalized a deal with <strong style={{ color: 'white' }}>{acceptedDealTerms?.investorName || selectedOffer?.investorName}</strong>.</p>
+                                    <p style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>Congratulations! You finalized a deal with <strong style={{ color: 'white' }}>{investorDisplayName(acceptedDealTerms?.investorName || selectedOffer?.investorName || '')}</strong>.</p>
                                     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1.5rem' }}>
                                         <div style={{ textAlign: 'center' }}>
                                             <div style={{ fontSize: '0.9rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px' }}>Investment</div>
@@ -1625,7 +1625,7 @@ export default function WarRoomSimulation() {
                                     </div>
                                 </div>
                                 <button className="final-report-btn" onClick={handleCompleteToVerdict} style={{ position: 'relative', zIndex: 10 }}>
-                                    The Council Renders Its Verdict
+                                    The Board Renders Its Verdict
                                 </button>
                             </motion.div>
                         )}
@@ -1670,9 +1670,9 @@ export default function WarRoomSimulation() {
                     background: linear-gradient(90deg,
                         transparent 0%,
                         rgba(239,68,68,0.5) 15%,
-                        rgba(201,162,39,0.4) 30%,
+                        rgba(179,144,62,0.4) 30%,
                         rgba(239,68,68,0.6) 50%,
-                        rgba(201,162,39,0.4) 70%,
+                        rgba(179,144,62,0.4) 70%,
                         rgba(239,68,68,0.5) 85%,
                         transparent 100%
                     );
@@ -1695,9 +1695,9 @@ export default function WarRoomSimulation() {
                     background: linear-gradient(90deg,
                         transparent 0%,
                         rgba(239,68,68,0.5) 15%,
-                        rgba(201,162,39,0.4) 30%,
+                        rgba(179,144,62,0.4) 30%,
                         rgba(239,68,68,0.6) 50%,
-                        rgba(201,162,39,0.4) 70%,
+                        rgba(179,144,62,0.4) 70%,
                         rgba(239,68,68,0.5) 85%,
                         transparent 100%
                     );

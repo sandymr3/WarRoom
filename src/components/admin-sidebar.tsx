@@ -80,7 +80,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                     className="truncate font-semibold text-[color:var(--color-warroom-ivory)] tracking-[0.04em]"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
-                    War Room
+                    The Gambit
                   </span>
                   <span
                     className="truncate text-xs text-[color:var(--color-warroom-smoke)]"

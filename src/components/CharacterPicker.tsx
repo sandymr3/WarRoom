@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Mentor, Leader, Investor } from '@/src/types'
 
 interface CharacterGroupProps<T> {
@@ -80,7 +81,7 @@ function CharacterGroup<T extends { id: string; name: string; avatar?: string }>
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-                    className="absolute top-2 right-2 h-5 w-5 rounded-full bg-[color:var(--color-warroom-gold)] flex items-center justify-center shadow-[0_0_12px_rgba(201,162,39,0.55)]"
+                    className="absolute top-2 right-2 h-5 w-5 rounded-full bg-[color:var(--color-warroom-gold)] flex items-center justify-center shadow-[0_0_12px_rgba(179,144,62,0.55)]"
                   >
                     <Check className="h-3 w-3 text-primary-foreground" />
                   </motion.div>
@@ -108,12 +109,12 @@ function CharacterGroup<T extends { id: string; name: string; avatar?: string }>
                 )}>
                   {/* Initial is the base; the avatar overlays it and removes itself
                       on load error so a broken URL falls back to the initial. */}
-                  <span aria-hidden>{item.name.charAt(0)}</span>
+                  <span aria-hidden>{investorDisplayName(item.name).charAt(0)}</span>
                   {item.avatar && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.avatar}
-                      alt={item.name}
+                      alt={investorDisplayName(item.name)}
                       loading="lazy"
                       decoding="async"
                       onError={(e) => { e.currentTarget.style.display = 'none' }}
@@ -125,7 +126,7 @@ function CharacterGroup<T extends { id: string; name: string; avatar?: string }>
 
               <div className="space-y-0.5">
                 <div className="font-display text-sm font-semibold leading-tight tracking-wide">
-                  {item.name}
+                  {investorDisplayName(item.name)}
                 </div>
                 <div className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-warroom-gold)]/85 font-semibold">
                   {renderBadge(item)}

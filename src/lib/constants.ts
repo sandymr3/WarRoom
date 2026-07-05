@@ -1,5 +1,5 @@
 // ============================================
-// War Room – Shared Constants
+// The Gambit – Shared Constants
 // ============================================
 
 import type { LucideIcon } from 'lucide-react'
@@ -7,30 +7,30 @@ import { Globe, AlertTriangle, Target, BarChart3 } from 'lucide-react'
 import type { StageName } from '@/src/types'
 
 
-// Stage accent colours — GOT themed
+// Stage accent colours — Grandmaster's Study palette
 export const STAGE_THEMES: Record<string, string> = {
-  STAGE_NEG2_IDEATION: '#6b5a8e',     // Dragonglass purple
-  STAGE_NEG1_VISION: '#7c5a9e',       // Raven's wing purple
-  STAGE_0_COMMITMENT: '#c9a227',      // Lannister Gold
-  STAGE_1_VALIDATION: '#4a7c59',      // Stark green (Godswood)
-  STAGE_2A_GROWTH: '#3d6b8e',         // Castle Black steel blue
-  STAGE_2B_EXPANSION: '#2e7d82',      // Braavosi teal
-  STAGE_3_SCALE: '#c9a227',           // Molten Gold
-  STAGE_WARROOM_PREP: '#8b3a1a',      // Dragonstone burnt orange-red
-  STAGE_4_WARROOM: '#8b1a1a',         // Dragon fire blood red
+  STAGE_NEG2_IDEATION: '#66607f',     // The Opening — twilight heather
+  STAGE_NEG1_VISION: '#77678f',       // Development — study violet
+  STAGE_0_COMMITMENT: '#b3903e',      // The Castling — aged brass
+  STAGE_1_VALIDATION: '#3f6b4f',      // The Exchange — board green
+  STAGE_2A_GROWTH: '#42617a',         // The Middlegame — slate blue
+  STAGE_2B_EXPANSION: '#2f6f6a',      // Seizing the Center — deep teal
+  STAGE_3_SCALE: '#c9a45a',           // The Promotion — bright electrum
+  STAGE_WARROOM_PREP: '#8a5a2a',      // The Adjournment — amber walnut
+  STAGE_4_WARROOM: '#5c1a24',         // The Grand Board — oxblood
 }
 
 // Cinematic narration metadata per stage
 export const STAGE_NARRATIVES: Record<string, { month: string; title: string; desc: string }> = {
-  STAGE_NEG2_IDEATION: { month: 'Month 0', title: 'Ideation', desc: 'Every great company starts with an idea. Define your vision, target market, and initial model.' },
-  STAGE_NEG1_VISION: { month: 'Month 1', title: 'Vision & Alignment', desc: 'Align your goals. Decide what kind of company you want to build before taking the leap.' },
-  STAGE_0_COMMITMENT: { month: 'Month 2', title: 'The Commitment', desc: 'It is time to decide if you are all-in. Are you ready to commit your time and capital?' },
-  STAGE_1_VALIDATION: { month: 'Month 3', title: 'Market Validation', desc: 'Get out of the building. Talk to customers and prove they actually want what you are building.' },
-  STAGE_2A_GROWTH: { month: 'Month 6', title: 'Initial Growth', desc: 'You have a product. Now you need to find your first true believers and early adopters.' },
-  STAGE_2B_EXPANSION: { month: 'Month 9', title: 'Expansion & Churn', desc: 'Growth brings problems. Deal with scaling issues, team dynamics, and keeping customers happy.' },
-  STAGE_3_SCALE: { month: 'Month 12', title: 'Scaling Up', desc: 'You have hit early product-market fit. Now it is time to pour fuel on the fire and scale operations.' },
-  STAGE_WARROOM_PREP: { month: 'Month 15', title: 'Pitch Prep', desc: 'You need outside capital to truly win the market. Perfect your pitch before facing the Sharks.' },
-  STAGE_4_WARROOM: { month: 'Month 18', title: 'The War Room', desc: 'Face the investors. Defend your valuation, handle tough questions, and secure the bag.' },
+  STAGE_NEG2_IDEATION: { month: 'Move 1', title: 'The Opening', desc: 'Every great game starts with a strong first move. Define your vision, target market, and initial model.' },
+  STAGE_NEG1_VISION: { month: 'Move 2', title: 'Development', desc: 'Develop your pieces. Decide what kind of company you want to build before taking the leap.' },
+  STAGE_0_COMMITMENT: { month: 'Move 3', title: 'The Castling', desc: 'One irreversible move. Are you ready to commit your time and capital?' },
+  STAGE_1_VALIDATION: { month: 'Move 4', title: 'The Exchange', desc: 'Test every trade. Talk to customers and prove they actually want what you are building.' },
+  STAGE_2A_GROWTH: { month: 'Move 5', title: 'The Middlegame', desc: 'You have a product. Now you need to find your first true believers and early adopters.' },
+  STAGE_2B_EXPANSION: { month: 'Move 6', title: 'Seizing the Center', desc: 'Growth brings pressure. Deal with scaling issues, team dynamics, and keeping customers happy.' },
+  STAGE_3_SCALE: { month: 'Move 7', title: 'The Promotion', desc: 'You have hit early product-market fit. Push your pawn to the eighth rank and scale operations.' },
+  STAGE_WARROOM_PREP: { month: 'Move 8', title: 'The Adjournment', desc: 'You need outside capital to truly win. Study the position and perfect your pitch before facing the Board.' },
+  STAGE_4_WARROOM: { month: 'Move 9', title: 'The Grand Board', desc: 'Face the investors. Defend your valuation, handle tough questions, and close the deal.' },
 }
 
 // Stage-specific mentor tip messages
@@ -73,7 +73,7 @@ export const STAGE_DURATIONS: Record<string, number> = {
 }
 
 // Short labels shown on stage timeline
-export const NARRATION_STAGE_LABELS = ['Idea', 'Vision', 'Commit', 'Validate', 'Grow', 'Expand', 'Scale', 'Prep', 'War Room']
+export const NARRATION_STAGE_LABELS = ['Opening', 'Develop', 'Castle', 'Exchange', 'Middlegame', 'Center', 'Promote', 'Adjourn', 'Grand Board']
 
 // Investor voice filename overrides, keyed by investor id (stable across rename)
 export const INVESTOR_VOICE_BY_ID: Record<string, string> = {
@@ -88,8 +88,11 @@ export const INVESTOR_VOICE_BY_ID: Record<string, string> = {
 
 // Maps the public display title back to the stable investor id.
 // Investor panel context_text shows the title; we resolve it here to look up
-// voice assets and other id-keyed resources.
+// voice assets and other id-keyed resources. The backend still sends the
+// legacy titles — keep them forever. The chess display titles are also
+// listed so any display string round-trips back to the same id.
 export const INVESTOR_TITLE_TO_ID: Record<string, string> = {
+  // Legacy titles (backend contract — do not remove)
   'The Mirror of Identity': 'mirror_identity',
   'The Master of Coin': 'master_coin',
   'The Lord of Hustle': 'lord_hustle',
@@ -97,6 +100,27 @@ export const INVESTOR_TITLE_TO_ID: Record<string, string> = {
   'The Hand of Execution': 'hand_execution',
   'The Spider of Strategy': 'spider_strategy',
   'The Warden of Trust': 'warden_trust',
+  // Chess display titles (defensive round-trip)
+  'The Arbiter of Identity': 'mirror_identity',
+  'The Queen of Coin': 'master_coin',
+  'The Knight of Hustle': 'lord_hustle',
+  'The Blindfold Master': 'mother_instinct',
+  'The Rook of Execution': 'hand_execution',
+  'The Bishop of Strategy': 'spider_strategy',
+  'The Warden of the King': 'warden_trust',
+}
+
+// Chess-themed display names, keyed by stable investor id. The backend keeps
+// sending the legacy titles; render sites resolve through
+// investorDisplayName() (src/lib/helpers.tsx) so users only ever see these.
+export const INVESTOR_DISPLAY_BY_ID: Record<string, string> = {
+  master_coin: 'The Queen of Coin',
+  lord_hustle: 'The Knight of Hustle',
+  hand_execution: 'The Rook of Execution',
+  spider_strategy: 'The Bishop of Strategy',
+  warden_trust: 'The Warden of the King',
+  mother_instinct: 'The Blindfold Master',
+  mirror_identity: 'The Arbiter of Identity',
 }
 
 // Scenario step styling — icons are lucide components (on-brand SVG, no emoji).

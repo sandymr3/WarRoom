@@ -19,10 +19,10 @@ interface CouncilDeliberatesLoaderProps {
   className?: string
 }
 
-const RUNES = ['⚔', '⚜', '✦'] as const
+const RUNES = ['♟', '♞', '♝'] as const
 
 export function CouncilDeliberatesLoader({
-  message = 'The council deliberates…',
+  message = 'The Board deliberates…',
   className,
 }: CouncilDeliberatesLoaderProps) {
   const reducedMotion = useReducedMotion()
@@ -38,7 +38,7 @@ export function CouncilDeliberatesLoader({
       )}
       style={{
         background: 'var(--wr-overlay-bg)',
-        boxShadow: 'inset 0 0 60px rgba(139,26,26,0.18)',
+        boxShadow: 'inset 0 0 60px rgba(92,26,36,0.18)',
       }}
     >
       <div className="relative flex items-center justify-center">

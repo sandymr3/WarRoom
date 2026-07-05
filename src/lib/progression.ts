@@ -1,9 +1,10 @@
 // ============================================
-// War Room — Progression catalog & pure helpers
+// The Gambit — Progression catalog & pure helpers
 // ----------------------------------------------------------------
-// DEFINITIONS live here (ranks, sigils, palettes, competency copy)
+// DEFINITIONS live here (titles, norms, palettes, competency copy)
 // so visuals/copy ship without a backend round-trip. The BACKEND owns
 // the authoritative renown number + which sigil IDs are earned.
+// (Internal ids/keys keep their legacy names — display strings are chess.)
 //
 // No React, no side effects — pure data + functions (easy to unit-test).
 // ============================================
@@ -16,8 +17,8 @@ import type {
 } from '@/src/types'
 
 // ------------------------------------------------------------------
-// Founder Ranks — the prestige ladder. Thresholds are tunable here;
-// the backend awards the renown, this maps renown → rank for display.
+// Founder Titles — the prestige ladder (chess titles). Thresholds are
+// tunable here; the backend awards the renown, this maps renown → title.
 // ------------------------------------------------------------------
 
 export interface RankDef {
@@ -28,13 +29,13 @@ export interface RankDef {
 }
 
 export const RANKS: RankDef[] = [
-  { tier: 0, title: 'Aspirant', threshold: 0 },
-  { tier: 1, title: 'Squire', threshold: 500 },
-  { tier: 2, title: 'Knight of the Realm', threshold: 1_500 },
-  { tier: 3, title: 'Bannerlord', threshold: 3_500 },
-  { tier: 4, title: 'Warden', threshold: 7_000 },
-  { tier: 5, title: 'Hand of the King', threshold: 12_000 },
-  { tier: 6, title: 'Ruler of the Realm', threshold: 20_000 },
+  { tier: 0, title: 'Novice', threshold: 0 },
+  { tier: 1, title: 'Pupil', threshold: 500 },
+  { tier: 2, title: 'Club Player', threshold: 1_500 },
+  { tier: 3, title: 'Expert', threshold: 3_500 },
+  { tier: 4, title: 'Candidate Master', threshold: 7_000 },
+  { tier: 5, title: 'International Master', threshold: 12_000 },
+  { tier: 6, title: 'Grandmaster', threshold: 20_000 },
 ]
 
 /** Map a total renown value to a fully-resolved RankProgress. */
@@ -81,12 +82,12 @@ export const CATEGORY_LABEL: Record<CompetencyCategory, string> = {
   NATURAL_DOMINANT: 'Natural-Born',
 }
 
-/** Star colour by tier — dim ember → molten gold as mastery rises. */
+/** Star colour by tier — dim bronze → bright brass as mastery rises. */
 export const CATEGORY_COLOR: Record<CompetencyCategory, string> = {
   HIGH_RISK: '#6b5840',
   DEVELOPMENT_REQUIRED: '#9a7b3a',
-  FUNCTIONAL: '#c9a227',
-  STRONG: '#e8c84a',
+  FUNCTIONAL: '#b3903e',
+  STRONG: '#d9b45f',
   NATURAL_DOMINANT: '#fff0b8',
 }
 
@@ -135,8 +136,8 @@ export function competencyMeta(code: CompetencyCode): CompetencyMeta | undefined
 }
 
 // ------------------------------------------------------------------
-// Sigils (achievements) — each tied to a genuine founder feat.
-// Pure data; the id → icon mapping lives in SigilCrest.tsx.
+// Norms (achievements; legacy "sigils" ids) — each tied to a genuine
+// founder feat. Pure data; the id → icon mapping lives in SigilCrest.tsx.
 // ------------------------------------------------------------------
 
 export interface SigilDef {
@@ -148,20 +149,20 @@ export interface SigilDef {
 }
 
 export const SIGILS: SigilDef[] = [
-  { id: 'first_blood', name: 'First Blood', description: 'Complete your first trial.', tier: 'BRONZE' },
-  { id: 'the_committed', name: 'The Committed', description: 'Reach the War Room in any trial.', tier: 'BRONZE' },
+  { id: 'first_blood', name: 'First Game', description: 'Complete your first match.', tier: 'BRONZE' },
+  { id: 'the_committed', name: 'The Committed', description: 'Reach the Grand Board in any match.', tier: 'BRONZE' },
   { id: 'silver_tongue', name: 'Silver Tongue', description: 'Score 80+ persuasion on a pitch.', tier: 'SILVER' },
   { id: 'the_diplomat', name: 'The Diplomat', description: 'Negotiate a better deal than first offered.', tier: 'SILVER' },
-  { id: 'the_unbroken', name: 'The Unbroken', description: 'Complete a trial without a single mentor lifeline.', tier: 'SILVER' },
-  { id: 'master_of_coin', name: 'Master of Coin', description: 'Project $1M+ annual revenue.', tier: 'GOLD' },
-  { id: 'dragonslayer', name: 'Dragonslayer', description: 'Close a deal with an investor.', tier: 'GOLD' },
+  { id: 'the_unbroken', name: 'The Unbroken', description: 'Complete a match without a single hint from your seconds.', tier: 'SILVER' },
+  { id: 'master_of_coin', name: 'Material Advantage', description: 'Project $1M+ annual revenue.', tier: 'GOLD' },
+  { id: 'dragonslayer', name: 'Checkmate', description: 'Close a deal with an investor.', tier: 'GOLD' },
   { id: 'natural_born', name: 'Natural-Born', description: 'Reach Natural-Born mastery in any competency.', tier: 'GOLD' },
   { id: 'the_phoenix', name: 'The Phoenix', description: 'Beat your previous legacy score by 15+.', tier: 'GOLD' },
-  { id: 'iron_will', name: 'Iron Will', description: 'Keep the hearth lit for 4 weeks running.', tier: 'GOLD' },
+  { id: 'iron_will', name: 'The Long Grind', description: 'Keep the study candle burning for 4 weeks running.', tier: 'GOLD' },
   { id: 'the_strategist', name: 'The Strategist', description: 'Reach Strong+ in Strategy and Financial Discipline.', tier: 'GOLD' },
   { id: 'polymath', name: 'The Polymath', description: 'Reach Strong+ in all eight competencies.', tier: 'OBSIDIAN' },
-  { id: 'the_sovereign', name: 'The Sovereign', description: 'Rise to Ruler of the Realm.', tier: 'OBSIDIAN' },
-  { id: 'unanimous', name: 'Unanimous Verdict', description: 'Win a favourable verdict from every investor.', tier: 'OBSIDIAN' },
+  { id: 'the_sovereign', name: 'The Grandmaster', description: 'Rise to the title of Grandmaster.', tier: 'OBSIDIAN' },
+  { id: 'unanimous', name: 'Unanimous Decision', description: 'Win a favourable verdict from every investor.', tier: 'OBSIDIAN' },
 ]
 
 export function sigilById(id: string): SigilDef | undefined {
@@ -177,13 +178,13 @@ export interface SigilTierStyle {
 export const SIGIL_TIER_COLOR: Record<SigilTierName, SigilTierStyle> = {
   BRONZE: { base: '#a05a2c', bright: '#c8814c', label: 'Bronze' },
   SILVER: { base: '#8a8f98', bright: '#c4cad2', label: 'Silver' },
-  GOLD: { base: '#c9a227', bright: '#e8c84a', label: 'Gold' },
+  GOLD: { base: '#b3903e', bright: '#d9b45f', label: 'Gold' },
   OBSIDIAN: { base: '#3a2a52', bright: '#7a5ca0', label: 'Obsidian' },
 }
 
 // ------------------------------------------------------------------
-// House identity — palettes & crest shapes unlock by rank (earned,
-// never purchased). All palette colours are on-brand tokens.
+// Club identity (legacy "house" keys) — palettes & crest shapes unlock
+// by title (earned, never purchased). All palette colours are on-brand.
 // ------------------------------------------------------------------
 
 export interface HousePalette {
@@ -196,12 +197,12 @@ export interface HousePalette {
 }
 
 export const HOUSE_PALETTES: HousePalette[] = [
-  { id: 'gold', name: 'Cloth of Gold', primary: '#e8c84a', secondary: '#8b6914', unlockRank: 0 },
-  { id: 'crimson', name: 'Blood & Fire', primary: '#c23b3b', secondary: '#8b1a1a', unlockRank: 0 },
-  { id: 'verdant', name: 'The Greenwood', primary: '#3f9c6f', secondary: '#2d6a4f', unlockRank: 1 },
+  { id: 'gold', name: 'Brass & Ebony', primary: '#d9b45f', secondary: '#7a6224', unlockRank: 0 },
+  { id: 'crimson', name: 'Oxblood', primary: '#8e3644', secondary: '#5c1a24', unlockRank: 0 },
+  { id: 'verdant', name: 'Tournament Green', primary: '#3f9c6f', secondary: '#2d6a4f', unlockRank: 1 },
   { id: 'sapphire', name: 'Deep Waters', primary: '#3d6b8e', secondary: '#1a3a5c', unlockRank: 2 },
-  { id: 'ember', name: 'Dragonfire', primary: '#ff9933', secondary: '#ff6b00', unlockRank: 3 },
-  { id: 'amethyst', name: 'Twilight Court', primary: '#7a5ca0', secondary: '#4a2060', unlockRank: 4 },
+  { id: 'ember', name: 'Candlelight', primary: '#e5a94d', secondary: '#d98e2b', unlockRank: 3 },
+  { id: 'amethyst', name: 'Twilight Study', primary: '#7a5ca0', secondary: '#4a2060', unlockRank: 4 },
 ]
 
 export function paletteById(id: string): HousePalette {
@@ -216,28 +217,28 @@ export interface HouseSigilDef {
 }
 
 export const HOUSE_SIGILS: HouseSigilDef[] = [
-  { id: 'blade', name: 'The Blade', unlockRank: 0 },
-  { id: 'flame', name: 'The Flame', unlockRank: 0 },
-  { id: 'tower', name: 'The Tower', unlockRank: 0 },
-  { id: 'crown', name: 'The Crown', unlockRank: 2 },
-  { id: 'wolf', name: 'The Direwolf', unlockRank: 3 },
-  { id: 'dragon', name: 'The Dragon', unlockRank: 5 },
+  { id: 'blade', name: 'The Pawn', unlockRank: 0 },
+  { id: 'flame', name: 'The Bishop', unlockRank: 0 },
+  { id: 'tower', name: 'The Rook', unlockRank: 0 },
+  { id: 'crown', name: 'The King', unlockRank: 2 },
+  { id: 'wolf', name: 'The Knight', unlockRank: 3 },
+  { id: 'dragon', name: 'The Queen', unlockRank: 5 },
 ]
 
 export function houseSigilById(id: string): HouseSigilDef {
   return HOUSE_SIGILS.find((s) => s.id === id) ?? HOUSE_SIGILS[0]
 }
 
-/** Curated house words. Customizer also allows capped free-text. */
+/** Curated club mottos. Customizer also allows capped free-text. */
 export const HOUSE_WORDS: string[] = [
-  'Build or Burn',
+  'Every Move Counts',
   'Ship Without Fear',
   'We Do Not Flinch',
   'The Bold Endure',
   'Conviction Over Comfort',
-  'Forged Under Fire',
+  'Play the Long Game',
   'First, Then Fast',
-  'No Throne Without Toil',
+  'Think Three Moves Ahead',
 ]
 
 export const HOUSE_WORDS_MAX = 32

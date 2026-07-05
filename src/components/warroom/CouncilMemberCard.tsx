@@ -5,10 +5,11 @@ import { motion, useAnimationControls, useReducedMotion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { investorPortraitSrc } from '@/src/lib/investorAssets'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Investor } from '@/src/types'
 
 // ============================================================
-// <CouncilMemberCard /> — single seat at the war council table.
+// <CouncilMemberCard /> — single seat at the Board's table.
 //
 // Renders a portrait thumb + name + lens badge per investor in
 // the roster strip. The mood-driven aura is the load-bearing
@@ -68,7 +69,8 @@ export function CouncilMemberCard({
 }: CouncilMemberCardProps) {
   const reducedMotion = useReducedMotion()
   const stirControls = useAnimationControls()
-  const initials = investor.name
+  const displayName = investorDisplayName(investor.name)
+  const initials = displayName
     .split(' ')
     .map((w) => w[0])
     .slice(0, 2)
@@ -122,7 +124,7 @@ export function CouncilMemberCard({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={investorPortraitSrc(investor)}
-            alt={investor.name}
+            alt={displayName}
             className="absolute inset-0 h-full w-full object-cover"
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
           />
@@ -134,7 +136,7 @@ export function CouncilMemberCard({
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <span className="truncate font-display text-sm font-semibold leading-tight text-foreground">
-          {investor.name}
+          {displayName}
         </span>
         <span className="truncate text-[0.62rem] uppercase tracking-[0.18em] text-foreground/55">
           {MOOD_LABEL[mood]}
@@ -152,7 +154,7 @@ export function CouncilMemberCard({
         <button
           type="button"
           className="w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md"
-          aria-label={`${investor.name} — view bio`}
+          aria-label={`${displayName} — view bio`}
         >
           {card}
         </button>
@@ -160,7 +162,7 @@ export function CouncilMemberCard({
       <PopoverContent side="left" align="start" className="w-80">
         <div className="space-y-2.5">
           <div>
-            <h3 className="font-display text-base font-semibold text-foreground">{investor.name}</h3>
+            <h3 className="font-display text-base font-semibold text-foreground">{displayName}</h3>
             {investor.primary_lens && (
               <p className="text-[0.65rem] uppercase tracking-[0.18em] text-amber-400">
                 {investor.primary_lens}

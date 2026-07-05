@@ -118,7 +118,7 @@ export function AIScenarioQuestion({
                     <div>
                       <h3
                         className="text-2xl md:text-3xl font-bold tracking-wide text-emerald-200"
-                        style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.04em' }}
+                        style={{ fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.04em' }}
                       >
                         Accept the Buyout
                       </h3>
@@ -154,7 +154,7 @@ export function AIScenarioQuestion({
                       onClick={onBuyoutSubmit}
                       disabled={submitting}
                       className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold py-3 rounded-md transition shadow-lg shadow-emerald-900/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.08em' }}
+                      style={{ fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.08em' }}
                     >
                       {submitting ? 'Finalizing…' : 'Accept & Exit'}
                     </motion.button>
@@ -188,7 +188,7 @@ export function AIScenarioQuestion({
                     <div>
                       <h3
                         className="text-2xl md:text-3xl font-bold tracking-wide text-red-200"
-                        style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.04em' }}
+                        style={{ fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.04em' }}
                       >
                         Enter the War Room
                       </h3>
@@ -198,7 +198,7 @@ export function AIScenarioQuestion({
                     </div>
                   </div>
                   <div className="pt-6 flex items-center gap-2 text-xs font-bold text-red-200 uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity"
-                    style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.12em' }}
+                    style={{ fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.12em' }}
                   >
                     Prepare for War <ChevronRight className="h-4 w-4" />
                   </div>

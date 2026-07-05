@@ -66,7 +66,7 @@ export default function FinalReportPage() {
             className="text-sm text-[color:var(--color-warroom-smoke)] tracking-[0.04em]"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Unsealing the Legacy Scroll&hellip;
+Opening the Annotated Games&hellip;
           </p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function FinalReportPage() {
             href="/"
             className="text-sm text-[color:var(--color-warroom-gold)] hover:text-[color:var(--color-warroom-gold-bright)] transition-colors"
           >
-            &larr; Return to the Great Hall
+            &larr; Return to the Study
           </Link>
         </div>
       </div>

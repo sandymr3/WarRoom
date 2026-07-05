@@ -24,7 +24,7 @@ export function MuteToggle({ className }: MuteToggleProps) {
         'text-[color:var(--color-warroom-gold)]',
         'transition-all duration-200',
         'hover:border-[color:var(--color-warroom-gold)]/60 hover:bg-[color:var(--color-warroom-obsidian)]/80',
-        'hover:shadow-[0_0_18px_rgba(201,162,39,0.35)]',
+        'hover:shadow-[0_0_18px_rgba(179,144,62,0.35)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)]',
         className,
       )}

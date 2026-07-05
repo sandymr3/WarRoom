@@ -60,7 +60,7 @@ export function RoundCompleteOverlay({
     audioManager.playSfx(survived ? 'sim.stage-clear' : 'ui.error', survived ? 0.55 : 0.5)
   }, [open, survived])
 
-  const verdict = message ?? (survived ? 'Round survived.' : 'The council is unmoved.')
+  const verdict = message ?? (survived ? 'Round survived.' : 'The Board is unmoved.')
   const headingLabel = totalRounds
     ? `Round ${roundIndex + 1} of ${totalRounds}`
     : `Round ${roundIndex + 1}`
@@ -86,8 +86,8 @@ export function RoundCompleteOverlay({
             className="pointer-events-none absolute inset-0"
             style={{
               background: survived
-                ? 'radial-gradient(ellipse at center, rgba(201,162,39,0.08) 0%, rgba(0,0,0,0.92) 75%)'
-                : 'radial-gradient(ellipse at center, rgba(139,26,26,0.12) 0%, rgba(0,0,0,0.95) 75%)',
+                ? 'radial-gradient(ellipse at center, rgba(179,144,62,0.08) 0%, rgba(0,0,0,0.92) 75%)'
+                : 'radial-gradient(ellipse at center, rgba(92,26,36,0.12) 0%, rgba(0,0,0,0.95) 75%)',
             }}
           />
 
@@ -98,7 +98,7 @@ export function RoundCompleteOverlay({
             className="relative z-10 mx-4 w-full max-w-lg rounded-md border border-[color:var(--color-warroom-gold)]/30 bg-card/85 p-8 text-center backdrop-blur-md noise-overlay"
             style={{
               boxShadow:
-                '0 12px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(201,162,39,0.15)',
+                '0 12px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(179,144,62,0.15)',
             }}
           >
             <p className="font-display text-[0.65rem] uppercase tracking-[0.22em] text-[color:var(--color-warroom-gold)]/70">
@@ -113,8 +113,8 @@ export function RoundCompleteOverlay({
               )}
               style={{
                 textShadow: survived
-                  ? '0 0 30px rgba(201,162,39,0.4)'
-                  : '0 0 30px rgba(139,26,26,0.4)',
+                  ? '0 0 30px rgba(179,144,62,0.4)'
+                  : '0 0 30px rgba(92,26,36,0.4)',
               }}
             >
               {verdict}
@@ -150,7 +150,7 @@ export function RoundCompleteOverlay({
                 'transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                 'border-[color:var(--color-warroom-gold)]/45 bg-[color:var(--color-warroom-obsidian)]/60 text-[color:var(--color-warroom-gold)]',
-                'hover:border-[color:var(--color-warroom-gold)]/85 hover:bg-[color:var(--color-warroom-obsidian)]/80 hover:shadow-[0_0_22px_rgba(201,162,39,0.35)]',
+                'hover:border-[color:var(--color-warroom-gold)]/85 hover:bg-[color:var(--color-warroom-obsidian)]/80 hover:shadow-[0_0_22px_rgba(179,144,62,0.35)]',
               )}
             >
               Next investor <span aria-hidden>→</span>
@@ -176,7 +176,7 @@ function Sparkline({ scores, survived }: SparklineProps) {
   const pathD = points
     .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
     .join(' ')
-  const accent = survived ? '#e8c84a' : '#c23b3b'
+  const accent = survived ? '#d9b45f' : '#8e3644'
 
   return (
     <svg

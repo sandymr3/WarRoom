@@ -2,39 +2,39 @@
 @import 'tw-animate-css';
 
 /* ============================================================
- * GAME OF THRONES — WAR ROOM
- * Design System: Iron Throne Palette
+ * THE GAMBIT — GRANDMASTER'S STUDY
+ * Design System: Ebony, Walnut, Aged Brass & Oxblood
  * ============================================================ */
 
 @custom-variant dark (&:is(.dark *));
 
-/* === GOT CSS Variables === */
+/* === Gambit CSS Variables === */
 :root {
-  /* GOT Light (rare — parchment / torchlit hall) */
+  /* Light (rare — ivory study / daylight reading room) */
   --background: oklch(0.96 0.012 75);        /* aged parchment */
   --foreground: oklch(0.15 0.02 50);         /* dark ink */
   --card: oklch(0.92 0.015 70);              /* stone slab */
   --card-foreground: oklch(0.18 0.02 50);
   --popover: oklch(0.94 0.012 70);
   --popover-foreground: oklch(0.15 0.02 50);
-  --primary: oklch(0.72 0.14 75);            /* GOT Gold */
+  --primary: oklch(0.68 0.11 82);            /* Aged Brass */
   --primary-foreground: oklch(0.12 0.02 50);
   --secondary: oklch(0.85 0.02 60);
   --secondary-foreground: oklch(0.2 0.02 50);
   --muted: oklch(0.88 0.015 70);
   --muted-foreground: oklch(0.45 0.03 60);
-  --accent: oklch(0.65 0.18 30);             /* Blood Red */
+  --accent: oklch(0.5 0.15 18);              /* Oxblood */
   --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.52 0.22 25);        /* Deep Blood Red */
+  --destructive: oklch(0.46 0.17 18);        /* Deep Oxblood */
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.78 0.04 65);
   --input: oklch(0.88 0.012 65);
-  --ring: oklch(0.72 0.14 75);
-  --chart-1: oklch(0.72 0.14 75);            /* Gold */
-  --chart-2: oklch(0.52 0.22 25);            /* Blood Red */
-  --chart-3: oklch(0.45 0.1 220);            /* Dragonglass */
-  --chart-4: oklch(0.62 0.12 150);           /* Stark Green */
-  --chart-5: oklch(0.55 0.15 290);           /* Lannister Purple */
+  --ring: oklch(0.68 0.11 82);
+  --chart-1: oklch(0.68 0.11 82);            /* Brass */
+  --chart-2: oklch(0.5 0.16 18);             /* Oxblood */
+  --chart-3: oklch(0.42 0.09 165);           /* Board Green */
+  --chart-4: oklch(0.6 0.11 150);            /* Tournament Green */
+  --chart-5: oklch(0.5 0.06 75);             /* Ivory Brass */
   --radius: 0.375rem;
   --sidebar: oklch(0.9 0.018 70);
   --sidebar-foreground: oklch(0.15 0.02 50);
@@ -51,24 +51,24 @@
   --info: oklch(0.48 0.12 220);
   --info-foreground: oklch(0.98 0 0);
 
-  /* GOT Semantic Colors */
-  --got-gold: #c9a227;
-  --got-gold-light: #e8c84a;
-  --got-gold-dark: #8b6914;
-  --got-blood: #8b1a1a;
-  --got-blood-bright: #c23b3b;
-  --got-stone: #2a2520;
+  /* Gambit Semantic Colors (legacy --got-* names kept; values re-tinted) */
+  --got-gold: #b3903e;
+  --got-gold-light: #d9b45f;
+  --got-gold-dark: #7a6224;
+  --got-blood: #5c1a24;
+  --got-blood-bright: #8e3644;
+  --got-stone: #2b211a;
   --got-stone-mid: #3d3530;
   --got-stone-light: #5a5048;
   --got-dragon: #1a0a00;
-  --got-dragonglass: #0f1a2e;
-  --got-fire: #ff6b00;
-  --got-fire-bright: #ff9933;
+  --got-dragonglass: #12241a;
+  --got-fire: #d98e2b;
+  --got-fire-bright: #e5a94d;
   --got-ash: #8c8075;
   --got-parchment: #f5e6c8;
   --got-ink: #1a1208;
 
-  /* Warroom surface tokens — light (parchment / torchlit hall) */
+  /* Gambit surface tokens — light (ivory study / daylight reading room) */
   --wr-void: #faf5eb;
   --wr-black: #f5ece0;
   --wr-obsidian: #ede4d4;
@@ -88,9 +88,9 @@
   --wr-silver: #666666;
   --wr-ember: #9a3d00;
   --wr-gold-glow: rgba(180, 140, 30, 0.15);
-  --wr-dragonglass: #1a2a48;
+  --wr-dragonglass: #23402e;
   --wr-shadow-gold: 0 0 12px rgba(160, 120, 30, 0.2), 0 0 40px rgba(160, 120, 30, 0.08);
-  --wr-shadow-crimson: 0 0 12px rgba(139, 26, 26, 0.25);
+  --wr-shadow-crimson: 0 0 12px rgba(92, 26, 36, 0.25);
   --wr-shadow-deep: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
   --wr-glow-ember: 0 0 20px rgba(200, 75, 15, 0.25);
 
@@ -100,45 +100,45 @@
   --wr-panel-bg: rgba(237, 228, 212, 0.65);
   --wr-panel-bg-heavy: rgba(229, 219, 200, 0.85);
   --wr-panel-bg-darker: rgba(216, 204, 184, 0.4);
-  --wr-offer-portrait-bg: linear-gradient(160deg, rgba(201, 162, 39, 0.15), rgba(216, 204, 184, 0.7));
+  --wr-offer-portrait-bg: linear-gradient(160deg, rgba(179, 144, 62, 0.15), rgba(216, 204, 184, 0.7));
   --wr-parchment-wash: linear-gradient(rgba(253, 251, 247, 0.88), rgba(253, 251, 247, 0.92));
   --wr-overlay-bg: rgba(245, 236, 224, 0.85);
 }
 
 .dark {
-  /* GOT Dark Mode — Iron Throne aesthetic: obsidian black, molten gold, blood */
-  --background: oklch(0.08 0.01 50);         /* near-black obsidian */
-  --foreground: oklch(0.88 0.04 75);         /* warm aged parchment */
-  --card: oklch(0.11 0.015 50);              /* dark stone */
+  /* Gambit Dark Mode — Grandmaster's Study: ebony, walnut, aged brass, oxblood */
+  --background: oklch(0.08 0.01 50);         /* near-black ebony */
+  --foreground: oklch(0.88 0.04 75);         /* warm aged ivory */
+  --card: oklch(0.11 0.015 50);              /* dark walnut */
   --card-foreground: oklch(0.85 0.035 75);
   --popover: oklch(0.1 0.012 50);
   --popover-foreground: oklch(0.85 0.035 75);
-  --primary: oklch(0.72 0.16 75);            /* Molten Gold */
+  --primary: oklch(0.7 0.12 82);             /* Aged Brass */
   --primary-foreground: oklch(0.08 0.01 50);
   --secondary: oklch(0.16 0.015 50);
   --secondary-foreground: oklch(0.82 0.03 75);
   --muted: oklch(0.15 0.012 50);
   --muted-foreground: oklch(0.58 0.04 70);
-  --accent: oklch(0.55 0.2 28);              /* Blood Red Accent */
+  --accent: oklch(0.44 0.14 15);             /* Oxblood Accent */
   --accent-foreground: oklch(0.95 0.02 75);
-  --destructive: oklch(0.46 0.22 24);        /* Deep Crimson */
+  --destructive: oklch(0.42 0.16 18);        /* Deep Oxblood */
   --destructive-foreground: oklch(0.9 0.04 70);
-  --border: oklch(0.22 0.025 55);            /* dark stone border */
+  --border: oklch(0.22 0.025 55);            /* dark walnut border */
   --input: oklch(0.14 0.012 50);
-  --ring: oklch(0.62 0.14 75);
-  --chart-1: oklch(0.72 0.16 75);            /* Gold */
-  --chart-2: oklch(0.52 0.22 25);            /* Blood */
-  --chart-3: oklch(0.48 0.12 220);           /* Dragonglass */
-  --chart-4: oklch(0.58 0.14 145);           /* Stark */
-  --chart-5: oklch(0.52 0.18 290);           /* Lannister */
+  --ring: oklch(0.62 0.11 82);
+  --chart-1: oklch(0.7 0.12 82);             /* Brass */
+  --chart-2: oklch(0.45 0.15 18);            /* Oxblood */
+  --chart-3: oklch(0.45 0.09 165);           /* Board Green */
+  --chart-4: oklch(0.58 0.1 145);            /* Tournament Green */
+  --chart-5: oklch(0.55 0.06 75);            /* Ivory Brass */
   --sidebar: oklch(0.1 0.014 50);
   --sidebar-foreground: oklch(0.85 0.035 75);
-  --sidebar-primary: oklch(0.72 0.16 75);
+  --sidebar-primary: oklch(0.7 0.12 82);
   --sidebar-primary-foreground: oklch(0.08 0.01 50);
   --sidebar-accent: oklch(0.16 0.015 50);
   --sidebar-accent-foreground: oklch(0.82 0.03 75);
   --sidebar-border: oklch(0.2 0.022 55);
-  --sidebar-ring: oklch(0.62 0.14 75);
+  --sidebar-ring: oklch(0.62 0.11 82);
   --success: oklch(0.48 0.15 145);
   --success-foreground: oklch(0.95 0.02 75);
   --warning: oklch(0.68 0.16 75);
@@ -146,29 +146,29 @@
   --info: oklch(0.44 0.14 220);
   --info-foreground: oklch(0.95 0.02 75);
 
-  /* Warroom surface tokens — dark (Iron Throne obsidian) */
+  /* Gambit surface tokens — dark (ebony study, walnut panelling) */
   --wr-void: #060504;
   --wr-black: #0a0805;
   --wr-obsidian: #14100c;
-  --wr-rampart: #231c16;
-  --wr-stone: #2a2520;
-  --wr-slate: #2e2520;
+  --wr-rampart: #241a12;
+  --wr-stone: #2b211a;
+  --wr-slate: #2e231b;
   --wr-ash: #4a3f38;
   --wr-smoke: #978878;     /* WCAG AA secondary text on dark surfaces (was #7a6a5f) */
   --wr-ivory: #e8d5b7;
   --wr-ghost: #f2ece0;
-  --wr-electrum: #daa520;
+  --wr-electrum: #c9a45a;
   --wr-parchment: #f5e6c8;
   --wr-ink: #1a1208;
-  /* Theme-responsive accents — dark: bright values as originally tuned */
-  --wr-gold: #c9a227;
-  --wr-gold-bright: #e8c84a;
+  /* Theme-responsive accents — dark: aged brass, candle amber */
+  --wr-gold: #b3903e;
+  --wr-gold-bright: #d9b45f;
   --wr-silver: #a8a8a8;
-  --wr-ember: #ff6b00;
-  --wr-gold-glow: rgba(240, 192, 64, 0.2);
-  --wr-dragonglass: #0f1a2e;
-  --wr-shadow-gold: 0 0 20px rgba(201, 150, 42, 0.3), 0 0 60px rgba(201, 150, 42, 0.1);
-  --wr-shadow-crimson: 0 0 20px rgba(139, 26, 26, 0.4);
+  --wr-ember: #d98e2b;
+  --wr-gold-glow: rgba(217, 180, 95, 0.2);
+  --wr-dragonglass: #12241a;
+  --wr-shadow-gold: 0 0 20px rgba(179, 144, 62, 0.3), 0 0 60px rgba(179, 144, 62, 0.1);
+  --wr-shadow-crimson: 0 0 20px rgba(92, 26, 36, 0.45);
   --wr-shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
   --wr-glow-ember: 0 0 30px rgba(200, 75, 15, 0.5);
 
@@ -178,7 +178,7 @@
   --wr-panel-bg: rgba(14, 11, 8, 0.6);
   --wr-panel-bg-heavy: rgba(14, 11, 8, 0.7);
   --wr-panel-bg-darker: rgba(0, 0, 0, 0.35);
-  --wr-offer-portrait-bg: linear-gradient(160deg, rgba(201, 162, 39, 0.14), rgba(14, 11, 8, 0.85));
+  --wr-offer-portrait-bg: linear-gradient(160deg, rgba(179, 144, 62, 0.14), rgba(14, 11, 8, 0.85));
   --wr-parchment-wash: linear-gradient(rgba(16, 14, 10, 0.82), rgba(16, 14, 10, 0.86));
   --wr-overlay-bg: rgba(0, 0, 0, 0.65);
 }
@@ -186,8 +186,8 @@
 @theme inline {
   --font-sans: 'Geist', 'Geist Fallback';
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --font-display: 'Cinzel', 'Georgia', serif;
-  --font-display-decorative: var(--font-cinzel-decorative), 'Cinzel', 'Georgia', serif;
+  --font-display: var(--font-got), 'Georgia', serif;
+  --font-display-decorative: var(--font-cinzel-decorative), var(--font-got), 'Georgia', serif;
   --font-body: var(--font-body-serif), 'EB Garamond', 'Georgia', serif;
   --font-data: var(--font-data-mono), 'JetBrains Mono', 'Geist Mono', monospace;
 
@@ -200,12 +200,12 @@
      light = darker AA-passing antique variants). Gold buttons use a hardcoded
      gradient, so fills are unaffected — only token-driven text/borders adapt. */
   --color-warroom-ember: var(--wr-ember);
-  --color-warroom-ember-bright: #ff9933;
+  --color-warroom-ember-bright: #e5a94d;
   --color-warroom-gold: var(--wr-gold);
   --color-warroom-gold-bright: var(--wr-gold-bright);
-  --color-warroom-gold-dark: #8b6914;
-  --color-warroom-crimson: #8b1a1a;
-  --color-warroom-crimson-bright: #c23b3b;
+  --color-warroom-gold-dark: #7a6224;
+  --color-warroom-crimson: #5c1a24;
+  --color-warroom-crimson-bright: #8e3644;
   --color-warroom-silver: var(--wr-silver);
   --color-warroom-verdant: #2d6a4f;
   --color-warroom-sapphire: #1a3a5c;
@@ -301,15 +301,15 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='none'/%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0,0,0,0.03)'/%3E%3C/svg%3E");
   }
 
-  /* GOT Display font class */
+  /* Gambit display font class (legacy .font-got name kept) */
   .font-got {
-    font-family: 'Cinzel', 'Georgia', serif;
+    font-family: var(--font-got), 'Georgia', serif;
     letter-spacing: 0.04em;
   }
 
   h1 {
     @apply text-4xl font-bold tracking-tight;
-    font-family: 'Cinzel', 'Georgia', serif;
+    font-family: var(--font-got), 'Georgia', serif;
   }
 
   h2 {
@@ -350,7 +350,7 @@
 }
 
 @layer components {
-  /* GOT Stone Card — light mode defaults, dark overrides below */
+  /* Study Stone Card — light mode defaults, dark overrides below */
   .card-base {
     @apply rounded-sm bg-card text-card-foreground shadow-sm border border-border transition-all duration-300;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08), inset 0 1px 0 rgba(201,162,39,0.06);
@@ -369,10 +369,10 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 20px rgba(201,162,39,0.06), inset 0 1px 0 rgba(201,162,39,0.12);
   }
 
-  /* GOT Stone Card — thematic card */
+  /* Study Stone Card — thematic card (legacy .got-stone-card name kept) */
   .got-stone-card {
-    background: linear-gradient(135deg, var(--card) 0%, color-mix(in oklch, var(--card), #c9a22710 100%) 100%);
-    border: 1px solid color-mix(in oklch, var(--border), #c9a227 15%);
+    background: linear-gradient(135deg, var(--card) 0%, color-mix(in oklch, var(--card), #b3903e10 100%) 100%);
+    border: 1px solid color-mix(in oklch, var(--border), #b3903e 15%);
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(201,162,39,0.08), inset 0 -1px 0 rgba(0,0,0,0.04);
     position: relative;
@@ -395,7 +395,7 @@
   .badge-primary {
     @apply inline-flex items-center px-3 py-1 rounded-sm text-xs font-semibold whitespace-nowrap;
     background: rgba(201,162,39,0.12);
-    color: #c9a227;
+    color: #b3903e;
     border: 1px solid rgba(201,162,39,0.3);
     letter-spacing: 0.05em;
   }
@@ -407,7 +407,7 @@
   .badge-warning {
     @apply inline-flex items-center px-3 py-1 rounded-sm text-xs font-semibold whitespace-nowrap;
     background: rgba(201,162,39,0.15);
-    color: #c9a227;
+    color: #b3903e;
     border: 1px solid rgba(201,162,39,0.25);
   }
 
@@ -494,12 +494,12 @@
 .gradient-text-animate {
   background: linear-gradient(
     90deg,
-    #c9a227 0%,
-    #e8c84a 18%,
-    #ff6b00 38%,
-    #8b1a1a 58%,
-    #e8c84a 80%,
-    #c9a227 100%
+    #b3903e 0%,
+    #d9b45f 18%,
+    #d98e2b 38%,
+    #5c1a24 58%,
+    #d9b45f 80%,
+    #b3903e 100%
   );
   background-size: 300% auto;
   -webkit-background-clip: text;
@@ -509,7 +509,7 @@
   animation: gradient-shift 6s linear infinite;
   /* A faint warm glow so the text still reads against dark bg even before
      the animation kicks in (and for users with reduced motion). */
-  filter: drop-shadow(0 0 14px rgba(201, 162, 39, 0.32));
+  filter: drop-shadow(0 0 14px rgba(179, 144, 62, 0.32));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -569,8 +569,8 @@
     top: -1px;
     left: -1px;
     filter:
-      drop-shadow(0 0 4px rgba(201, 162, 39, 0.7))
-      drop-shadow(0 0 10px rgba(201, 162, 39, 0.4));
+      drop-shadow(0 0 4px rgba(179, 144, 62, 0.7))
+      drop-shadow(0 0 10px rgba(179, 144, 62, 0.4));
     transition: transform 140ms ease, filter 180ms ease;
     transform-origin: 0 0;
   }
@@ -579,7 +579,7 @@
     transform: scale(1.12);
     filter:
       drop-shadow(0 0 6px rgba(240, 200, 80, 0.95))
-      drop-shadow(0 0 16px rgba(201, 162, 39, 0.55));
+      drop-shadow(0 0 16px rgba(179, 144, 62, 0.55));
   }
 
   .wr-cursor.wr-cursor--click .wr-cursor__arrow {
@@ -595,7 +595,7 @@
 /* ============================================================
  * WAR ROOM — Pitch Simulation Page Layout
  * Used by app/assessment/[assessmentId]/war-room/page.tsx
- * Iron Throne palette: obsidian black, molten gold, blood crimson.
+ * Grandmaster's Study palette: ebony black, aged brass, deep oxblood.
  * ============================================================ */
 
 .warroom-page {
@@ -604,8 +604,8 @@
   min-height: 100vh;
   color: var(--foreground);
   background:
-    radial-gradient(ellipse at top, rgba(201, 162, 39, 0.06), transparent 55%),
-    radial-gradient(ellipse at bottom, rgba(139, 26, 26, 0.05), transparent 60%),
+    radial-gradient(ellipse at top, rgba(179, 144, 62, 0.06), transparent 55%),
+    radial-gradient(ellipse at bottom, rgba(92, 26, 36, 0.05), transparent 60%),
     linear-gradient(180deg, var(--background) 0%, var(--wr-page-grad-end) 100%);
   font-family: var(--font-body), 'EB Garamond', Georgia, serif;
 }
@@ -622,9 +622,9 @@
   padding: 0.9rem 1.75rem;
   backdrop-filter: blur(14px);
   background: var(--wr-header-bg);
-  border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+  border-bottom: 1px solid rgba(179, 144, 62, 0.22);
   box-shadow:
-    0 1px 0 rgba(201, 162, 39, 0.08),
+    0 1px 0 rgba(179, 144, 62, 0.08),
     0 6px 24px rgba(0, 0, 0, 0.55);
 }
 
@@ -635,18 +635,18 @@
 }
 
 .warroom-title {
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--color-warroom-gold);
-  text-shadow: 0 0 24px rgba(201, 162, 39, 0.35);
+  text-shadow: 0 0 24px rgba(179, 144, 62, 0.35);
   text-transform: uppercase;
   margin: 0;
 }
 
 .warroom-subtitle {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.22em;
@@ -672,26 +672,26 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.7rem 1.4rem;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-warroom-parchment);
-  background: linear-gradient(135deg, #4a0d0d 0%, #8b1a1a 50%, #4a0d0d 100%);
+  background: linear-gradient(135deg, #3d0f16 0%, #5c1a24 50%, #3d0f16 100%);
   border: 1px solid rgba(194, 59, 59, 0.55);
   border-radius: 3px;
   box-shadow:
-    0 2px 10px rgba(139, 26, 26, 0.45),
+    0 2px 10px rgba(92, 26, 36, 0.45),
     inset 0 1px 0 rgba(255, 120, 120, 0.18);
   cursor: pointer;
   transition: all 0.3s var(--ease-regal);
 }
 
 .end-btn:hover {
-  background: linear-gradient(135deg, #631414 0%, #a82020 50%, #631414 100%);
+  background: linear-gradient(135deg, #4a1420 0%, #a82020 50%, #4a1420 100%);
   box-shadow:
-    0 4px 18px rgba(139, 26, 26, 0.7),
+    0 4px 18px rgba(92, 26, 36, 0.7),
     0 0 24px rgba(194, 59, 59, 0.35),
     inset 0 1px 0 rgba(255, 140, 140, 0.22);
   transform: translateY(-1px);
@@ -714,16 +714,16 @@
 }
 
 .loading-icon {
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: 4rem;
   font-weight: 700;
   color: var(--color-warroom-gold);
-  text-shadow: 0 0 30px rgba(201, 162, 39, 0.5);
+  text-shadow: 0 0 30px rgba(179, 144, 62, 0.5);
   letter-spacing: 0.08em;
 }
 
 .loading-text {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -743,7 +743,7 @@
 .loading-bar {
   width: 280px;
   height: 3px;
-  background: rgba(201, 162, 39, 0.1);
+  background: rgba(179, 144, 62, 0.1);
   border-radius: 999px;
   overflow: hidden;
   position: relative;
@@ -783,18 +783,18 @@
   gap: 0.4rem;
   padding: 0.35rem 1.1rem;
   margin-bottom: 1.5rem;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--color-warroom-gold);
-  background: rgba(201, 162, 39, 0.08);
-  border: 1px solid rgba(201, 162, 39, 0.35);
+  background: rgba(179, 144, 62, 0.08);
+  border: 1px solid rgba(179, 144, 62, 0.35);
   border-radius: 2px;
   box-shadow:
-    0 0 16px rgba(201, 162, 39, 0.08),
-    inset 0 1px 0 rgba(201, 162, 39, 0.1);
+    0 0 16px rgba(179, 144, 62, 0.08),
+    inset 0 1px 0 rgba(179, 144, 62, 0.1);
 }
 
 .phase-badge::before,
@@ -805,7 +805,7 @@
 }
 
 .phase-title {
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: clamp(1.85rem, 3.5vw, 2.6rem);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -813,7 +813,7 @@
   text-align: center;
   margin: 0 0 0.85rem;
   color: var(--color-warroom-parchment);
-  text-shadow: 0 0 32px rgba(201, 162, 39, 0.22);
+  text-shadow: 0 0 32px rgba(179, 144, 62, 0.22);
 }
 
 .phase-desc {
@@ -833,10 +833,10 @@
 
 /* Pitch template (collapsible) */
 .pitch-template {
-  border: 1px solid rgba(201, 162, 39, 0.22);
+  border: 1px solid rgba(179, 144, 62, 0.22);
   border-radius: 4px;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.035), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.035), transparent 70%),
     var(--wr-panel-bg);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
@@ -845,7 +845,7 @@
 
 .pitch-template-summary {
   cursor: pointer;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -880,7 +880,7 @@
 }
 
 .template-helper-label {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -897,7 +897,7 @@
   color: var(--color-warroom-parchment);
   padding: 1rem 1.1rem;
   background: var(--wr-panel-bg-darker);
-  border: 1px solid rgba(201, 162, 39, 0.18);
+  border: 1px solid rgba(179, 144, 62, 0.18);
   border-radius: 4px;
 }
 
@@ -906,9 +906,9 @@
   position: relative;
   padding: 2.25rem 1.75rem;
   border-radius: 4px;
-  border: 1px dashed rgba(201, 162, 39, 0.3);
+  border: 1px dashed rgba(179, 144, 62, 0.3);
   background:
-    radial-gradient(ellipse at center, rgba(201, 162, 39, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse at center, rgba(179, 144, 62, 0.04) 0%, transparent 70%),
     var(--wr-panel-bg);
   text-align: center;
   backdrop-filter: blur(6px);
@@ -921,7 +921,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(201, 162, 39, 0.04), transparent 60%);
+  background: linear-gradient(135deg, rgba(179, 144, 62, 0.04), transparent 60%);
   pointer-events: none;
 }
 
@@ -960,18 +960,18 @@
   justify-content: center;
   min-height: 3.25rem;
   padding: 0.85rem 2rem;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-warroom-ink);
-  background: linear-gradient(135deg, #b8891e 0%, #c9a227 50%, #b8891e 100%);
+  background: linear-gradient(135deg, #9a7a33 0%, #b3903e 50%, #9a7a33 100%);
   background-size: 200% 100%;
-  border: 1px solid rgba(201, 162, 39, 0.55);
+  border: 1px solid rgba(179, 144, 62, 0.55);
   border-radius: 3px;
   box-shadow:
-    0 3px 14px rgba(201, 162, 39, 0.35),
+    0 3px 14px rgba(179, 144, 62, 0.35),
     inset 0 1px 0 rgba(255, 220, 100, 0.32);
   cursor: pointer;
   transition: all 0.3s var(--ease-regal);
@@ -980,8 +980,8 @@
 .mic-button:hover:not(:disabled) {
   background-position: 100% 0;
   box-shadow:
-    0 5px 24px rgba(201, 162, 39, 0.55),
-    0 0 40px rgba(201, 162, 39, 0.22),
+    0 5px 24px rgba(179, 144, 62, 0.55),
+    0 0 40px rgba(179, 144, 62, 0.22),
     inset 0 1px 0 rgba(255, 220, 100, 0.4);
   transform: translateY(-1px);
 }
@@ -992,7 +992,7 @@
 }
 
 .mic-button.active {
-  background: linear-gradient(135deg, #631414 0%, #c23b3b 50%, #631414 100%);
+  background: linear-gradient(135deg, #4a1420 0%, #8e3644 50%, #4a1420 100%);
   border-color: rgba(194, 59, 59, 0.65);
   color: var(--color-warroom-parchment);
   box-shadow:
@@ -1053,7 +1053,7 @@
   margin-top: 1rem;
   height: 3px;
   width: 100%;
-  background: rgba(201, 162, 39, 0.1);
+  background: rgba(179, 144, 62, 0.1);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -1070,12 +1070,12 @@
   text-align: center;
   padding: 3rem 1.5rem;
   background: var(--wr-panel-bg);
-  border: 1px solid rgba(201, 162, 39, 0.18);
+  border: 1px solid rgba(179, 144, 62, 0.18);
   border-radius: 4px;
 }
 
 .analyzing-state h3 {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1095,7 +1095,7 @@
   height: 3rem;
   margin: 0 auto;
   border-radius: 999px;
-  border: 2px solid rgba(201, 162, 39, 0.15);
+  border: 2px solid rgba(179, 144, 62, 0.15);
   border-top-color: var(--color-warroom-gold);
   animation: spin 1s linear infinite;
 }
@@ -1114,18 +1114,18 @@
   gap: 0.5rem;
   padding: 0.95rem 1.8rem;
   min-height: 3.25rem;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-warroom-ink);
-  background: linear-gradient(135deg, #b8891e 0%, #c9a227 45%, #d4aa2a 55%, #b8891e 100%);
+  background: linear-gradient(135deg, #9a7a33 0%, #b3903e 45%, #c4a04a 55%, #9a7a33 100%);
   background-size: 200% 100%;
-  border: 1px solid rgba(201, 162, 39, 0.55);
+  border: 1px solid rgba(179, 144, 62, 0.55);
   border-radius: 3px;
   box-shadow:
-    0 2px 12px rgba(201, 162, 39, 0.35),
+    0 2px 12px rgba(179, 144, 62, 0.35),
     inset 0 1px 0 rgba(255, 220, 100, 0.3);
   cursor: pointer;
   transition: all 0.3s var(--ease-regal);
@@ -1138,8 +1138,8 @@
 .final-report-btn:not(:disabled):hover {
   background-position: 100% 0;
   box-shadow:
-    0 4px 24px rgba(201, 162, 39, 0.55),
-    0 0 40px rgba(201, 162, 39, 0.22),
+    0 4px 24px rgba(179, 144, 62, 0.55),
+    0 0 40px rgba(179, 144, 62, 0.22),
     inset 0 1px 0 rgba(255, 220, 100, 0.4);
   transform: translateY(-2px);
 }
@@ -1157,15 +1157,15 @@
   padding: 1.75rem;
   margin-top: 1rem;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.04), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.04), transparent 70%),
     var(--wr-panel-bg-heavy);
-  border: 1px solid rgba(201, 162, 39, 0.25);
+  border: 1px solid rgba(179, 144, 62, 0.25);
   border-radius: 4px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(201, 162, 39, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(179, 144, 62, 0.08);
 }
 
 .analysis-title {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1187,12 +1187,12 @@
   align-items: center;
   padding: 0.85rem 0.5rem;
   background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(201, 162, 39, 0.18);
+  border: 1px solid rgba(179, 144, 62, 0.18);
   border-radius: 4px;
 }
 
 .score-label {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -1202,11 +1202,11 @@
 }
 
 .score-value {
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--color-warroom-gold);
-  text-shadow: 0 0 14px rgba(201, 162, 39, 0.25);
+  text-shadow: 0 0 14px rgba(179, 144, 62, 0.25);
 }
 
 .analysis-transcript {
@@ -1219,7 +1219,7 @@
 
 .analysis-label {
   display: block;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -1272,9 +1272,9 @@
 .investor-question {
   padding: 1.25rem 1.4rem;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.06), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.06), transparent 70%),
     var(--wr-panel-bg-heavy);
-  border: 1px solid rgba(201, 162, 39, 0.2);
+  border: 1px solid rgba(179, 144, 62, 0.2);
   border-left: 4px solid var(--color-warroom-gold);
   border-radius: 0 4px 4px 0;
   margin-bottom: 1.25rem;
@@ -1282,7 +1282,7 @@
 
 .question-label {
   display: inline-block;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1304,16 +1304,16 @@
   padding: 1.25rem 1.4rem;
   margin-top: 1rem;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.06), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.06), transparent 70%),
     var(--wr-panel-bg-heavy);
-  border: 1px solid rgba(201, 162, 39, 0.2);
+  border: 1px solid rgba(179, 144, 62, 0.2);
   border-left: 4px solid var(--color-warroom-ember);
   border-radius: 0 4px 4px 0;
 }
 
 .reaction-label {
   display: block;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1340,18 +1340,18 @@
 .scorecard {
   padding: 1.5rem;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.04), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.04), transparent 70%),
     var(--wr-panel-bg-heavy);
-  border: 1px solid rgba(201, 162, 39, 0.22);
+  border: 1px solid rgba(179, 144, 62, 0.22);
   border-radius: 4px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(201, 162, 39, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(179, 144, 62, 0.08);
   transition: all 0.3s var(--ease-regal);
 }
 
 .scorecard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(201, 162, 39, 0.18);
-  border-color: rgba(201, 162, 39, 0.45);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(179, 144, 62, 0.18);
+  border-color: rgba(179, 144, 62, 0.45);
 }
 
 .sc-header {
@@ -1368,16 +1368,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--color-warroom-gold);
-  background: rgba(201, 162, 39, 0.12);
-  border: 2px solid rgba(201, 162, 39, 0.35);
+  background: rgba(179, 144, 62, 0.12);
+  border: 2px solid rgba(179, 144, 62, 0.35);
 }
 
 .sc-name {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1387,7 +1387,7 @@
 
 .sc-decision {
   display: inline-block;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -1401,7 +1401,7 @@
   gap: 1rem;
   padding: 0.85rem 1rem;
   background: var(--wr-panel-bg-darker);
-  border: 1px solid rgba(201, 162, 39, 0.15);
+  border: 1px solid rgba(179, 144, 62, 0.15);
   border-radius: 3px;
   font-family: var(--font-data), 'JetBrains Mono', monospace;
   font-size: 0.88rem;
@@ -1432,11 +1432,11 @@
   overflow: hidden;
   cursor: pointer;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.04), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.04), transparent 70%),
     var(--wr-panel-bg-heavy);
   border: 1px solid rgba(16, 185, 129, 0.28);
   border-radius: 6px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(201, 162, 39, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(179, 144, 62, 0.08);
   transition:
     transform 0.3s var(--ease-regal),
     box-shadow 0.3s var(--ease-regal),
@@ -1455,7 +1455,7 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--wr-offer-portrait-bg);
-  border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+  border-bottom: 1px solid rgba(179, 144, 62, 0.22);
 }
 
 .offer-portrait img {
@@ -1473,10 +1473,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display-decorative), 'Cinzel Decorative', serif;
+  font-family: var(--font-display-decorative), Georgia, serif;
   font-size: 3.25rem;
   font-weight: 700;
-  color: rgba(201, 162, 39, 0.45);
+  color: rgba(179, 144, 62, 0.45);
 }
 
 .offer-tag {
@@ -1484,7 +1484,7 @@
   left: 0.6rem;
   bottom: 0.6rem;
   padding: 0.22rem 0.6rem;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1504,7 +1504,7 @@
 }
 
 .offer-name {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1518,7 +1518,7 @@
   gap: 1rem;
   padding: 0.7rem 0.9rem;
   background: var(--wr-panel-bg-darker);
-  border: 1px solid rgba(201, 162, 39, 0.15);
+  border: 1px solid rgba(179, 144, 62, 0.15);
   border-radius: 3px;
   font-family: var(--font-data), 'JetBrains Mono', monospace;
   font-size: 0.9rem;
@@ -1543,7 +1543,7 @@
 
 .offer-cta {
   text-align: center;
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1563,14 +1563,14 @@
 .negotiation-room {
   padding: 1.5rem;
   background:
-    linear-gradient(135deg, rgba(201, 162, 39, 0.03), transparent 70%),
+    linear-gradient(135deg, rgba(179, 144, 62, 0.03), transparent 70%),
     var(--wr-panel-bg-heavy);
-  border: 1px solid rgba(201, 162, 39, 0.22);
+  border: 1px solid rgba(179, 144, 62, 0.22);
   border-radius: 4px;
 }
 
 .neg-header h3 {
-  font-family: var(--font-display), 'Cinzel', Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1749,6 +1749,32 @@
   .end-btn {
     width: 100%;
   }
+}
+
+/* ── Chess motif utilities (Grandmaster's Study) ─────────────────────────
+   Subtle, professional accents: board grain for panel backdrops, algebraic
+   notation styling for stage/move markers, brass hardware edges for cards. */
+.chessboard-grain {
+  background-image: repeating-conic-gradient(
+    from 0deg,
+    rgba(245, 230, 200, 0.016) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 96px 96px;
+}
+
+.notation-accent {
+  font-family: var(--font-data);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--wr-gold);
+}
+
+.brass-edge {
+  border: 1px solid color-mix(in srgb, var(--wr-gold) 30%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--wr-gold) 12%, transparent),
+    0 0 14px color-mix(in srgb, var(--wr-gold) 8%, transparent);
 }
 
 /* ── Reduced motion ───────────────────────────────────────────────────────

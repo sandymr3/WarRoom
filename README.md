@@ -1,10 +1,10 @@
-# KK's War Room - Entrepreneurial Assessment Platform
+# The Gambit - Entrepreneurial Assessment Platform
 
-A comprehensive Next.js 16 application for assessing entrepreneurial competencies through adaptive questioning, real-time state tracking, and AI-powered personalized insights.
+A comprehensive Next.js 16 application for assessing entrepreneurial competencies through adaptive questioning, real-time state tracking, and AI-powered personalized insights. Themed as a grandmaster's chess study (user-facing copy only; internal ids, routes, and CSS token names keep their legacy `warroom`/`war-room` naming).
 
 ## 🎯 Overview
 
-The War Room is a full-stack entrepreneurial assessment platform that evaluates 16 core competencies across 6 business stages, providing:
+The Gambit is a full-stack entrepreneurial assessment platform that evaluates 16 core competencies across 6 business stages, providing:
 - **150+ adaptive questions** spanning pre-launch through growth stages
 - **Real-time consequence simulation** tracking financial, team, and customer metrics
 - **AI-powered analysis** generating personalized development roadmaps
@@ -303,7 +303,7 @@ See `/src/lib/services/placeholder-service.ts` for implementation stubs.
 
 ## 📄 License
 
-Proprietary - KK's War Room
+Proprietary - The Gambit
 
 ## 🆘 Support
 

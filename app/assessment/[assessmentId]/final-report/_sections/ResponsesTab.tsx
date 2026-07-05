@@ -117,7 +117,7 @@ export function ResponsesTab({ report }: { report: EvaluationReport }) {
         .responses-subtitle { color: var(--color-warroom-smoke); font-size: 0.9rem; font-family: var(--font-body, serif); }
         .stage-group { margin-bottom: 2rem; }
         .stage-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-        .stage-badge { background: rgba(201,162,39,0.12); color: var(--color-warroom-gold); padding: 0.25rem 0.8rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-display); }
+        .stage-badge { background: rgba(179,144,62,0.12); color: var(--color-warroom-gold); padding: 0.25rem 0.8rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-display); }
         .response-count { font-size: 0.8rem; color: var(--color-warroom-smoke); }
 
         .response-accordion :global(.response-item) {

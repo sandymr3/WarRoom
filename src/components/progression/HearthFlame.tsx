@@ -51,7 +51,7 @@ export function HearthFlame({ hearth, showLabel = true, size = 22, className }: 
           className="text-[11px] uppercase tracking-[0.12em] text-[color:var(--color-warroom-smoke)]"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          {lit ? `${weeks}-week hearth` : 'Hearth unlit'}
+          {lit ? `${weeks}-week candle` : 'Candle unlit'}
         </span>
       )}
     </div>

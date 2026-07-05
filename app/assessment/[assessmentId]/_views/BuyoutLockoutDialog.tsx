@@ -59,7 +59,7 @@ export function BuyoutLockoutDialog({ open, company, amount, onContinue }: Buyou
               <h2
                 className="text-2xl font-bold"
                 style={{
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  fontFamily: "var(--font-got), Georgia, serif",
                   color: '#e8e0d0',
                   letterSpacing: '0.06em',
                 }}
@@ -87,7 +87,7 @@ export function BuyoutLockoutDialog({ open, company, amount, onContinue }: Buyou
                 border: '1px solid rgba(16,185,129,0.55)',
                 borderRadius: '3px',
                 color: '#a7f3d0',
-                fontFamily: "'Cinzel', Georgia, serif",
+                fontFamily: "var(--font-got), Georgia, serif",
                 letterSpacing: '0.12em',
                 cursor: 'pointer',
               }}

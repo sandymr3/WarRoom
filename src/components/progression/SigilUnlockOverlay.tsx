@@ -61,7 +61,7 @@ export function SigilUnlockOverlay({ sigils, onClose }: SigilUnlockOverlayProps)
         style={{ background: 'radial-gradient(ellipse at center, rgba(10,8,6,0.97), rgba(5,4,3,0.99))' }}
         role="dialog"
         aria-modal="true"
-        aria-label={`Sigil earned: ${def?.name ?? current.id}`}
+        aria-label={`Norm earned: ${def?.name ?? current.id}`}
       >
         <EmberParticles density={14} speed={0.7} />
 
@@ -76,7 +76,7 @@ export function SigilUnlockOverlay({ sigils, onClose }: SigilUnlockOverlayProps)
             className="text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[color:var(--color-warroom-gold)]/80"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Sigil Earned
+            Norm Earned
           </p>
 
           <SigilCrest
@@ -90,7 +90,7 @@ export function SigilUnlockOverlay({ sigils, onClose }: SigilUnlockOverlayProps)
 
           <h2
             className="text-2xl font-bold tracking-wide text-[color:var(--color-warroom-ghost)] sm:text-3xl"
-            style={{ fontFamily: 'var(--font-display)', textShadow: '0 0 26px rgba(201,162,39,0.3)' }}
+            style={{ fontFamily: 'var(--font-display)', textShadow: '0 0 26px rgba(179,144,62,0.3)' }}
           >
             {def?.name ?? current.id}
           </h2>
@@ -99,7 +99,7 @@ export function SigilUnlockOverlay({ sigils, onClose }: SigilUnlockOverlayProps)
             className="text-[0.6rem] uppercase tracking-[0.22em]"
             style={{ fontFamily: 'var(--font-display)', color: style.bright }}
           >
-            {style.label} Sigil
+            {style.label} Norm
           </p>
 
           {def?.description && (

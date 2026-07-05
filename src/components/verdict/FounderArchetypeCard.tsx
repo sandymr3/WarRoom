@@ -77,7 +77,7 @@ export function FounderArchetypeCard({
             background:
               'linear-gradient(135deg, #1a1208 0%, #2a1c0a 30%, #1a1208 70%, #0a0805 100%)',
             boxShadow:
-              '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(201,162,39,0.12)',
+              '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(179,144,62,0.12)',
           }}
         >
           {/* Gilt corners */}
@@ -102,12 +102,12 @@ export function FounderArchetypeCard({
             className="pointer-events-none absolute inset-x-6 top-3 h-px"
             style={{
               background:
-                'linear-gradient(90deg, transparent, rgba(232,200,74,0.85), transparent)',
+                'linear-gradient(90deg, transparent, rgba(217,180,95,0.85), transparent)',
             }}
           />
 
           {/* Sigil */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-25 [filter:drop-shadow(0_0_18px_rgba(201,162,39,0.5))]">
+          <div className="absolute inset-0 flex items-center justify-center opacity-25 [filter:drop-shadow(0_0_18px_rgba(179,144,62,0.5))]">
             <span className="font-display text-[10rem] leading-none text-[color:var(--color-warroom-gold)]">
               ⚜
             </span>
@@ -123,7 +123,7 @@ export function FounderArchetypeCard({
             <div>
               <h2
                 className="font-display text-3xl font-bold uppercase tracking-wide text-[color:var(--color-warroom-gold-bright)] sm:text-4xl"
-                style={{ textShadow: '0 0 28px rgba(232,200,74,0.5)' }}
+                style={{ textShadow: '0 0 28px rgba(217,180,95,0.5)' }}
               >
                 {archetypeName}
               </h2>
@@ -145,7 +145,7 @@ export function FounderArchetypeCard({
             background:
               'linear-gradient(135deg, #2a1c0a 0%, #1a1208 80%)',
             boxShadow:
-              '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(201,162,39,0.12)',
+              '0 20px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(179,144,62,0.12)',
           }}
         >
           <p className="mb-3 font-display text-[0.6rem] uppercase tracking-[0.3em] text-[color:var(--color-warroom-gold)]/70">

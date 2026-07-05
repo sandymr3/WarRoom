@@ -39,12 +39,12 @@ export function HouseBanner({
           size={104}
           primary={palette.primary}
           secondary={palette.secondary}
-          title={`${shapeName} of House ${founderName ?? ''}`.trim()}
+          title={`${shapeName} of ${founderName ?? ''} Club`.trim()}
         />
         {founderName && (
           <h1
             className="text-2xl font-bold tracking-wide text-[color:var(--color-warroom-ghost)] sm:text-3xl"
-            style={{ fontFamily: 'var(--font-display)', textShadow: '0 0 24px rgba(201,162,39,0.22)' }}
+            style={{ fontFamily: 'var(--font-display)', textShadow: '0 0 24px rgba(179,144,62,0.22)' }}
           >
             {founderName}
           </h1>

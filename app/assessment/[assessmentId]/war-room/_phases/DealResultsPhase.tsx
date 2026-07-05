@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Mic, MicOff, Loader2, RefreshCw, CheckCircle2, TrendingUp, X, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { investorDisplayName } from '@/src/lib/helpers'
 
 interface DealOffer {
   investorName: string
@@ -58,7 +59,7 @@ export function DealResultsPhase({
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
             className="p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 text-sm text-center"
           >
-            {walkedAwayInvestor} walked away from the deal.
+            {investorDisplayName(walkedAwayInvestor)} walked away from the deal.
           </motion.div>
         )}
       </AnimatePresence>
@@ -74,7 +75,7 @@ export function DealResultsPhase({
             <span className="text-3xl font-black">{formatCurrency(acceptedDealTerms.capital)}</span>
             <span className="text-gray-400 ml-2">for {acceptedDealTerms.equity}% equity</span>
           </div>
-          <p className="text-gray-400 text-sm">from {acceptedDealTerms.investorName}</p>
+          <p className="text-gray-400 text-sm">from {investorDisplayName(acceptedDealTerms.investorName)}</p>
           <Button onClick={onEndSimulation} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold mt-4">
             Go to Final Report →
           </Button>
@@ -96,7 +97,7 @@ export function DealResultsPhase({
                 className="w-full text-left p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-white/10 transition-all space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-white">{offer.investorName}</span>
+                  <span className="font-bold text-white">{investorDisplayName(offer.investorName)}</span>
                   <TrendingUp className="h-4 w-4 text-emerald-400" />
                 </div>
                 <div className="text-2xl font-black text-emerald-400">{formatCurrency(offer.capital)}</div>
@@ -113,7 +114,7 @@ export function DealResultsPhase({
         <div className="space-y-4">
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-white">{selectedOffer.investorName}</span>
+              <span className="font-bold text-white">{investorDisplayName(selectedOffer.investorName)}</span>
               <Button variant="ghost" size="sm" onClick={onRejectDeal} className="text-gray-500 hover:text-red-400 text-xs">
                 <X className="h-3 w-3 mr-1" />Walk Away
               </Button>
@@ -127,7 +128,7 @@ export function DealResultsPhase({
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {negHistory.map((msg, i) => (
                 <div key={i} className={cn('p-3 rounded-xl text-sm', msg.type === 'investor' ? 'bg-white/5 border border-white/10 text-gray-300' : 'bg-primary/10 border border-primary/20 text-primary ml-8')}>
-                  <div className="text-xs font-bold mb-1 opacity-60">{msg.sender}</div>
+                  <div className="text-xs font-bold mb-1 opacity-60">{msg.type === 'investor' ? investorDisplayName(msg.sender) : msg.sender}</div>
                   {msg.msg}
                 </div>
               ))}

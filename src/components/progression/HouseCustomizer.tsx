@@ -60,7 +60,7 @@ export function HouseCustomizer({ house, rankTier, onSave, className }: HouseCus
     <div className={cn('space-y-7', className)}>
       {/* Crest shapes */}
       <div>
-        <SectionLabel>House Crest</SectionLabel>
+        <SectionLabel>Club Crest</SectionLabel>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
           {HOUSE_SIGILS.map((s) => {
             const unlocked = isUnlocked(s.unlockRank, rankTier)
@@ -83,7 +83,7 @@ export function HouseCustomizer({ house, rankTier, onSave, className }: HouseCus
                 <SigilCrest
                   icon={iconForHouseSigil(s.id)}
                   size={40}
-                  primary="#c9a227"
+                  primary="#b3903e"
                   secondary="#8b6914"
                   locked={!unlocked}
                 />
@@ -134,7 +134,7 @@ export function HouseCustomizer({ house, rankTier, onSave, className }: HouseCus
 
       {/* Words */}
       <div>
-        <SectionLabel>House Words</SectionLabel>
+        <SectionLabel>Club Motto</SectionLabel>
         <div className="mb-3 flex flex-wrap gap-2">
           {HOUSE_WORDS.map((w) => (
             <button
@@ -158,7 +158,7 @@ export function HouseCustomizer({ house, rankTier, onSave, className }: HouseCus
           value={words}
           maxLength={HOUSE_WORDS_MAX}
           onChange={(e) => setWords(e.target.value)}
-          placeholder="Or forge your own…"
+          placeholder="Or write your own…"
           className="w-full rounded-sm border border-[color:var(--color-warroom-stone)]/50 bg-[color:var(--color-warroom-black)]/60 px-3 py-2 text-sm italic text-[color:var(--color-warroom-ivory)] outline-none transition-colors focus:border-[color:var(--color-warroom-gold)]/60"
           style={{ fontFamily: 'var(--font-body, var(--font-display))' }}
         />
@@ -179,7 +179,7 @@ export function HouseCustomizer({ house, rankTier, onSave, className }: HouseCus
         )}
         style={{ fontFamily: 'var(--font-display)' }}
       >
-        {saving ? 'Sealing…' : 'Seal House Decree'}
+        {saving ? 'Saving…' : 'Save Club Identity'}
       </button>
     </div>
   )

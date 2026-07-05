@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Mic, MicOff, Loader2, RefreshCw, CheckCircle2, ChevronRight, Volume2, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Investor } from '@/src/types'
 
 interface InvestorQAPhaseProps {
@@ -47,10 +48,12 @@ export function InvestorQAPhase({
     || (investor as any).question
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     || (investor as any).pitch_question
-    || `${investor.name} will ask you a question about your business model and market strategy. Record your response.`
+    || `${investorDisplayName(investor.name)} will ask you a question about your business model and market strategy. Record your response.`
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const investorFirm = (investor as any).firm || (investor as any).company || (investor as any).specialty || 'Independent Investor'
+
+  const displayName = investorDisplayName(investor.name)
 
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-6">
@@ -61,10 +64,10 @@ export function InvestorQAPhase({
         </div>
         <div className="flex items-center justify-center gap-3 mt-2">
           <div className="h-14 w-14 rounded-full bg-red-600/20 border-2 border-red-600/40 flex items-center justify-center text-2xl font-black text-white">
-            {investor.name.charAt(0)}
+            {displayName.charAt(0)}
           </div>
           <div className="text-left">
-            <h1 className="text-2xl font-black text-white">{investor.name}</h1>
+            <h1 className="text-2xl font-black text-white">{displayName}</h1>
             <p className="text-gray-500 text-sm">{investorFirm}</p>
           </div>
         </div>
@@ -85,7 +88,7 @@ export function InvestorQAPhase({
         <div className="flex items-center gap-2">
           {isPlayingAudio && <Volume2 className="h-4 w-4 text-amber-400 animate-pulse" />}
           <MessageSquare className="h-3.5 w-3.5 text-gray-500" />
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{investor.name} asks:</span>
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{displayName} asks:</span>
         </div>
         <p className="text-white text-sm leading-relaxed font-medium">{investorQuestion}</p>
       </div>
@@ -164,7 +167,7 @@ export function InvestorQAPhase({
           <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-3">
             <div className="flex items-center gap-2">
               {isPlayingAudio && <Volume2 className="h-4 w-4 text-amber-400 animate-pulse" />}
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">{investor.name} follows up:</span>
+              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">{displayName} follows up:</span>
             </div>
             <p className="text-white font-medium">{followupQuestion}</p>
           </div>
@@ -226,7 +229,7 @@ export function InvestorQAPhase({
               <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
                 <div className="flex items-center gap-2 mb-2">
                   {isPlayingAudio && <Volume2 className="h-3.5 w-3.5 text-amber-400 animate-pulse" />}
-                  <div className="text-xs font-bold text-amber-400 uppercase">{investor.name} reacts</div>
+                  <div className="text-xs font-bold text-amber-400 uppercase">{displayName} reacts</div>
                 </div>
                 <p className="text-sm text-amber-100 leading-relaxed">{currentInvestorReaction}</p>
               </div>

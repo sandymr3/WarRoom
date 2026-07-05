@@ -1,7 +1,7 @@
 ﻿import React from "react"
 import { MotionConfig } from 'framer-motion'
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono, Cinzel, Cinzel_Decorative, EB_Garamond, JetBrains_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Cormorant_SC, Cormorant_Garamond, EB_Garamond, JetBrains_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/src/context/AuthContext'
 import { Toaster } from '@/components/ui/toaster'
@@ -13,18 +13,18 @@ import './globals.css'
 
 const geistSans = Geist({ subsets: ['latin'], variable: '--font-sans' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' })
-const cinzel = Cinzel({
+const cormorantSC = Cormorant_SC({
   subsets: ['latin'],
   variable: '--font-got',
-  weight: ['400', '600', '700', '900'],
+  weight: ['400', '600', '700'],
   display: 'swap',
 })
 
-// Premium font stack â€” Iron Throne overhaul
-const cinzelDecorative = Cinzel_Decorative({
+// Premium font stack — Grandmaster's Study overhaul
+const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
   variable: '--font-cinzel-decorative',
-  weight: ['400', '700'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -44,9 +44,9 @@ const jetBrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "KK's War Room â€” Forge Your Legacy",
-  description: 'Enter the War Room. Face legendary investors, defend your vision, and forge your entrepreneurial legacy in the ultimate pressure simulation.',
-  keywords: ['entrepreneurship', 'simulation', 'pitch', 'investors', 'war room', 'gamified'],
+  title: 'The Gambit — Play the Long Game',
+  description: 'Enter the Grand Board. Face a board of grandmaster investors, defend your vision, and play the long game in the ultimate pressure simulation.',
+  keywords: ['entrepreneurship', 'simulation', 'pitch', 'investors', 'chess', 'gambit', 'gamified'],
   generator: 'v0.app'
 }
 
@@ -64,7 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${cinzelDecorative.variable} ${ebGaramond.variable} ${jetBrainsMono.variable} font-sans antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${cormorantSC.variable} ${cormorantGaramond.variable} ${ebGaramond.variable} ${jetBrainsMono.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

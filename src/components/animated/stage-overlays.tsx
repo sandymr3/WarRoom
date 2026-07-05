@@ -42,7 +42,7 @@ export function CinemaOverlay({ show, icon, title, subtitle }: CinemaOverlayProp
           {title && (
             <motion.h2
               initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
-              style={{ fontFamily: "'Cinzel', Georgia, serif", fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.06em', color: '#c9a227', textShadow: '0 0 30px rgba(201,162,39,0.5)' }}
+              style={{ fontFamily: "var(--font-got), Georgia, serif", fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.06em', color: '#b3903e', textShadow: '0 0 30px rgba(179,144,62,0.5)' }}
             >
               {title}
             </motion.h2>
@@ -57,7 +57,7 @@ export function CinemaOverlay({ show, icon, title, subtitle }: CinemaOverlayProp
           <motion.div
             initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
             transition={{ delay: 0.3, duration: 1.5, ease: 'easeInOut' }}
-            style={{ width: 200, height: 1, background: 'linear-gradient(90deg, transparent, #c9a227, transparent)', transformOrigin: 'center' }}
+            style={{ width: 200, height: 1, background: 'linear-gradient(90deg, transparent, #b3903e, transparent)', transformOrigin: 'center' }}
           />
         </motion.div>
       )}
@@ -86,7 +86,7 @@ interface StageNarrationOverlayProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function StageNarrationOverlay({ show, data, stageIndex, totalStages: _totalStages, stageLabels, accentColor = '#c9a227', onDismiss }: StageNarrationOverlayProps) {
+export function StageNarrationOverlay({ show, data, stageIndex, totalStages: _totalStages, stageLabels, accentColor = '#b3903e', onDismiss }: StageNarrationOverlayProps) {
   useEffect(() => {
     if (!show) return
     const timer = setTimeout(onDismiss, 6000)
@@ -242,18 +242,18 @@ function SnapshotNextStagePanel({ nextStage }: { nextStage?: SnapshotNextStage }
       transition={{ delay: 0.3 }}
       className="relative flex flex-col items-center overflow-hidden rounded-2xl border p-5 text-center"
       style={{
-        borderColor: 'rgba(201,162,39,0.3)',
-        background: 'linear-gradient(160deg, rgba(201,162,39,0.07), transparent 55%), rgba(14,11,8,0.6)',
+        borderColor: 'rgba(179,144,62,0.3)',
+        background: 'linear-gradient(160deg, rgba(179,144,62,0.07), transparent 55%), rgba(14,11,8,0.6)',
       }}
     >
-      <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 20%, rgba(201,162,39,0.14), transparent 60%)' }} />
+      <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 20%, rgba(179,144,62,0.14), transparent 60%)' }} />
 
       {/* Oracle orb */}
       <motion.div
-        animate={{ scale: [1, 1.06, 1], boxShadow: ['0 0 24px rgba(201,162,39,0.35)', '0 0 38px rgba(201,162,39,0.55)', '0 0 24px rgba(201,162,39,0.35)'] }}
+        animate={{ scale: [1, 1.06, 1], boxShadow: ['0 0 24px rgba(179,144,62,0.35)', '0 0 38px rgba(179,144,62,0.55)', '0 0 24px rgba(179,144,62,0.35)'] }}
         transition={{ repeat: Infinity, duration: 3.2, ease: 'easeInOut' }}
         className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full"
-        style={{ background: 'radial-gradient(circle at 50% 35%, #f6e6b0, #c9a227 55%, #7a5e12)', border: '1px solid rgba(201,162,39,0.6)' }}
+        style={{ background: 'radial-gradient(circle at 50% 35%, #f6e6b0, #b3903e 55%, #7a5e12)', border: '1px solid rgba(179,144,62,0.6)' }}
       >
         <span className="text-2xl" aria-hidden>🜂</span>
       </motion.div>
@@ -263,7 +263,7 @@ function SnapshotNextStagePanel({ nextStage }: { nextStage?: SnapshotNextStage }
       {nextStage && (
         <span
           className="relative z-10 mt-2 inline-flex items-center rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.15em]"
-          style={{ background: 'rgba(201,162,39,0.12)', border: '1px solid rgba(201,162,39,0.3)', color: '#c9a227' }}
+          style={{ background: 'rgba(179,144,62,0.12)', border: '1px solid rgba(179,144,62,0.3)', color: '#b3903e' }}
         >
           {nextStage.month}
         </span>
@@ -271,14 +271,14 @@ function SnapshotNextStagePanel({ nextStage }: { nextStage?: SnapshotNextStage }
 
       <h4
         className="relative z-10 mt-2 text-2xl font-black tracking-tight"
-        style={{ color: '#e8d49a', fontFamily: "'Cinzel', Georgia, serif" }}
+        style={{ color: '#e8d49a', fontFamily: "var(--font-got), Georgia, serif" }}
       >
-        {nextStage?.title ?? 'The Next Trial'}
+        {nextStage?.title ?? 'The Next Round'}
       </h4>
 
       <p className="relative z-10 mt-2 min-h-[3.5rem] text-sm leading-relaxed text-foreground/75">
         {revealedText}
-        {!isComplete && <span className="ml-0.5 inline-block w-1.5 animate-pulse" style={{ color: '#c9a227' }}>▍</span>}
+        {!isComplete && <span className="ml-0.5 inline-block w-1.5 animate-pulse" style={{ color: '#b3903e' }}>▍</span>}
       </p>
     </motion.div>
   )
@@ -309,7 +309,7 @@ export function SnapshotDashboard({ show, revenue, previousRevenue, leaderboardE
           >
             <div className="text-center mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold tracking-widest uppercase mb-3"
-              style={{ background: 'rgba(201,162,39,0.08)', border: '1px solid rgba(201,162,39,0.3)', color: '#c9a227', borderRadius: '2px', fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.15em' }}>
+              style={{ background: 'rgba(179,144,62,0.08)', border: '1px solid rgba(179,144,62,0.3)', color: '#b3903e', borderRadius: '2px', fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.15em' }}>
               ⚔ Stage Complete ⚔
               </div>
               <h3 className="text-xl font-bold">{stageName}</h3>
@@ -340,7 +340,7 @@ export function SnapshotDashboard({ show, revenue, previousRevenue, leaderboardE
                     {capital !== undefined && (
                       <div className="flex items-center justify-between text-xs mb-2">
                         <span className="uppercase tracking-wider text-muted-foreground">War Chest</span>
-                        <span className="font-mono font-bold" style={{ color: '#c9a227' }}>{fmtRev(Math.max(0, capital - allocated))}</span>
+                        <span className="font-mono font-bold" style={{ color: '#b3903e' }}>{fmtRev(Math.max(0, capital - allocated))}</span>
                       </div>
                     )}
                     {allocations.length > 0 ? (
@@ -408,7 +408,7 @@ export function SnapshotDashboard({ show, revenue, previousRevenue, leaderboardE
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={onContinue}
-                style={{ background: 'linear-gradient(135deg, #b8891e, #c9a227)', color: '#0a0806', border: '1px solid rgba(201,162,39,0.5)', borderRadius: '3px', padding: '10px 28px', fontFamily: "'Cinzel', Georgia, serif", fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', boxShadow: '0 4px 20px rgba(201,162,39,0.3)', cursor: 'pointer' }}
+                style={{ background: 'linear-gradient(135deg, #b8891e, #b3903e)', color: '#0a0806', border: '1px solid rgba(179,144,62,0.5)', borderRadius: '3px', padding: '10px 28px', fontFamily: "var(--font-got), Georgia, serif", fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', boxShadow: '0 4px 20px rgba(179,144,62,0.3)', cursor: 'pointer' }}
               >
                 Continue →
               </motion.button>
@@ -443,23 +443,23 @@ export function MentorTipPopup({ show, message, emoji = 'TIP', onDismiss, onAskM
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           className="fixed bottom-24 right-6 z-[55] max-w-xs"
         >
-          <div className="relative p-4 shadow-xl" style={{ background: 'rgba(17,14,10,0.95)', border: '1px solid rgba(201,162,39,0.2)', borderRadius: '4px', backdropFilter: 'blur(16px)' }}>
+          <div className="relative p-4 shadow-xl" style={{ background: 'rgba(17,14,10,0.95)', border: '1px solid rgba(179,144,62,0.2)', borderRadius: '4px', backdropFilter: 'blur(16px)' }}>
             <button onClick={onDismiss} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-muted hover:bg-muted-foreground/20 flex items-center justify-center text-xs text-muted-foreground hover:text-foreground transition-all">✕</button>
             <div className="flex items-start gap-3 pr-4">
               <motion.div
                 animate={{ y: [0, -3, 0] }}
                 transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-                className="h-10 w-10 flex items-center justify-center text-lg flex-shrink-0" style={{ background: 'rgba(201,162,39,0.1)', border: '1px solid rgba(201,162,39,0.25)', borderRadius: '50%' }}
+                className="h-10 w-10 flex items-center justify-center text-lg flex-shrink-0" style={{ background: 'rgba(179,144,62,0.1)', border: '1px solid rgba(179,144,62,0.25)', borderRadius: '50%' }}
               >
                 {emoji}
               </motion.div>
               <div className="flex-1 min-w-0">
-                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#c9a227', fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.15em' }}><ScrollText className="h-3 w-3" />Mentor Scroll</p>
+                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#b3903e', fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.15em' }}><ScrollText className="h-3 w-3" />Second's Note</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{message}</p>
               </div>
             </div>
             {onAskMentor && (
-              <button onClick={() => { onDismiss(); onAskMentor() }} className="mt-3 w-full py-2 text-xs font-bold transition-all" style={{ background: 'rgba(201,162,39,0.08)', border: '1px solid rgba(201,162,39,0.25)', color: '#c9a227', borderRadius: '2px', fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.08em' }}>
+              <button onClick={() => { onDismiss(); onAskMentor() }} className="mt-3 w-full py-2 text-xs font-bold transition-all" style={{ background: 'rgba(179,144,62,0.08)', border: '1px solid rgba(179,144,62,0.25)', color: '#b3903e', borderRadius: '2px', fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.08em' }}>
                 Use a Mentor Lifeline
               </button>
             )}

@@ -54,11 +54,11 @@ export function CouncilRoster({
         'flex h-full flex-col overflow-hidden rounded-md border border-border/60 bg-card/50 p-3 backdrop-blur-sm',
         className,
       )}
-      aria-label="War council roster"
+      aria-label="The Board roster"
     >
       <header className="mb-3 flex items-center justify-between px-1">
         <h3 className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-foreground/60">
-          The Council
+          The Board
         </h3>
         <span className="text-[0.62rem] uppercase tracking-[0.18em] text-foreground/40">
           {investors.length} members

@@ -1,14 +1,18 @@
 // ============================================
-// War Room – Shared Helper Functions
+// The Gambit – Shared Helper Functions
 // ============================================
 
 import { FileText, AlertTriangle, Target, DollarSign, Lightbulb } from 'lucide-react'
-import { INVESTOR_VOICE_BY_ID, INVESTOR_TITLE_TO_ID } from './constants'
+import { INVESTOR_VOICE_BY_ID, INVESTOR_TITLE_TO_ID, INVESTOR_DISPLAY_BY_ID, STAGE_NARRATIVES } from './constants'
 import type { AssessmentState } from '@/src/types'
 
 // ---- Stage / Question labels ----
 
 export function stageLabel(s: string): string {
+  // Chess display titles for known stages ("The Grand Board" instead of
+  // "4 Warroom"); mechanical fallback keeps unknown backend stages readable.
+  const narrative = STAGE_NARRATIVES[s]
+  if (narrative) return narrative.title
   return s.replace('STAGE_', '').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
@@ -43,12 +47,12 @@ export function getQuestionTypeIcon(type: string) {
 
 export function getQuestionTypeColor(type: string): string {
   switch (type) {
-    case 'scenario': return '#ff6b00'
-    case 'multiple_choice': return '#c9a227'
+    case 'scenario': return '#d98e2b'
+    case 'multiple_choice': return '#b3903e'
     case 'budget_allocation': return '#2d6a4f'
-    case 'ai_scenario': return '#8b1a1a'
-    case 'info': return '#3d6b8e'
-    default: return '#7c5a9e'
+    case 'ai_scenario': return '#5c1a24'
+    case 'info': return '#42617a'
+    default: return '#77678f'
   }
 }
 
@@ -71,6 +75,18 @@ export function getVoiceKeysForName(value: string): string[] {
   return normalized ? [normalized] : []
 }
 
+// ---- Investor display names ----
+
+// The backend still sends the legacy titles ("The Master of Coin") in
+// context_text and payloads. Resolve any title or id to its chess display
+// name at render time; unknown strings pass through untouched (fail-soft).
+export function investorDisplayName(titleOrId: string): string {
+  const trimmed = (titleOrId ?? '').trim()
+  if (!trimmed) return trimmed
+  const id = INVESTOR_TITLE_TO_ID[trimmed] ?? (INVESTOR_DISPLAY_BY_ID[trimmed] ? trimmed : undefined)
+  return (id && INVESTOR_DISPLAY_BY_ID[id]) || trimmed
+}
+
 // Parse structured investor panel Q lines: `Name: "Question"`
 export function parseInvestorPanelQuestions(
   contextText: string
@@ -82,9 +98,11 @@ export function parseInvestorPanelQuestions(
     .map((line) => {
       const match = line.match(/^(.+?):\s*['"](.+?)['"]$/)
       if (!match) return null
-      const investorName = match[1].trim()
+      const rawName = match[1].trim()
       const question = match[2].trim()
-      return { investorName, question, voiceKeys: getVoiceKeysForName(investorName) }
+      // voiceKeys derive from the RAW backend name (voice ids are stable);
+      // the display name shown to users is the chess title.
+      return { investorName: investorDisplayName(rawName), question, voiceKeys: getVoiceKeysForName(rawName) }
     })
     .filter((item): item is { investorName: string; question: string; voiceKeys: string[] } => item !== null)
 }

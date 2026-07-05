@@ -104,7 +104,7 @@ interface AnimatedGradientTextProps {
   to?: string
 }
 
-export function AnimatedGradientText({ children, className, from = '#c9a227', via = '#f59e0b', to = '#c23b3b' }: AnimatedGradientTextProps) {
+export function AnimatedGradientText({ children, className, from = '#b3903e', via = '#f59e0b', to = '#8e3644' }: AnimatedGradientTextProps) {
   return (
     <motion.span
       className={cn('inline-block bg-clip-text text-transparent bg-[length:200%_auto]', className)}

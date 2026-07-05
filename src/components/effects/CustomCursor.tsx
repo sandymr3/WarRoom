@@ -232,7 +232,7 @@ export function CustomCursor() {
             <linearGradient id="wrCursorGold" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%"   stopColor="#fff7d6" />
               <stop offset="30%"  stopColor="#e8c245" />
-              <stop offset="70%"  stopColor="#c9a227" />
+              <stop offset="70%"  stopColor="#b3903e" />
               <stop offset="100%" stopColor="#7a5e12" />
             </linearGradient>
           </defs>

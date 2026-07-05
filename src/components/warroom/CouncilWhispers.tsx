@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { investorPortraitSrc } from '@/src/lib/investorAssets'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Investor, InvestorScorecard } from '@/src/types'
 
 // ============================================================
@@ -166,19 +167,19 @@ export function CouncilWhispers({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={investorPortraitSrc(w.investor)}
-                  alt={w.investor.name}
+                  alt={investorDisplayName(w.investor.name)}
                   className="absolute inset-0 h-full w-full object-cover"
                   onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                 />
               ) : (
                 <span className="absolute inset-0 flex items-center justify-center font-display text-xs font-semibold text-foreground/60">
-                  {initialsOf(w.investor.name)}
+                  {initialsOf(investorDisplayName(w.investor.name))}
                 </span>
               )}
             </div>
             <div className="min-w-0">
               <p className="font-display text-[0.62rem] uppercase tracking-[0.18em] text-[color:var(--color-warroom-gold)]/70">
-                {w.investor.name} whispers
+                {investorDisplayName(w.investor.name)} counsels
               </p>
               <p className="text-sm italic leading-snug text-foreground/85">&ldquo;{w.line}&rdquo;</p>
             </div>

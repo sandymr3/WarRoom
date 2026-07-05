@@ -83,7 +83,7 @@ export function AssetPlaceholder({
       <span
         aria-hidden
         className="font-display text-3xl text-[color:var(--color-warroom-gold)]/55"
-        style={{ textShadow: '0 0 14px rgba(201,162,39,0.35)' }}
+        style={{ textShadow: '0 0 14px rgba(179,144,62,0.35)' }}
       >
         {KIND_ICON[kind]}
       </span>

@@ -40,38 +40,38 @@ export default function HomePage() {
   }, [])
 
   const houses = [
-    { icon: Crown, name: 'Mentors', desc: 'Master strategists who forge your mindset on the field of ideas', color: '#7c5a9e', sigil: '⚜' },
-    { icon: Flame, name: 'Investors', desc: 'Dragons who demand gold and execution — or they burn your plan', color: '#c9a227', sigil: <Flame className="h-40 w-40" /> },
-    { icon: Shield, name: 'Leaders', desc: 'Lords who push purpose and honor above all else', color: '#3d6b8e', sigil: <Shield className="h-40 w-40" /> },
+    { icon: Crown, name: 'Mentors', desc: 'Your seconds — seasoned strategists who sharpen your preparation between rounds', color: '#7c5a9e', sigil: '♗' },
+    { icon: Flame, name: 'Investors', desc: 'Exacting players who demand precise calculation — every move must justify itself', color: '#b3903e', sigil: <Flame className="h-40 w-40" /> },
+    { icon: Shield, name: 'Leaders', desc: 'Principled players who weigh purpose and the long-term position above all else', color: '#3d6b8e', sigil: <Shield className="h-40 w-40" /> },
   ]
 
   const panelists = [
-    { name: 'The Master of Coin', avatar: 'MC', house: 'Lannister', color: '#c9a227' },
-    { name: 'The Mindset Architect', avatar: 'MA', house: 'Targaryen', color: '#8b1a1a' },
-    { name: 'The Hand of Execution', avatar: 'HE', house: 'Stark', color: '#3d6b8e' },
-    { name: 'The Purpose Translator', avatar: 'PT', house: 'Baratheon', color: '#1a1a1a' },
-    { name: 'The Mother of Instinct', avatar: 'MI', house: 'Tyrell', color: '#16a34a' },
-    { name: 'The Institution Builder', avatar: 'IB', house: 'Martell', color: '#ea580c' },
+    { name: 'The Queen of Coin', avatar: 'MC', house: 'Catalan', color: '#b3903e' },
+    { name: 'The Mindset Architect', avatar: 'MA', house: 'Najdorf', color: '#8e3644' },
+    { name: 'The Rook of Execution', avatar: 'HE', house: 'Berlin', color: '#42617a' },
+    { name: 'The Purpose Translator', avatar: 'PT', house: 'London', color: '#1a1a1a' },
+    { name: 'The Blindfold Master', avatar: 'MI', house: 'Réti', color: '#16a34a' },
+    { name: 'The Institution Builder', avatar: 'IB', house: 'Sicilian', color: '#c17a3a' },
   ]
 
   const stages = [
     {
-      num: 1, icon: Users, sigil: '⚔',
-      title: 'Assemble Your Council',
+      num: 1, icon: Users, sigil: '♘',
+      title: 'Assemble the Board',
       desc: 'Choose 6 advisors: 2 mentors, 2 investors, 2 leaders. Each brings a different agenda.',
-      accent: '#7c5a9e', border: 'rgba(124,90,158,0.2)',
+      accent: '#77678f', border: 'rgba(119,103,143,0.2)',
     },
     {
       num: 2, icon: MessageSquare, sigil: <Flame className="h-40 w-40" />,
-      title: 'Defend Your Realm',
-      desc: 'Navigate 6 brutal stages. Answer under fire. Your decisions shape your kingdom\'s fate.',
-      accent: '#c9a227', border: 'rgba(201,162,39,0.2)',
+      title: 'Defend Your Position',
+      desc: 'Navigate 6 exacting rounds. Answer with the clock running. Every decision shapes your position.',
+      accent: '#b3903e', border: 'rgba(179,144,62,0.2)',
     },
     {
       num: 3, icon: Target, sigil: <Crown className="h-40 w-40" />,
-      title: 'Claim the Throne',
-      desc: 'Receive verdict from each lord. Discover your Founder archetype. Forge your legacy.',
-      accent: '#ef4444', border: 'rgba(239,68,68,0.2)',
+      title: 'Earn the Title',
+      desc: 'Receive a verdict from each grandmaster. Discover your Founder archetype. Play the long game.',
+      accent: '#8e3644', border: 'rgba(142,54,68,0.2)',
     },
   ]
 
@@ -85,7 +85,7 @@ export default function HomePage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
         className="fixed w-full z-50 backdrop-blur-md"
-        style={{ borderBottom: '1px solid rgba(201,162,39,0.12)', background: 'rgba(10,8,6,0.85)' }}
+        style={{ borderBottom: '1px solid rgba(179,144,62,0.12)', background: 'rgba(10,8,6,0.85)' }}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -94,24 +94,24 @@ export default function HomePage() {
                 whileHover={{ rotate: 10, scale: 1.1 }}
                 className="h-9 w-9 rounded-sm flex items-center justify-center font-bold text-sm"
                 style={{
-                  background: 'linear-gradient(135deg, #8b6914, #c9a227, #8b6914)',
+                  background: 'linear-gradient(135deg, #8b6914, #b3903e, #8b6914)',
                   color: '#0a0806',
-                  boxShadow: '0 0 20px rgba(201,162,39,0.3)',
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  boxShadow: '0 0 20px rgba(179,144,62,0.3)',
+                  fontFamily: 'var(--font-got), Georgia, serif',
                 }}
               >
                 KK
               </motion.div>
               <div>
-                <span className="font-bold text-base" style={{ fontFamily: "'Cinzel', Georgia, serif", color: '#c9a227', letterSpacing: '0.08em' }}>
-                  War Room
+                <span className="font-bold text-base" style={{ fontFamily: 'var(--font-got), Georgia, serif', color: '#b3903e', letterSpacing: '0.08em' }}>
+                  The Gambit
                 </span>
-                <div className="text-[9px] tracking-[0.2em] text-amber-700/60 uppercase -mt-0.5">Forge Your Legacy</div>
+                <div className="text-[9px] tracking-[0.2em] text-amber-700/60 uppercase -mt-0.5">Play the Long Game</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Link href="/terms" className="text-xs text-amber-800/60 hover:text-amber-600 transition-colors" style={{ letterSpacing: '0.06em' }}>
-                Oath &amp; Terms
+                Terms &amp; Rules
               </Link>
               <Link href="/login">
                 <Button variant="outline" size="sm" className="text-xs border-amber-900/40 text-amber-700 hover:border-amber-600/50 hover:text-amber-500">
@@ -135,10 +135,10 @@ export default function HomePage() {
           {/* Vignette */}
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%)' }} />
           {/* Side torches glow */}
-          <div className="absolute top-1/3 left-0 w-64 h-64 opacity-20 blur-3xl" style={{ background: 'radial-gradient(circle, #ff6b00, transparent)' }} />
-          <div className="absolute top-1/3 right-0 w-64 h-64 opacity-20 blur-3xl" style={{ background: 'radial-gradient(circle, #ff6b00, transparent)' }} />
+          <div className="absolute top-1/3 left-0 w-64 h-64 opacity-20 blur-3xl" style={{ background: 'radial-gradient(circle, #d98e2b, transparent)' }} />
+          <div className="absolute top-1/3 right-0 w-64 h-64 opacity-20 blur-3xl" style={{ background: 'radial-gradient(circle, #d98e2b, transparent)' }} />
           {/* Gold horizon */}
-          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.4), transparent)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(179,144,62,0.4), transparent)' }} />
         </div>
 
         <div className="mx-auto max-w-4xl text-center relative z-10">
@@ -149,25 +149,25 @@ export default function HomePage() {
           </FadeInUp>
           <FadeInUp delay={0.1}>
             <SigilBadge icon={Flame} tone="gold" className="mb-8">
-              The Ultimate Founder Trial
+              The Ultimate Founder's Match
               <Star className="h-3 w-3 fill-amber-500 text-amber-500 ml-1" />
             </SigilBadge>
           </FadeInUp>
 
           <FadeInUp delay={0.25}>
-            <h1 ref={heroTitleRef} className="mb-6" style={{ fontFamily: "'Cinzel', Georgia, serif", fontSize: 'clamp(2.4rem, 7vw, 5rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '0.03em' }}>
-              <span style={{ color: '#e8e0d0', textShadow: '0 0 40px rgba(201,162,39,0.15)' }}>Pitch to the</span>
+            <h1 ref={heroTitleRef} className="mb-6" style={{ fontFamily: 'var(--font-got), Georgia, serif', fontSize: 'clamp(2.4rem, 7vw, 5rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '0.03em' }}>
+              <span style={{ color: '#e8e0d0', textShadow: '0 0 40px rgba(179,144,62,0.15)' }}>Pitch to the</span>
               <br />
               <span className="gradient-text-animate" style={{ display: 'inline-block', paddingBottom: '0.1em' }}>
-                Council of Lords
+                Board of Grandmasters
               </span>
             </h1>
           </FadeInUp>
 
           <FadeInUp delay={0.4}>
             <p className="mt-2 text-base max-w-xl mx-auto leading-relaxed" style={{ color: '#8c8075', letterSpacing: '0.02em' }}>
-              Face a war council of legendary investors, mentors, and visionary leaders.
-              Your startup idea is the kingdom. Defend it with everything you have.
+              Face a board of legendary investors, mentors, and visionary leaders.
+              Your startup idea is the position. Defend it with everything you have.
             </p>
           </FadeInUp>
 
@@ -188,23 +188,23 @@ export default function HomePage() {
                   iconRight={ArrowRight}
                   sfxKey="nav.page-enter"
                 >
-                  Enter the War Room
+                  Enter the Gambit
                 </WarRoomCTA>
               </Link>
               <WarRoomCTA size="md" variant="ghost" sfxKey="ui.hover">
-                Watch the Trial
+                Watch a Match
               </WarRoomCTA>
             </div>
             <p className="mt-5 text-xs" style={{ color: 'rgba(140,128,117,0.6)', letterSpacing: '0.06em' }}>
-              By entering, you swear to the{' '}
-              <Link href="/terms" className="text-amber-700 hover:text-amber-500">Oath &amp; Terms</Link>
+              By entering, you agree to the{' '}
+              <Link href="/terms" className="text-amber-700 hover:text-amber-500">Terms &amp; Rules</Link>
             </p>
           </FadeInUp>
 
           {/* Panelists orbital */}
           <FadeInUp delay={0.75}>
             <div className="mt-14 flex justify-center items-center gap-1 flex-wrap">
-              <span className="text-xs mr-3" style={{ color: 'rgba(140,128,117,0.6)', letterSpacing: '0.06em' }}>Face the council:</span>
+              <span className="text-xs mr-3" style={{ color: 'rgba(140,128,117,0.6)', letterSpacing: '0.06em' }}>Face the Board:</span>
               {panelists.map((p, i) => (
                 <motion.div
                   key={i}
@@ -218,10 +218,10 @@ export default function HomePage() {
                     borderColor: `${p.color}60`,
                     color: '#f5e6c8',
                     boxShadow: `0 0 12px ${p.color}40`,
-                    fontFamily: "'Cinzel', Georgia, serif",
+                    fontFamily: 'var(--font-got), Georgia, serif',
                     fontSize: '0.6rem',
                   }}
-                  title={`${p.name} — House ${p.house}`}
+                  title={`${p.name} — ${p.house} Opening`}
                 >
                   {p.avatar}
                 </motion.div>
@@ -233,7 +233,7 @@ export default function HomePage() {
                 className="text-xs ml-3"
                 style={{ color: 'rgba(140,128,117,0.5)', letterSpacing: '0.04em' }}
               >
-                + 15 Lords
+                + 15 Grandmasters
               </motion.span>
             </div>
           </FadeInUp>
@@ -242,13 +242,13 @@ export default function HomePage() {
 
       {/* HOW IT WORKS */}
       <section className="px-4 py-24 sm:px-6 lg:px-8 relative" style={{ background: 'linear-gradient(180deg, #0d0b09, #110e0a, #0d0b09)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(201,162,39,0.04), transparent 60%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(179,144,62,0.04), transparent 60%)' }} />
         <div className="mx-auto max-w-6xl relative">
           <FadeInUp>
             <div className="text-center mb-16">
-              <SigilBadge tone="gold" className="mb-4">The Trial</SigilBadge>
-              <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "'Cinzel', Georgia, serif", color: '#e8e0d0', letterSpacing: '0.04em' }}>
-                Three Trials to the Throne
+              <SigilBadge tone="gold" className="mb-4">The Match</SigilBadge>
+              <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-got), Georgia, serif', color: '#e8e0d0', letterSpacing: '0.04em' }}>
+                Three Moves to the Title
               </h2>
               <p style={{ color: '#8c8075', fontSize: '0.9rem', letterSpacing: '0.03em' }}>
                 Not a simulation. A reckoning. Built to break you—and make you stronger.
@@ -281,7 +281,7 @@ export default function HomePage() {
                         style={{
                           background: stage.accent,
                           color: '#0a0806',
-                          fontFamily: "'Cinzel', Georgia, serif",
+                          fontFamily: 'var(--font-got), Georgia, serif',
                           boxShadow: `0 0 18px ${stage.accent}55, inset 0 1px 0 rgba(255,255,255,0.25)`,
                         }}
                       >
@@ -296,7 +296,7 @@ export default function HomePage() {
                     <h3
                       className="font-semibold text-lg mb-2"
                       style={{
-                        fontFamily: "'Cinzel', Georgia, serif",
+                        fontFamily: 'var(--font-got), Georgia, serif',
                         color: '#f3ead7',
                         letterSpacing: '0.04em',
                       }}
@@ -323,12 +323,12 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl relative z-10">
           <FadeInUp>
             <div className="text-center mb-16">
-              <SigilBadge tone="crimson" className="mb-4">The Council</SigilBadge>
-              <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "'Cinzel', Georgia, serif", color: '#e8e0d0', letterSpacing: '0.04em' }}>
-                The Great Houses of the War Room
+              <SigilBadge tone="crimson" className="mb-4">The Board</SigilBadge>
+              <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-got), Georgia, serif', color: '#e8e0d0', letterSpacing: '0.04em' }}>
+                The Three Ranks of the Board
               </h2>
               <p style={{ color: '#8c8075', fontSize: '0.9rem' }}>
-                Their counsel will conflict. Your wisdom decides the realm's fate.
+                Their counsel will conflict. Your judgment decides the game.
               </p>
             </div>
           </FadeInUp>
@@ -352,7 +352,7 @@ export default function HomePage() {
                   >
                     <Icon className="h-6 w-6" style={{ color: h.color }} aria-hidden />
                   </motion.div>
-                  <h3 className="font-bold text-lg mb-2" style={{ fontFamily: "'Cinzel', Georgia, serif", color: '#e8e0d0', letterSpacing: '0.04em' }}>{h.name}</h3>
+                  <h3 className="font-bold text-lg mb-2" style={{ fontFamily: 'var(--font-got), Georgia, serif', color: '#e8e0d0', letterSpacing: '0.04em' }}>{h.name}</h3>
                   <p className="text-sm leading-relaxed" style={{ color: '#8c8075' }}>{h.desc}</p>
                 </StoneCard>
               )
@@ -363,29 +363,29 @@ export default function HomePage() {
 
       {/* THE TWIST */}
       <section className="relative px-4 py-24 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(139,26,26,0.08), rgba(201,162,39,0.06), rgba(139,26,26,0.08))' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(92,26,36,0.08), rgba(179,144,62,0.06), rgba(92,26,36,0.08))' }} />
         <div className="mx-auto max-w-4xl text-center relative z-10">
           <FadeInUp>
             <Floating duration={4} y={6}>
-              <div className="mb-4 flex justify-center animate-torch-glow"><Flame className="h-14 w-14" style={{ color: '#ff6b00' }} /></div>
+              <div className="mb-4 flex justify-center animate-torch-glow"><Flame className="h-14 w-14" style={{ color: '#d98e2b' }} /></div>
             </Floating>
           </FadeInUp>
           <FadeInUp delay={0.1}>
-            <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "'Cinzel', Georgia, serif" }}>
-              <AnimatedGradientText from="#c9a227" via="#ff6b00" to="#8b1a1a">
-                Conflicting Counsel. One Throne.
+            <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-got), Georgia, serif' }}>
+              <AnimatedGradientText from="#b3903e" via="#d98e2b" to="#5c1a24">
+                Conflicting Counsel. One Board.
               </AnimatedGradientText>
             </h2>
           </FadeInUp>
           <FadeInUp delay={0.2}>
             <p className="text-base mb-6" style={{ color: '#8c8075', maxWidth: '36rem', margin: '0 auto 2rem', lineHeight: 1.8 }}>
-              The Master of Coin demands profit above honor. The Brand Pioneer preaches culture first.
-              The Sales Commander screams ten-times growth. The Acquisition Operator warns of the debt dragon.
+              The Queen of Coin demands profit above all. The Brand Pioneer preaches culture first.
+              The Knight of Hustle drives for ten-times growth. The Acquisition Operator warns of crushing debt.
             </p>
           </FadeInUp>
           <FadeInUp delay={0.3}>
-            <p className="text-base font-semibold" style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.06em' }}>
-              <AnimatedGradientText from="#c9a227" via="#e8c84a" to="#c9a227">
+            <p className="text-base font-semibold" style={{ fontFamily: 'var(--font-got), Georgia, serif', letterSpacing: '0.06em' }}>
+              <AnimatedGradientText from="#b3903e" via="#d9b45f" to="#b3903e">
                 Real founders navigate conflicting counsel every day. Prove you can.
               </AnimatedGradientText>
             </p>
@@ -397,19 +397,19 @@ export default function HomePage() {
       <section className="px-4 py-20 sm:px-6 lg:px-8 relative overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #110e0a, #1a1208, #110e0a)' }}>
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, rgba(201,162,39,0.06), transparent 60%)' }} />
-          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.3), transparent)' }} />
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, rgba(179,144,62,0.06), transparent 60%)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(179,144,62,0.3), transparent)' }} />
         </div>
         <div className="mx-auto max-w-3xl text-center relative z-10">
           <FadeInUp>
-            <div className="mb-4 flex justify-center"><Crown className="h-11 w-11" style={{ color: '#e8c84a' }} /></div>
-            <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "'Cinzel', Georgia, serif", color: '#e8e0d0', letterSpacing: '0.04em' }}>
-              Ready to Face the Council?
+            <div className="mb-4 flex justify-center"><Crown className="h-11 w-11" style={{ color: '#d9b45f' }} /></div>
+            <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-got), Georgia, serif', color: '#e8e0d0', letterSpacing: '0.04em' }}>
+              Ready to Face the Board?
             </h2>
           </FadeInUp>
           <FadeInUp delay={0.1}>
             <p className="mb-10 text-sm" style={{ color: '#8c8075', letterSpacing: '0.04em' }}>
-              Two attempts. Six trials. One verdict. The throne awaits the worthy.
+              Two attempts. Nine rounds. One verdict. The title awaits the worthy.
             </p>
           </FadeInUp>
           <FadeInUp delay={0.2}>
@@ -421,7 +421,7 @@ export default function HomePage() {
                 iconRight={ArrowRight}
                 sfxKey="wr.door-creak"
               >
-                Enter the War Room
+                Enter the Gambit
               </WarRoomCTA>
             </Link>
           </FadeInUp>
@@ -429,13 +429,13 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="px-4 py-10 sm:px-6 lg:px-8 text-center" style={{ borderTop: '1px solid rgba(201,162,39,0.1)', background: '#080604' }}>
-        <div className="text-3xl mb-3 opacity-30">⚔</div>
-        <p className="text-xs" style={{ color: 'rgba(140,128,117,0.4)', letterSpacing: '0.08em', fontFamily: "'Cinzel', Georgia, serif" }}>
-          © 2026 KK&apos;s War Room — All Rights Reserved
+      <footer className="px-4 py-10 sm:px-6 lg:px-8 text-center" style={{ borderTop: '1px solid rgba(179,144,62,0.1)', background: '#080604' }}>
+        <div className="text-3xl mb-3 opacity-30">♚</div>
+        <p className="text-xs" style={{ color: 'rgba(140,128,117,0.4)', letterSpacing: '0.08em', fontFamily: 'var(--font-got), Georgia, serif' }}>
+          © 2026 The Gambit — All Rights Reserved
         </p>
         <p className="mt-1 text-xs" style={{ color: 'rgba(140,128,117,0.25)', letterSpacing: '0.04em' }}>
-          Winter is Coming for Unprepared Founders. Powered by AI.
+          The Clock Is Ticking for Unprepared Founders. Powered by AI.
         </p>
       </footer>
     </div>

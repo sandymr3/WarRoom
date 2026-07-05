@@ -43,7 +43,7 @@ export function ArchetypeBadge({
         </span>
         <h2
           className="font-display text-3xl font-bold uppercase tracking-wide text-[color:var(--color-warroom-gold-bright)] sm:text-4xl"
-          style={{ textShadow: '0 0 30px rgba(232,200,74,0.45)' }}
+          style={{ textShadow: '0 0 30px rgba(217,180,95,0.45)' }}
         >
           {archetypeName}
         </h2>

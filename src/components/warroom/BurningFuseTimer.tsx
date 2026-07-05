@@ -60,13 +60,13 @@ export function BurningFuseTimer({ progress, readout, className }: BurningFuseTi
         <defs>
           <radialGradient id="fuseEmber" cx="0.5" cy="0.5" r="0.5">
             <stop offset="0%"   stopColor="#fff3b0" stopOpacity="1" />
-            <stop offset="35%"  stopColor="#ff9933" stopOpacity="0.95" />
-            <stop offset="70%"  stopColor="#ff6b00" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#8b1a1a" stopOpacity="0" />
+            <stop offset="35%"  stopColor="#e5a94d" stopOpacity="0.95" />
+            <stop offset="70%"  stopColor="#d98e2b" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#5c1a24" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="ropeUnburnt" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#8b6914" />
-            <stop offset="50%" stopColor="#c9a227" />
+            <stop offset="50%" stopColor="#b3903e" />
             <stop offset="100%" stopColor="#8b6914" />
           </linearGradient>
         </defs>
@@ -100,7 +100,7 @@ export function BurningFuseTimer({ progress, readout, className }: BurningFuseTi
           y1={ROPE_Y}
           x2={FUSE_LENGTH}
           y2={ROPE_Y}
-          stroke={urgent ? '#c23b3b' : 'url(#ropeUnburnt)'}
+          stroke={urgent ? '#8e3644' : 'url(#ropeUnburnt)'}
           strokeWidth="3.5"
           strokeLinecap="round"
         />

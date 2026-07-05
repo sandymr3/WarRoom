@@ -61,28 +61,28 @@ export function AppSidebar({ user: userProp }: AppSidebarProps) {
     }
   }, [userProp])
 
-  // "House Banners" — premium GOT-flavored navigation labels.
+  // Chess-themed navigation labels (Grandmaster's Study).
   const navMain = [
     {
-      title: 'The Great Hall',
+      title: 'The Study',
       url: '/dashboard',
       icon: Castle,
       isActive: pathname === '/dashboard',
     },
     {
-      title: 'The Trial',
+      title: 'The Match',
       url: '/assessment/start',
       icon: Swords,
       isActive: pathname.startsWith('/assessment'),
     },
     {
-      title: 'The Legacy Scroll',
+      title: 'Annotated Games',
       url: '/results',
       icon: ScrollText,
       isActive: pathname.startsWith('/results'),
     },
     {
-      title: 'The Iron Rankings',
+      title: 'The Elo Ladder',
       url: '/leaderboard',
       icon: Trophy,
       isActive: pathname.startsWith('/leaderboard'),
@@ -91,12 +91,12 @@ export function AppSidebar({ user: userProp }: AppSidebarProps) {
 
   const navSecondary = [
     {
-      title: "The Maester's Hall",
+      title: 'The Analysis Room',
       url: '/support',
       icon: HelpCircle,
     },
     {
-      title: 'The Citadel',
+      title: 'The Preparation Room',
       url: '/settings',
       icon: Crown,
     },
@@ -122,13 +122,13 @@ export function AppSidebar({ user: userProp }: AppSidebarProps) {
                     className="truncate font-semibold tracking-[0.08em] text-[color:var(--color-warroom-gold)]"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
-                    War Room
+                    The Gambit
                   </span>
                   <span
                     className="truncate text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-warroom-smoke)]"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
-                    Forge Your Legacy
+                    Play the Long Game
                   </span>
                 </div>
               </Link>
@@ -142,7 +142,7 @@ export function AppSidebar({ user: userProp }: AppSidebarProps) {
             className="text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-warroom-smoke)]"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            House Banners
+            The Board
           </SidebarGroupLabel>
           <SidebarMenu>
             {navMain.map((item) => (

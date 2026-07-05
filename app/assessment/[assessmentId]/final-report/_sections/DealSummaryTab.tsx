@@ -29,10 +29,10 @@ export function DealSummaryTab({ report }: { report: EvaluationReport }) {
       return { title: 'Exited via Buyout', subtitle: capitalSource || `You accepted a buyout offer${exitStage ? ` at ${exitStage}` : ''}.`, tone: 'positive' as const }
     }
     if (exitedVia === 'WALKOUT') {
-      return { title: 'Walked Out of the War Room', subtitle: 'You declined every investor offer and exited without a deal.', tone: 'negative' as const }
+      return { title: 'Walked Out of the Grand Board', subtitle: 'You declined every investor offer and exited without a deal.', tone: 'negative' as const }
     }
     if (exitedVia === 'EARLY_EXIT') {
-      return { title: 'Early Exit', subtitle: `Simulation ended at ${exitStage || 'your current phase'} before reaching the War Room.`, tone: 'neutral' as const }
+      return { title: 'Early Exit', subtitle: `Simulation ended at ${exitStage || 'your current phase'} before reaching the Grand Board.`, tone: 'neutral' as const }
     }
     return null
   })()
@@ -83,10 +83,10 @@ export function DealSummaryTab({ report }: { report: EvaluationReport }) {
         .exit-banner .exit-subtitle { color: var(--color-warroom-smoke); font-size: 0.85rem; }
         .exit-positive { background: rgba(16,185,129,0.07); border-color: rgba(16,185,129,0.25); }
         .exit-negative { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.25); }
-        .exit-neutral  { background: rgba(201,162,39,0.07); border-color: rgba(201,162,39,0.25); }
+        .exit-neutral  { background: rgba(179,144,62,0.07); border-color: rgba(179,144,62,0.25); }
         .deal-hero { border-radius: 20px; padding: 2.5rem 2rem 2.2rem; text-align: center; border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); background: var(--wr-panel-bg-heavy); position: relative; overflow: hidden; }
-        .deal-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0px, transparent 2px, rgba(201,162,39,0.03) 2px, rgba(201,162,39,0.03) 4px); pointer-events: none; }
-        .deal-hero--success { border-color: rgba(201,162,39,0.3); }
+        .deal-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0px, transparent 2px, rgba(179,144,62,0.03) 2px, rgba(179,144,62,0.03) 4px); pointer-events: none; }
+        .deal-hero--success { border-color: rgba(179,144,62,0.3); }
         .deal-hero--empty   { border-color: rgba(239,68,68,0.25); }
         .deal-hero__label { font-family: var(--font-display); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.22em; color: var(--color-warroom-gold); margin-bottom: 0.6rem; }
         .deal-hero__count { display: flex; align-items: baseline; justify-content: center; gap: 0.4rem; margin-bottom: 1.8rem; }

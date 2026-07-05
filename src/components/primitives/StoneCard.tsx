@@ -60,7 +60,7 @@ export const StoneCard = forwardRef<HTMLDivElement, StoneCardProps>(
           'got-stone-card relative overflow-hidden',
           PADDING_CLASSES[padding],
           interactive &&
-            'transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_10px_36px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(201,162,39,0.18)]',
+            'transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_10px_36px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(179,144,62,0.18)]',
           className,
         )}
         style={

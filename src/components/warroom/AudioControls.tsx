@@ -46,9 +46,9 @@ export function AudioControls({ className }: { className?: string }) {
           'text-[color:var(--color-warroom-gold)] font-display text-[0.6rem] uppercase tracking-[0.16em]',
           'transition-all duration-200',
           'hover:border-[color:var(--color-warroom-gold)]/60 hover:bg-[color:var(--color-warroom-obsidian)]/80',
-          'hover:shadow-[0_0_18px_rgba(201,162,39,0.25)]',
+          'hover:shadow-[0_0_18px_rgba(179,144,62,0.25)]',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)]',
-          open && 'border-[color:var(--color-warroom-gold)]/60 shadow-[0_0_18px_rgba(201,162,39,0.25)]',
+          open && 'border-[color:var(--color-warroom-gold)]/60 shadow-[0_0_18px_rgba(179,144,62,0.25)]',
         )}
       >
         {allMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -72,7 +72,7 @@ export function AudioControls({ className }: { className?: string }) {
                 'absolute right-0 top-[calc(100%+8px)] z-50 w-52 overflow-hidden rounded-md',
                 'border border-[color:var(--color-warroom-gold)]/25',
                 'bg-[color:var(--color-warroom-obsidian)] backdrop-blur-xl',
-                'shadow-[0_8px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(201,162,39,0.08)]',
+                'shadow-[0_8px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(179,144,62,0.08)]',
               )}
               initial={{ opacity: 0, y: -8, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -130,7 +130,7 @@ export function AudioControls({ className }: { className?: string }) {
                           : (
                             <span
                               className="inline-flex h-1.5 w-1.5 rounded-full"
-                              style={{ background: 'var(--color-warroom-gold)', boxShadow: '0 0 6px rgba(201,162,39,0.8)' }}
+                              style={{ background: 'var(--color-warroom-gold)', boxShadow: '0 0 6px rgba(179,144,62,0.8)' }}
                             />
                           )
                         }

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import api from '@/src/lib/api'
+import { investorDisplayName } from '@/src/lib/helpers'
 import { useAudioRecorder } from '@/src/hooks/useAudioRecorder'
 import type { Investor, InvestorScorecard } from '@/src/types'
 import { isVoiceLineMuted, getVoiceLineVolume } from '@/src/state/audioStore'
@@ -70,12 +71,12 @@ export function useInvestorQA(assessmentId: string) {
           setFollowupActive(true)
           if (followup.audioBase64) playAudioBase64(followup.audioBase64)
         } else {
-          setCurrentInvestorReaction(result.scorecard.investorReaction || `${investor.name} has considered your response.`)
+          setCurrentInvestorReaction(result.scorecard.investorReaction || `${investorDisplayName(investor.name)} has considered your response.`)
           if (result.audioBase64) playAudioBase64(result.audioBase64)
         }
       } catch (followupErr) {
         console.warn('[useInvestorQA] follow-up generation failed, skipping', followupErr)
-        setCurrentInvestorReaction(result.scorecard.investorReaction || `${investor.name} has considered your response.`)
+        setCurrentInvestorReaction(result.scorecard.investorReaction || `${investorDisplayName(investor.name)} has considered your response.`)
         if (result.audioBase64) playAudioBase64(result.audioBase64)
       }
     } catch (err: unknown) {
@@ -94,7 +95,7 @@ export function useInvestorQA(assessmentId: string) {
         assessmentId, investor.id, initialTranscription, followupQuestion, responseRecorder.audioBlob
       )
       setResponseTranscription(result.transcription)
-      setCurrentInvestorReaction(result.scorecard.investorReaction || `${investor.name} has considered your follow-up.`)
+      setCurrentInvestorReaction(result.scorecard.investorReaction || `${investorDisplayName(investor.name)} has considered your follow-up.`)
       setFollowupActive(false)
       responseRecorder.resetRecording()
       if (result.audioBase64) playAudioBase64(result.audioBase64)

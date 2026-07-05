@@ -7,7 +7,7 @@ import { TermsBackLink } from './TermsBackLink'
 const SECTION_A = [
   {
     title: '1. Nature of the Experience',
-    body: "KK's WAR ROOM is a high-pressure, simulation-based experience designed to evaluate decision-making, problem-solving, and entrepreneurial thinking under time and situational constraints. This is not a standardized psychometric, academic, or clinical assessment.",
+    body: "The Gambit is a high-pressure, simulation-based experience designed to evaluate decision-making, problem-solving, and entrepreneurial thinking under time and situational constraints. This is not a standardized psychometric, academic, or clinical assessment.",
   },
   {
     title: '2. Voluntary Participation',
@@ -34,7 +34,7 @@ const SECTION_A = [
       'These stakeholders may have access to your participation details, decision-making approach, and performance within the simulation.',
     ],
     footer:
-      'Such sharing is strictly for learning and development purposes only. KK\'s WAR ROOM does not authorize or recommend the use of this report for formal grading, hiring, promotion, or performance evaluation.',
+      'Such sharing is strictly for learning and development purposes only. The Gambit does not authorize or recommend the use of this report for formal grading, hiring, promotion, or performance evaluation.',
   },
   {
     title: '6. Data Protection & Privacy',
@@ -42,7 +42,7 @@ const SECTION_A = [
   },
   {
     title: '7. Use of AI in the Experience (No Human Review)',
-    body: "KK's WAR ROOM uses AI-driven systems for:",
+    body: "The Gambit uses AI-driven systems for:",
     list: [
       'Scenario generation',
       'Response analysis',
@@ -65,7 +65,7 @@ const SECTION_A = [
   },
   {
     title: '10. Code of Conduct',
-    body: "Participants must engage respectfully and professionally. KK's WAR ROOM reserves the right to remove participants for inappropriate or disruptive behavior.",
+    body: "Participants must engage respectfully and professionally. The Gambit reserves the right to remove participants for inappropriate or disruptive behavior.",
   },
   {
     title: '11. Emotional & Psychological Acknowledgment',
@@ -82,11 +82,11 @@ const SECTION_A = [
   },
   {
     title: '13. Limitation of Liability',
-    body: "To the maximum extent permitted by law: KK's WAR ROOM and its facilitators shall not be liable for any direct, indirect, incidental, or consequential loss, damage, or impact arising from participation in the simulation or use of its outputs. All actions taken based on the insights provided are the sole responsibility of the participant or organization.",
+    body: "To the maximum extent permitted by law: The Gambit and its facilitators shall not be liable for any direct, indirect, incidental, or consequential loss, damage, or impact arising from participation in the simulation or use of its outputs. All actions taken based on the insights provided are the sole responsibility of the participant or organization.",
   },
   {
     title: '14. Indemnification',
-    body: "Participants and sponsoring organizations agree to indemnify and hold harmless KK's WAR ROOM from any claims, damages, or liabilities arising from:",
+    body: "Participants and sponsoring organizations agree to indemnify and hold harmless The Gambit from any claims, damages, or liabilities arising from:",
     list: [
       'Participation in the program.',
       'Use or misuse of outputs or reports.',
@@ -159,12 +159,12 @@ const SECTION_B = [
     list: [
       'The report is intended only for development discussions.',
       'It must be combined with other evaluation methods and professional judgment.',
-      "KK's WAR ROOM is not responsible for decisions made by third parties using this report.",
+      "The Gambit is not responsible for decisions made by third parties using this report.",
     ],
   },
   {
     title: '8. Limitation of Liability',
-    body: "KK's WAR ROOM shall not be liable for any decisions, actions, or outcomes arising from the use or interpretation of this report.",
+    body: "The Gambit shall not be liable for any decisions, actions, or outcomes arising from the use or interpretation of this report.",
   },
   {
     title: '9. Confidentiality & Use',
@@ -269,14 +269,14 @@ export default function TermsAndConditionsPage() {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              The Sacred Oath
+The Rules of Play
             </h1>
           </div>
           <p
             className="text-sm text-[color:var(--color-warroom-smoke)]"
             style={{ fontFamily: 'var(--font-body, serif)' }}
           >
-            KK&apos;s WAR ROOM — Terms & Conditions
+            The Gambit — Terms & Conditions
           </p>
           {/* Divider */}
           <div className="mt-6 h-px bg-gradient-to-r from-transparent via-[color:var(--color-warroom-gold)]/30 to-transparent" />
@@ -290,7 +290,7 @@ export default function TermsAndConditionsPage() {
               className="text-base font-semibold text-[color:var(--color-warroom-gold)] tracking-[0.04em]"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              A. Before Entering the WAR ROOM
+              A. Before Entering the Gambit
             </h2>
           </div>
           <p
@@ -320,7 +320,7 @@ export default function TermsAndConditionsPage() {
               className="text-base font-semibold text-[color:var(--color-warroom-gold)] tracking-[0.04em]"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              B. WAR ROOM Evaluation Report
+              B. THE GAMBIT Evaluation Report
             </h2>
           </div>
           <p
@@ -345,7 +345,7 @@ export default function TermsAndConditionsPage() {
             className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-warroom-smoke)]"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            By entering the War Room, you accept these terms in full.
+            By entering the Gambit, you accept these terms in full.
           </p>
         </footer>
       </div>

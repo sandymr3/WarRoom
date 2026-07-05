@@ -141,7 +141,7 @@ export default function RegisterPage() {
           className="text-sm text-[color:var(--color-warroom-smoke)] mt-2"
           style={{ fontFamily: 'var(--font-body, serif)' }}
         >
-          Create your War Room account and join the Council.
+          Create your Gambit account and join the Board.
         </motion.p>
       </div>
 
@@ -398,7 +398,7 @@ export default function RegisterPage() {
               disabled={loading || !acceptedTerms}
               className="w-full justify-center"
             >
-              {loading ? 'Forging your banner…' : 'Create Account'}
+              {loading ? 'Setting up the board…' : 'Create Account'}
             </WarRoomCTA>
           </form>
         </StoneCard>

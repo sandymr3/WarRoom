@@ -69,8 +69,8 @@ type AmbientPreview = {
 
 const AMBIENT_PREVIEWS: AmbientPreview[] = [
   { key: null, label: 'Silence' },
-  { key: 'ambient.hall', label: 'The Hall' },
-  { key: 'ambient.warroom', label: 'War Room' },
+  { key: 'ambient.hall', label: 'The Study' },
+  { key: 'ambient.warroom', label: 'The Grand Board' },
   { key: 'ambient.deliberate', label: 'Deliberation' },
   { key: 'ambient.victory', label: 'Verdict' },
 ]
@@ -195,7 +195,7 @@ export default function SettingsPage() {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            The Forge
+            The Preparation Room
           </h1>
         </div>
         <p
@@ -844,7 +844,7 @@ export default function SettingsPage() {
                       'hover:border-[color:var(--color-warroom-gold)]/55',
                       'hover:bg-[color:var(--color-warroom-gold)]/[0.06]',
                       'hover:text-[color:var(--color-warroom-gold)]',
-                      'hover:shadow-[0_0_18px_rgba(201,162,39,0.18)]',
+                      'hover:shadow-[0_0_18px_rgba(179,144,62,0.18)]',
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)]/60',
                       'disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[color:var(--color-warroom-gold)]/25 disabled:hover:bg-[color:var(--color-warroom-rampart)]/40 disabled:hover:text-[color:var(--color-warroom-ivory)] disabled:hover:shadow-none',
                     )}
@@ -890,7 +890,7 @@ export default function SettingsPage() {
                       'hover:border-[color:var(--color-warroom-gold)]/55',
                       'hover:bg-[color:var(--color-warroom-gold)]/[0.06]',
                       'hover:text-[color:var(--color-warroom-gold)]',
-                      'hover:shadow-[0_0_18px_rgba(201,162,39,0.18)]',
+                      'hover:shadow-[0_0_18px_rgba(179,144,62,0.18)]',
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)]/60',
                       'disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[color:var(--color-warroom-gold)]/25 disabled:hover:bg-[color:var(--color-warroom-rampart)]/40 disabled:hover:text-[color:var(--color-warroom-ivory)] disabled:hover:shadow-none',
                     )}
@@ -962,7 +962,7 @@ export default function SettingsPage() {
                       className="text-xs text-[color:var(--color-warroom-smoke)]"
                       style={{ fontFamily: 'var(--font-body, serif)' }}
                     >
-                      Make your profile visible on the Iron Rankings
+                      Make your profile visible on the Elo Ladder
                     </p>
                   </div>
                   <Switch id="profile-public" />

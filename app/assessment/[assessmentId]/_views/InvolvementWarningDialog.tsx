@@ -31,31 +31,31 @@ export function InvolvementWarningDialog({ open, spamPercent, onAcknowledge }: I
             className="relative w-full max-w-md p-7 space-y-6"
             style={{
               background: 'linear-gradient(160deg, rgba(80,60,10,0.35), rgba(17,14,10,0.95))',
-              border: '1px solid rgba(201,162,39,0.45)',
+              border: '1px solid rgba(179,144,62,0.45)',
               borderRadius: '4px',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.6), 0 0 40px rgba(201,162,39,0.15)',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.6), 0 0 40px rgba(179,144,62,0.15)',
             }}
           >
             <div
               className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.7), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(179,144,62,0.7), transparent)' }}
             />
 
             <div className="flex flex-col items-center text-center space-y-3">
               <div
                 className="w-12 h-12 flex items-center justify-center"
                 style={{
-                  background: 'rgba(201,162,39,0.18)',
-                  border: '1px solid rgba(201,162,39,0.45)',
+                  background: 'rgba(179,144,62,0.18)',
+                  border: '1px solid rgba(179,144,62,0.45)',
                   borderRadius: '2px',
                 }}
               >
-                <AlertTriangle className="h-5 w-5" style={{ color: '#c9a227' }} />
+                <AlertTriangle className="h-5 w-5" style={{ color: '#b3903e' }} />
               </div>
               <h2
                 className="text-xl font-bold"
                 style={{
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  fontFamily: "var(--font-got), Georgia, serif",
                   color: '#e8e0d0',
                   letterSpacing: '0.06em',
                 }}
@@ -64,7 +64,7 @@ export function InvolvementWarningDialog({ open, spamPercent, onAcknowledge }: I
               </h2>
               <div
                 className="h-px w-24"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent)' }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(179,144,62,0.5), transparent)' }}
               />
               <p className="text-sm leading-relaxed" style={{ color: '#a89e90', letterSpacing: '0.01em' }}>
                 Your selections this phase looked rushed or uniform ({percent}% of choices flagged). A focus penalty has been applied to your revenue projection. Slow down — every choice counts.
@@ -76,11 +76,11 @@ export function InvolvementWarningDialog({ open, spamPercent, onAcknowledge }: I
                 onClick={onAcknowledge}
                 className="w-full py-2.5 text-xs font-bold transition-colors"
                 style={{
-                  background: 'rgba(201,162,39,0.18)',
-                  border: '1px solid rgba(201,162,39,0.45)',
+                  background: 'rgba(179,144,62,0.18)',
+                  border: '1px solid rgba(179,144,62,0.45)',
                   borderRadius: '3px',
-                  color: '#c9a227',
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  color: '#b3903e',
+                  fontFamily: "var(--font-got), Georgia, serif",
                   letterSpacing: '0.1em',
                   cursor: 'pointer',
                 }}

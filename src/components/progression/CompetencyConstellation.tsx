@@ -89,8 +89,8 @@ export function CompetencyConstellation({
       >
         <defs>
           <radialGradient id="constellation-haze" cx="50%" cy="48%" r="60%">
-            <stop offset="0%" stopColor="rgba(201,162,39,0.10)" />
-            <stop offset="100%" stopColor="rgba(201,162,39,0)" />
+            <stop offset="0%" stopColor="rgba(179,144,62,0.10)" />
+            <stop offset="100%" stopColor="rgba(179,144,62,0)" />
           </radialGradient>
         </defs>
         <rect x="0" y="0" width="206" height="196" fill="url(#constellation-haze)" />

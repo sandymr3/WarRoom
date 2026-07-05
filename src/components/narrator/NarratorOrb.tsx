@@ -76,8 +76,8 @@ export function NarratorOrb() {
           {/* Orb */}
           <motion.button
             type="button"
-            aria-label="The Oracle"
-            title="The Oracle"
+            aria-label="The Grandmaster"
+            title="The Grandmaster"
             onDoubleClick={() => dismiss()}
             initial={{ opacity: 0, scale: 0.6, y: 12 }}
             animate={{

@@ -35,8 +35,8 @@ const DECISION_LABEL: Record<DealDecision, 'INVEST' | 'CONDITIONAL' | 'PASS'> = 
 
 const DECISION_COLOUR: Record<DealDecision, string> = {
   PRIORITY_1: '#34d399',
-  PRIORITY_2: '#e8c84a',
-  WALK_OUT: '#c23b3b',
+  PRIORITY_2: '#d9b45f',
+  WALK_OUT: '#8e3644',
 }
 
 export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function ShareCard(
@@ -80,7 +80,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
         // Self-contained gradient background so html2canvas doesn't need to load assets.
         background:
           'radial-gradient(ellipse at 50% 20%, #2a1c0a 0%, #1a1208 40%, #0a0805 100%)',
-        fontFamily: "'Cinzel', Georgia, serif",
+        fontFamily: "var(--font-got), Georgia, serif",
       }}
     >
       {/* Top accent */}
@@ -92,7 +92,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
           top: '8%',
           height: '2px',
           background:
-            'linear-gradient(90deg, transparent, rgba(232,200,74,0.8), transparent)',
+            'linear-gradient(90deg, transparent, rgba(217,180,95,0.8), transparent)',
         }}
       />
 
@@ -102,11 +102,11 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
           style={{
             fontSize: '22px',
             letterSpacing: '0.34em',
-            color: 'rgba(201,162,39,0.7)',
+            color: 'rgba(179,144,62,0.7)',
             textTransform: 'uppercase',
           }}
         >
-          The War Room — Verdict
+          The Gambit — Verdict
         </p>
         {founderName && (
           <p
@@ -134,7 +134,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
           style={{
             fontSize: '20px',
             letterSpacing: '0.32em',
-            color: 'rgba(201,162,39,0.65)',
+            color: 'rgba(179,144,62,0.65)',
             textTransform: 'uppercase',
           }}
         >
@@ -146,8 +146,8 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             fontSize: '72px',
             fontWeight: 800,
             lineHeight: 1.05,
-            color: '#e8c84a',
-            textShadow: '0 0 40px rgba(232,200,74,0.5)',
+            color: '#d9b45f',
+            textShadow: '0 0 40px rgba(217,180,95,0.5)',
           }}
         >
           {archetypeName}
@@ -168,7 +168,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
           style={{
             flex: '0 0 360px',
             padding: '36px',
-            border: '1px solid rgba(201,162,39,0.4)',
+            border: '1px solid rgba(179,144,62,0.4)',
             borderRadius: '8px',
             background:
               'linear-gradient(135deg, rgba(42,28,10,0.85), rgba(20,16,12,0.85))',
@@ -179,7 +179,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             style={{
               fontSize: '16px',
               letterSpacing: '0.3em',
-              color: 'rgba(201,162,39,0.7)',
+              color: 'rgba(179,144,62,0.7)',
               textTransform: 'uppercase',
             }}
           >
@@ -191,8 +191,8 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
               fontSize: '128px',
               fontWeight: 800,
               lineHeight: 1,
-              color: '#e8c84a',
-              textShadow: '0 0 36px rgba(232,200,74,0.45)',
+              color: '#d9b45f',
+              textShadow: '0 0 36px rgba(217,180,95,0.45)',
             }}
           >
             {Math.round(legacyScore)}
@@ -207,11 +207,11 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             style={{
               fontSize: '16px',
               letterSpacing: '0.3em',
-              color: 'rgba(201,162,39,0.7)',
+              color: 'rgba(179,144,62,0.7)',
               textTransform: 'uppercase',
             }}
           >
-            Council vote
+            Board vote
           </p>
           {(['INVEST', 'CONDITIONAL', 'PASS'] as const).map((k) => (
             <div
@@ -221,7 +221,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '14px 22px',
-                border: `1px solid ${k === 'INVEST' ? '#34d399' : k === 'CONDITIONAL' ? 'rgba(201,162,39,0.55)' : 'rgba(194,59,59,0.55)'}`,
+                border: `1px solid ${k === 'INVEST' ? '#34d399' : k === 'CONDITIONAL' ? 'rgba(179,144,62,0.55)' : 'rgba(194,59,59,0.55)'}`,
                 background:
                   k === 'INVEST'
                     ? 'rgba(6,78,59,0.4)'
@@ -236,7 +236,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
                   fontSize: '20px',
                   fontWeight: 700,
                   letterSpacing: '0.22em',
-                  color: k === 'INVEST' ? '#a7f3d0' : k === 'CONDITIONAL' ? '#e8c84a' : '#fca5a5',
+                  color: k === 'INVEST' ? '#a7f3d0' : k === 'CONDITIONAL' ? '#d9b45f' : '#fca5a5',
                 }}
               >
                 {k}
@@ -264,7 +264,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             width: '160px',
             height: '1px',
             background:
-              'linear-gradient(90deg, transparent, rgba(201,162,39,0.6), transparent)',
+              'linear-gradient(90deg, transparent, rgba(179,144,62,0.6), transparent)',
           }}
         />
         <p
@@ -275,7 +275,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             textTransform: 'uppercase',
           }}
         >
-          KK&apos;s War Room
+          The Gambit
         </p>
         {/* Hidden helper: keep DECISION_COLOUR import-used so the file doesn't trip
             unused-import rules even when the import remains for future variants. */}

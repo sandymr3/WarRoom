@@ -66,7 +66,7 @@ export function DeliverAnswerButton({
         'min-h-12 px-6 py-3',
         'font-display text-sm font-bold uppercase tracking-[0.12em]',
         'text-primary-foreground',
-        'shadow-[0_2px_12px_rgba(201,162,39,0.32),inset_0_1px_0_rgba(255,220,100,0.35)]',
+        'shadow-[0_2px_12px_rgba(179,144,62,0.32),inset_0_1px_0_rgba(255,220,100,0.35)]',
         'transition-all duration-300',
         'border border-[color:var(--color-warroom-gold)]/55',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
@@ -75,7 +75,7 @@ export function DeliverAnswerButton({
       )}
       style={{
         background:
-          'linear-gradient(135deg, #b8891e 0%, #c9a227 35%, #e8c84a 50%, #c9a227 65%, #b8891e 100%)',
+          'linear-gradient(135deg, #b8891e 0%, #b3903e 35%, #d9b45f 50%, #b3903e 65%, #b8891e 100%)',
         backgroundSize: '200% 100%',
       }}
       aria-busy={isPending}

@@ -49,12 +49,12 @@ export function RankInsignia({
           <defs>
             <linearGradient id="rank-ring" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#8b6914" />
-              <stop offset="50%" stopColor="#e8c84a" />
+              <stop offset="50%" stopColor="#d9b45f" />
               <stop offset="100%" stopColor="#8b6914" />
             </linearGradient>
           </defs>
           <circle cx="50" cy="50" r="46" fill="rgba(10,8,5,0.92)" stroke="url(#rank-ring)" strokeWidth="3" />
-          <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(201,162,39,0.25)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(179,144,62,0.25)" strokeWidth="1" />
           {pipNodes}
         </svg>
         <Crown
@@ -63,7 +63,7 @@ export function RankInsignia({
             width: size * 0.4,
             height: size * 0.4,
             color: 'var(--color-warroom-gold-bright)',
-            filter: `drop-shadow(0 0 ${6 + tier * 2}px rgba(232,200,74,${glow}))`,
+            filter: `drop-shadow(0 0 ${6 + tier * 2}px rgba(217,180,95,${glow}))`,
           }}
         />
       </div>

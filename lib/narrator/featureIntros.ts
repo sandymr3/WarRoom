@@ -1,10 +1,10 @@
 import type { NarratorMood } from '@/src/state/narratorStore'
 
 /**
- * FEATURE_INTROS — first-hover Oracle explanations, keyed by feature.
+ * FEATURE_INTROS — first-hover Grandmaster explanations, keyed by feature.
  *
  * The first time the founder hovers (or focuses) an important control, the
- * Oracle steps in, spotlights it, and explains what it does — once. After
+ * Grandmaster steps in, spotlights it, and explains what it does — once. After
  * that the feature stays silent (a `wr_feat_<key>` localStorage flag is set).
  *
  * Wired via `useFeatureIntro(key)` (src/hooks/useFeatureIntro.ts), which
@@ -13,7 +13,7 @@ import type { NarratorMood } from '@/src/state/narratorStore'
  * fail-soft (silent until supplied — see ASSETS_REQUIRED.md).
  *
  * This map is append-only: add a key here, then spread `useFeatureIntro(key)`
- * onto the control. Copy stays in-world (the Oracle's voice).
+ * onto the control. Copy stays in-world (the Grandmaster's voice).
  */
 export interface FeatureIntro {
   text: string
@@ -23,27 +23,27 @@ export interface FeatureIntro {
 export const FEATURE_INTROS: Record<string, FeatureIntro> = {
   // ── Dashboard / entry ─────────────────────────────────────────
   'dashboard-begin': {
-    text: 'Beyond this door lies the Trial, lord. Press on when your resolve is steeled.',
+    text: 'Beyond this door lies the match, challenger. Press on when your resolve is set.',
     mood: 'pointing',
   },
   'assessment-start': {
-    text: 'Seal your oath and enter the gauntlet. Nine stages stand between you and the War Room.',
+    text: 'Commit your opening and enter the tournament. Nine rounds stand between you and the Grand Board.',
     mood: 'pointing',
   },
 
   // ── Stage simulation ──────────────────────────────────────────
   'stage-submit': {
-    text: 'When your testimony is ready, deliver it to the Council. They weigh every word.',
+    text: 'When your answer is ready, deliver it to the Board. They weigh every word.',
     mood: 'pointing',
   },
   'mentor-block': {
-    text: 'Your mentors whisper counsel here. Spend a lifeline wisely — you hold only a few.',
+    text: 'Your seconds offer counsel here. Spend a hint wisely — you hold only a few.',
     mood: 'whispering',
   },
 
-  // ── War Room ──────────────────────────────────────────────────
+  // ── Grand Board ───────────────────────────────────────────────
   'warroom-pitch-record': {
-    text: 'Raise your voice, lord. Sixty seconds to set the chamber alight with your pitch.',
+    text: 'Raise your voice, challenger. Sixty seconds to command the board with your pitch.',
     mood: 'warning',
   },
   'warroom-investor-mic': {
@@ -53,13 +53,13 @@ export const FEATURE_INTROS: Record<string, FeatureIntro> = {
 
   // ── Negotiation ───────────────────────────────────────────────
   'negotiation-offer': {
-    text: 'An offer on the table. Open it to barter — more coin oft costs more of your realm.',
+    text: 'An offer on the table. Open it to negotiate — more capital oft costs more of your position.',
     mood: 'pointing',
   },
 
   // ── Transition ────────────────────────────────────────────────
   'snapshot-continue': {
-    text: 'The next moon awaits. Press on to face what the season brings.',
+    text: 'The next round awaits. Press on to face what the position brings.',
     mood: 'pointing',
   },
 }

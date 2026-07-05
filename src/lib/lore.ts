@@ -1,30 +1,30 @@
 // ============================================
-// War Room — Codex (lore → plain language)
+// The Gambit — Codex (lore → plain language)
 // ----------------------------------------------------------------
 // Central plain-language definitions for the themed terms, surfaced
-// via <LoreTip>. Keeps the GoT metaphors atmospheric without
+// via <LoreTip>. Keeps the chess metaphors atmospheric without
 // sacrificing comprehension. One source of truth for the copy.
 // ============================================
 
 export const LORE = {
   renown:
-    'Renown — your prestige score, earned by making strong decisions in trials. It raises your Founder Rank.',
+    'Rating — your prestige score, earned by making strong decisions in matches. It raises your Founder Title.',
   founderRank:
-    'Founder Rank — your prestige tier, from Aspirant up to Ruler of the Realm, earned by accumulating Renown.',
+    'Founder Title — your prestige tier, from Novice up to Grandmaster, earned by accumulating Rating.',
   ranking:
     'Your live position on this cohort’s leaderboard, ranked by projected revenue.',
   constellation:
-    'Each star is one of your eight founder competencies. It brightens as you master that skill across trials.',
+    'Each star is one of your eight founder competencies. It brightens as you master that skill across matches.',
   sigil:
-    'Sigils are achievements for genuine feats — earned through merit, never bought.',
+    'Norms are achievements for genuine feats — earned through merit, never bought.',
   hearth:
-    'The Hearth tracks your weekly consistency. Keep it lit by returning each week.',
+    'The Study Candle tracks your weekly consistency. Keep it burning by returning each week.',
   house:
-    'Your House is your identity — crest, words, and colours. New options unlock as your rank rises.',
+    'Your Club is your identity — crest, motto, and colours. New options unlock as your title rises.',
   ironRankings:
-    'The Iron Rankings rank every founder in your cohort by projected revenue.',
+    'The Elo Ladder ranks every founder in your cohort by projected revenue.',
   legacyScore:
-    'Your legacy score is the investors’ average verdict from a completed trial.',
+    'Your legacy score is the investors’ average verdict from a completed match.',
 } as const
 
 export type LoreKey = keyof typeof LORE

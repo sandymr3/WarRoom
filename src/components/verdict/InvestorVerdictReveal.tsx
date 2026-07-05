@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { audioManager } from '@/lib/audio/audioManager'
 import { useTypewriterReveal } from '@/src/hooks/useTypewriterReveal'
 import { investorPortraitSrc } from '@/src/lib/investorAssets'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Investor, InvestorScorecard, DealDecision } from '@/src/types'
 
 // ============================================================
@@ -55,13 +56,13 @@ const LABEL_TONE: Record<VerdictLabel, { text: string; bg: string; border: strin
     text: 'text-[color:var(--color-warroom-gold-bright)]',
     bg: 'bg-[color:var(--color-warroom-obsidian)]/80',
     border: 'border-[color:var(--color-warroom-gold)]/60',
-    shadow: '0 0 30px rgba(201,162,39,0.55)',
+    shadow: '0 0 30px rgba(179,144,62,0.55)',
   },
   PASS: {
     text: 'text-[color:var(--color-warroom-crimson-bright)]',
     bg: 'bg-[color:var(--color-warroom-crimson)]/30',
     border: 'border-[color:var(--color-warroom-crimson)]/70',
-    shadow: '0 0 30px rgba(139,26,26,0.55)',
+    shadow: '0 0 30px rgba(92,26,36,0.55)',
   },
 }
 
@@ -76,7 +77,7 @@ function deriveVerdictText(card: InvestorScorecard | null): string {
   if (card.redFlagReasons?.length) return card.redFlagReasons[0]
   // Score-only fallback
   if (card.primaryScore >= 75) return 'Their conviction was unshaken.'
-  if (card.primaryScore >= 50) return 'They held the council in tension.'
+  if (card.primaryScore >= 50) return 'They held the Board in tension.'
   return 'The chamber doubted their cause.'
 }
 
@@ -128,7 +129,8 @@ export function InvestorVerdictReveal({
     }
   }, [isComplete, holdMs, onComplete])
 
-  const initials = investor.name
+  const displayName = investorDisplayName(investor.name)
+  const initials = displayName
     .split(' ')
     .map((w) => w[0])
     .slice(0, 2)
@@ -155,7 +157,7 @@ export function InvestorVerdictReveal({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={investorPortraitSrc(investor)}
-            alt={investor.name}
+            alt={displayName}
             className="absolute inset-0 h-full w-full object-cover"
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
           />
@@ -168,7 +170,7 @@ export function InvestorVerdictReveal({
 
       <div className="min-w-0 flex-1">
         <p className="font-display text-[0.6rem] uppercase tracking-[0.22em] text-[color:var(--color-warroom-gold)]/70">
-          {investor.name} declares
+          {displayName} declares
         </p>
         <p className="mt-1 font-mono text-sm leading-relaxed text-foreground/90 sm:text-base">
           &ldquo;{revealedText}

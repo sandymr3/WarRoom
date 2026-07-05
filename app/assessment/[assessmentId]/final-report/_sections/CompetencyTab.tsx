@@ -4,8 +4,8 @@ import { CompetencyRadarChart } from '@/components/competency-radar-chart-lazy'
 import type { EvaluationReport, RankedCompetency, CompetencyCode } from '@/src/types'
 
 const COMP_COLORS: Record<string, string> = {
-  C1: '#c9a227', C2: '#e8c84a', C3: '#ff6b00', C4: '#2d6a4f',
-  C5: '#3d6b8e', C6: '#c23b3b', C7: '#2e7d82', C8: '#ff9933',
+  C1: '#b3903e', C2: '#d9b45f', C3: '#d98e2b', C4: '#2d6a4f',
+  C5: '#3d6b8e', C6: '#8e3644', C7: '#2e7d82', C8: '#e5a94d',
   C9: '#7c5a9e',
 }
 
@@ -39,7 +39,7 @@ export function CompetencyTab({ report }: { report: EvaluationReport }) {
           return (
             <div key={comp.code} className="bar-row">
               <div className="bar-label">
-                <span className="comp-code" style={{ color: COMP_COLORS[comp.code] || '#c9a227' }}>
+                <span className="comp-code" style={{ color: COMP_COLORS[comp.code] || '#b3903e' }}>
                   {comp.code}
                 </span>
                 <span className="comp-name">{comp.name}</span>
@@ -47,7 +47,7 @@ export function CompetencyTab({ report }: { report: EvaluationReport }) {
               <div className="bar-track">
                 <div
                   className="bar-fill"
-                  style={{ width: `${(scaledScore / maxVal) * 100}%`, background: COMP_COLORS[comp.code] || '#c9a227' }}
+                  style={{ width: `${(scaledScore / maxVal) * 100}%`, background: COMP_COLORS[comp.code] || '#b3903e' }}
                 />
               </div>
               <div className="bar-value">{scaledScore.toFixed(1)}</div>

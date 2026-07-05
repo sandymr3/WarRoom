@@ -73,7 +73,7 @@ export function AnswerScrollInput({
         className="pointer-events-none absolute inset-x-0 top-0 h-[2px]"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(201,162,39,0.6), rgba(232,200,74,0.85), rgba(201,162,39,0.6), transparent)',
+            'linear-gradient(90deg, transparent, rgba(179,144,62,0.6), rgba(217,180,95,0.85), rgba(179,144,62,0.6), transparent)',
         }}
       />
 

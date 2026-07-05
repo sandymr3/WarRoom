@@ -83,7 +83,7 @@ export function PastVerdictCard({
       href={href}
       className={cn(
         'group block rounded-md border border-[color:var(--color-warroom-gold)]/25 bg-card/70 p-4 backdrop-blur-sm transition-all',
-        'hover:border-[color:var(--color-warroom-gold)]/60 hover:bg-card/85 hover:shadow-[0_4px_24px_rgba(201,162,39,0.18)]',
+        'hover:border-[color:var(--color-warroom-gold)]/60 hover:bg-card/85 hover:shadow-[0_4px_24px_rgba(179,144,62,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-warroom-gold)]',
         className,
       )}
@@ -123,7 +123,7 @@ export function PastVerdictCard({
           )}
 
           <p className="mt-2 text-[0.65rem] uppercase tracking-[0.16em] text-foreground/40">
-            {investorCount > 0 ? `${investorCount} investors faced` : 'Council not yet assembled'}
+            {investorCount > 0 ? `${investorCount} investors faced` : 'Board not yet assembled'}
           </p>
         </div>
 

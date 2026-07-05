@@ -35,9 +35,9 @@ export function MentorBlock({ lifelinesLeft, tip, onOpen }: MentorBlockProps) {
       {...intro}
       className="rounded-xl border bg-card p-4 space-y-3"
       style={{
-        borderColor: 'rgba(201,162,39,0.28)',
+        borderColor: 'rgba(179,144,62,0.28)',
         background:
-          'linear-gradient(135deg, rgba(201,162,39,0.05), transparent 60%), hsl(var(--card))',
+          'linear-gradient(135deg, rgba(179,144,62,0.05), transparent 60%), hsl(var(--card))',
       }}
     >
       <div className="flex items-center gap-2">
@@ -45,13 +45,13 @@ export function MentorBlock({ lifelinesLeft, tip, onOpen }: MentorBlockProps) {
           animate={{ y: [0, -2.5, 0] }}
           transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
           className="flex h-7 w-7 items-center justify-center rounded-full"
-          style={{ background: 'rgba(201,162,39,0.12)', border: '1px solid rgba(201,162,39,0.3)' }}
+          style={{ background: 'rgba(179,144,62,0.12)', border: '1px solid rgba(179,144,62,0.3)' }}
         >
-          <ScrollText className="h-3.5 w-3.5" style={{ color: '#c9a227' }} />
+          <ScrollText className="h-3.5 w-3.5" style={{ color: '#b3903e' }} />
         </motion.span>
         <span
           className="text-sm font-semibold"
-          style={{ fontFamily: "'Cinzel', Georgia, serif", letterSpacing: '0.06em', color: '#c9a227' }}
+          style={{ fontFamily: "var(--font-got), Georgia, serif", letterSpacing: '0.06em', color: '#b3903e' }}
         >
           Mentor&rsquo;s Counsel
         </span>
@@ -63,7 +63,7 @@ export function MentorBlock({ lifelinesLeft, tip, onOpen }: MentorBlockProps) {
           style={{
             padding: '0.6rem 0.75rem',
             background: 'rgba(0,0,0,0.18)',
-            borderLeft: '2px solid rgba(201,162,39,0.5)',
+            borderLeft: '2px solid rgba(179,144,62,0.5)',
             borderRadius: '0 4px 4px 0',
             fontStyle: 'italic',
           }}

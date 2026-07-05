@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { investorPortraitSrc } from '@/src/lib/investorAssets'
+import { investorDisplayName } from '@/src/lib/helpers'
 import type { Investor, InvestorScorecard, DealDecision } from '@/src/types'
 import type { VerdictLabel } from './InvestorVerdictReveal'
 
@@ -56,7 +57,7 @@ export function VoteTallyBoard({
         'grid w-full grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6',
         className,
       )}
-      aria-label="Council vote tally"
+      aria-label="Board vote tally"
     >
       {investors.map((inv, i) => {
         const card = scorecardById.get(inv.id) ?? null
@@ -85,13 +86,13 @@ export function VoteTallyBoard({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={investorPortraitSrc(inv)}
-                  alt={inv.name}
+                  alt={investorDisplayName(inv.name)}
                   className="h-full w-full object-cover"
                   onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                 />
               ) : (
                 <span className="flex h-full w-full items-center justify-center font-display text-xs text-foreground/60">
-                  {inv.name
+                  {investorDisplayName(inv.name)
                     .split(' ')
                     .map((w) => w[0])
                     .slice(0, 2)
@@ -101,7 +102,7 @@ export function VoteTallyBoard({
               )}
             </div>
             <p className="truncate text-[0.65rem] font-medium leading-tight text-foreground/70">
-              {inv.name}
+              {investorDisplayName(inv.name)}
             </p>
             <motion.div
               initial={false}

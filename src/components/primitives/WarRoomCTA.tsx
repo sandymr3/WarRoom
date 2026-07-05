@@ -94,7 +94,7 @@ export const WarRoomCTA = forwardRef<HTMLButtonElement, WarRoomCTAProps>(
           ...(variant === 'primary'
             ? {
                 background:
-                  'linear-gradient(135deg, #8b6914, #c9a227, #e8c84a, #c9a227, #8b6914)',
+                  'linear-gradient(135deg, #8b6914, #b3903e, #d9b45f, #b3903e, #8b6914)',
                 backgroundSize: '200% 100%',
               }
             : {}),

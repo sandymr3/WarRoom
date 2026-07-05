@@ -29,7 +29,7 @@ export default async function DashboardLayout({
                     className="text-[color:var(--color-warroom-smoke)] hover:text-[color:var(--color-warroom-gold)] transition-colors"
                     style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.06em', fontSize: '0.8rem' }}
                   >
-                    War Room
+                    The Gambit
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block text-[color:var(--color-warroom-gold)]/30" />

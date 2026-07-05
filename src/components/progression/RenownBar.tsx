@@ -2,7 +2,7 @@
 
 // ============================================
 // <RenownBar /> — rank insignia + a restrained progress rail toward
-// the next rank, with a CountUp of total Renown. The prestige spine's
+// the next title, with a CountUp of total Rating. The prestige spine's
 // at-a-glance widget for the dashboard banner.
 // ============================================
 
@@ -43,7 +43,7 @@ export function RenownBar({ rank, renown, showInsignia = true, className }: Reno
             className="shrink-0 text-[11px] tracking-[0.08em] text-[color:var(--color-warroom-gold)]"
             style={{ fontFamily: 'var(--font-data, var(--font-mono))' }}
           >
-            <CountUp end={renown} duration={1.4} /> Renown
+            <CountUp end={renown} duration={1.4} /> Rating
           </span>
         </div>
 
@@ -53,14 +53,14 @@ export function RenownBar({ rank, renown, showInsignia = true, className }: Reno
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(frac * 100)}
-          aria-label="Progress to next rank"
+          aria-label="Progress to next title"
         >
           <motion.div
             className="h-full rounded-full"
             style={{
               background:
                 'linear-gradient(90deg, var(--color-warroom-gold-dark), var(--color-warroom-gold-bright))',
-              boxShadow: '0 0 10px rgba(201,162,39,0.45)',
+              boxShadow: '0 0 10px rgba(179,144,62,0.45)',
             }}
             initial={prefersReduced ? false : { width: 0 }}
             animate={{ width: `${frac * 100}%` }}
@@ -73,7 +73,7 @@ export function RenownBar({ rank, renown, showInsignia = true, className }: Reno
           style={{ fontFamily: 'var(--font-display)' }}
         >
           {atMax || !next
-            ? 'Apex rank — the realm is yours'
+            ? 'Highest title — the summit of the Elo Ladder'
             : `${rank.renownIntoTier.toLocaleString()} / ${rank.renownForNextTier?.toLocaleString()} to ${next.title}`}
         </div>
       </div>

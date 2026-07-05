@@ -55,7 +55,7 @@ export function MicPermissionDialog({ open, onAllow, onUseText, hideTextOption }
               <h2
                 className="text-xl font-bold"
                 style={{
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  fontFamily: "var(--font-got), Georgia, serif",
                   color: '#e8e0d0',
                   letterSpacing: '0.06em',
                 }}
@@ -82,7 +82,7 @@ export function MicPermissionDialog({ open, onAllow, onUseText, hideTextOption }
                   border: '1px solid rgba(99,102,241,0.55)',
                   borderRadius: '3px',
                   color: '#c7d2fe',
-                  fontFamily: "'Cinzel', Georgia, serif",
+                  fontFamily: "var(--font-got), Georgia, serif",
                   letterSpacing: '0.1em',
                   cursor: 'pointer',
                 }}
@@ -94,11 +94,11 @@ export function MicPermissionDialog({ open, onAllow, onUseText, hideTextOption }
                   onClick={onUseText}
                   className="py-2.5 text-xs font-bold transition-colors flex items-center justify-center gap-2"
                   style={{
-                    background: 'rgba(201,162,39,0.06)',
-                    border: '1px solid rgba(201,162,39,0.25)',
+                    background: 'rgba(179,144,62,0.06)',
+                    border: '1px solid rgba(179,144,62,0.25)',
                     borderRadius: '3px',
-                    color: '#c9a227',
-                    fontFamily: "'Cinzel', Georgia, serif",
+                    color: '#b3903e',
+                    fontFamily: "var(--font-got), Georgia, serif",
                     letterSpacing: '0.1em',
                     cursor: 'pointer',
                   }}

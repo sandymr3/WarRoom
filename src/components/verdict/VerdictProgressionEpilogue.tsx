@@ -42,7 +42,7 @@ export function VerdictProgressionEpilogue({
 
       <div className="relative z-10 flex w-full max-w-lg flex-col items-center gap-7 text-center">
         <p className="font-display text-[0.6rem] uppercase tracking-[0.34em] text-[color:var(--color-warroom-gold)]/75">
-          The Realm Takes Note
+          The Board Takes Note
         </p>
 
         <HouseBanner
@@ -59,7 +59,7 @@ export function VerdictProgressionEpilogue({
         {newSigils.length > 0 && (
           <div className="flex w-full flex-col items-center gap-3">
             <p className="font-display text-[0.6rem] uppercase tracking-[0.24em] text-foreground/55">
-              {newSigils.length === 1 ? 'Sigil Won' : `${newSigils.length} Sigils Won`}
+              {newSigils.length === 1 ? 'Norm Won' : `${newSigils.length} Norms Won`}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               {newSigils.map((s) => {

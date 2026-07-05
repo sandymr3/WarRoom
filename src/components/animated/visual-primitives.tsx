@@ -16,12 +16,12 @@ interface GlowCardProps {
   style?: React.CSSProperties
 }
 
-export function GlowCard({ children, className, glowColor = 'rgba(201, 162, 39, 0.12)', hoverScale = 1.02, style }: GlowCardProps) {
+export function GlowCard({ children, className, glowColor = 'rgba(179, 144, 62, 0.12)', hoverScale = 1.02, style }: GlowCardProps) {
   return (
     <motion.div
       whileHover={{
         scale: hoverScale,
-        boxShadow: `0 0 30px ${glowColor}, 0 0 60px ${glowColor}, inset 0 1px 0 rgba(201,162,39,0.15)`,
+        boxShadow: `0 0 30px ${glowColor}, 0 0 60px ${glowColor}, inset 0 1px 0 rgba(179,144,62,0.15)`,
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className={cn(
@@ -31,12 +31,12 @@ export function GlowCard({ children, className, glowColor = 'rgba(201, 162, 39, 
       )}
       style={{
         background: 'linear-gradient(135deg, rgba(17,14,10,0.9), rgba(10,8,6,0.8))',
-        border: '1px solid rgba(201,162,39,0.12)',
+        border: '1px solid rgba(179,144,62,0.12)',
         borderRadius: '4px',
         ...style,
       }}
     >
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,162,39,0.25), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(179,144,62,0.25), transparent)' }} />
       {children}
     </motion.div>
   )

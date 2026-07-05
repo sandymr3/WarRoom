@@ -1,5 +1,5 @@
 // ============================================
-// War Room — Progression mock adapter
+// The Gambit — Progression mock adapter
 // ----------------------------------------------------------------
 // Derives a FounderProgression from data that ALREADY exists
 // (assessments + reports + locally-stored house) so the UI is fully
@@ -28,6 +28,7 @@ import {
   DEFAULT_HOUSE,
   categoryForAverage,
   rankForRenown,
+  sigilById,
 } from '@/src/lib/progression'
 
 // --- tunable mock weights (the backend owns the real numbers) ---
@@ -217,11 +218,11 @@ export function deriveProgression(input: DeriveInput): FounderProgression {
     history.push({
       date: a.completedAt || a.updatedAt || a.createdAt,
       delta: RENOWN_PER_TRIAL,
-      reason: 'Trial completed',
+      reason: 'Match completed',
     })
   }
   for (const s of sigils) {
-    history.push({ date: s.earnedAt, delta: SIGIL_RENOWN[s.tier], reason: `Sigil earned: ${s.id}` })
+    history.push({ date: s.earnedAt, delta: SIGIL_RENOWN[s.tier], reason: `Norm earned: ${sigilById(s.id)?.name ?? s.id}` })
   }
   history.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 

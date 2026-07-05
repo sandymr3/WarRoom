@@ -31,10 +31,10 @@ const FADE_OUT_MS = 800
 const FALLBACK_DURATION_MS = 5200
 
 const DEFAULT_CUES: SubtitleCue[] = [
-  { atMs: 1800, text: 'The Council has been assembled…', holdMs: 2800 },
-  { atMs: 4800, text: 'Six lords. One throne.', holdMs: 2600 },
-  { atMs: 7600, text: 'Defend your vision.', holdMs: 2400 },
-  { atMs: 10200, text: 'Or burn.', holdMs: 2600 },
+  { atMs: 1800, text: 'The Board has been assembled…', holdMs: 2800 },
+  { atMs: 4800, text: 'Seven grandmasters. One title.', holdMs: 2600 },
+  { atMs: 7600, text: 'Defend your position.', holdMs: 2400 },
+  { atMs: 10200, text: 'Or resign.', holdMs: 2600 },
 ]
 
 interface WarRoomEntranceProps {
@@ -227,8 +227,8 @@ function FallbackDoorsAnimation({ reducedMotion }: { reducedMotion: boolean }) {
         style={{
           background:
             'linear-gradient(90deg, #1a0a00 0%, #2a1808 60%, #3d2210 100%)',
-          borderRight: '2px solid rgba(201,162,39,0.45)',
-          boxShadow: 'inset -10px 0 30px rgba(0,0,0,0.7), 8px 0 40px rgba(201,162,39,0.18)',
+          borderRight: '2px solid rgba(179,144,62,0.45)',
+          boxShadow: 'inset -10px 0 30px rgba(0,0,0,0.7), 8px 0 40px rgba(179,144,62,0.18)',
         }}
       />
       <motion.div
@@ -239,8 +239,8 @@ function FallbackDoorsAnimation({ reducedMotion }: { reducedMotion: boolean }) {
         style={{
           background:
             'linear-gradient(270deg, #1a0a00 0%, #2a1808 60%, #3d2210 100%)',
-          borderLeft: '2px solid rgba(201,162,39,0.45)',
-          boxShadow: 'inset 10px 0 30px rgba(0,0,0,0.7), -8px 0 40px rgba(201,162,39,0.18)',
+          borderLeft: '2px solid rgba(179,144,62,0.45)',
+          boxShadow: 'inset 10px 0 30px rgba(0,0,0,0.7), -8px 0 40px rgba(179,144,62,0.18)',
         }}
       />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

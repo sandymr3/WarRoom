@@ -38,7 +38,7 @@ const FAQ_ITEMS = [
     id: 'faq-1',
     question: 'How long does the simulation take?',
     answer:
-      'The War Room simulation typically takes 60-90 minutes to complete. You can pause and resume at any time, and your progress will be saved automatically.',
+      'The Gambit simulation typically takes 60-90 minutes to complete. You can pause and resume at any time, and your progress will be saved automatically.',
   },
   {
     id: 'faq-2',
@@ -118,14 +118,14 @@ export default function SupportPage() {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            The Council&apos;s Aid
+            The Analysis Room
           </h1>
         </div>
         <p
           className="text-sm text-[color:var(--color-warroom-smoke)] mb-4"
           style={{ fontFamily: 'var(--font-body, serif)' }}
         >
-          Get help with War Room simulation and troubleshooting.
+          Get help with the Gambit simulation and troubleshooting.
         </p>
         <GoldDivider variant="line" />
       </motion.div>

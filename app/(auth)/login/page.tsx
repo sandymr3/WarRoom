@@ -123,7 +123,7 @@ function LoginContent() {
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Return to the War Room
+          Return to the Board
         </motion.h1>
 
         <motion.p
@@ -135,7 +135,7 @@ function LoginContent() {
         >
           {isAdmin
             ? 'Sign in to the admin panel'
-            : 'Sign in to your War Room simulation'}
+            : 'Sign in to your Gambit simulation'}
         </motion.p>
       </div>
 
@@ -333,10 +333,10 @@ function LoginContent() {
               className="w-full justify-center"
             >
               {loading
-                ? 'Opening the gates…'
+                ? 'Opening the board…'
                 : isAdmin
                   ? 'Sign In as Admin'
-                  : 'Enter the War Room'}
+                  : 'Enter the Gambit'}
             </WarRoomCTA>
           </form>
         </StoneCard>
