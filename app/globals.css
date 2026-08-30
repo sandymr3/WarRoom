@@ -22,13 +22,13 @@
   --secondary-foreground: oklch(0.18 0.005 240);
   --muted: oklch(0.91 0.003 240);
   --muted-foreground: oklch(0.48 0.008 240);
-  --accent: oklch(0.62 0.06 75);             /* muted gold */
-  --accent-foreground: oklch(0.12 0.005 240);
+  --accent: oklch(0.62 0.16 48);             /* tactical ember orange */
+  --accent-foreground: oklch(0.98 0.005 90);
   --destructive: oklch(0.52 0.18 25);
   --destructive-foreground: oklch(0.97 0 0);
   --border: oklch(0.82 0.005 240);
   --input: oklch(0.90 0.003 240);
-  --ring: oklch(0.62 0.06 75);
+  --ring: oklch(0.62 0.16 48);
   --chart-1: oklch(0.62 0.06 75);            /* muted gold */
   --chart-2: oklch(0.18 0.005 240);          /* charcoal */
   --chart-3: oklch(0.55 0.04 220);           /* steel blue */
@@ -486,6 +486,31 @@
   .badge-error {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500/10 text-red-500;
   }
+}
+
+/* ============================================================
+ * WAR ROOM — restrained fire and flag motion
+ * ============================================================ */
+@keyframes warroom-spark {
+  0% { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.6); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(18px, -150px, 0) scale(0.15); }
+}
+
+@keyframes warroom-flicker {
+  0%, 100% { opacity: 0.45; transform: scaleY(0.94) skewX(-4deg); }
+  50% { opacity: 0.8; transform: scaleY(1.08) skewX(5deg); }
+}
+
+@keyframes warroom-flag {
+  0%, 100% { transform: rotate(-2deg) skewY(0deg) scaleX(1); filter: saturate(0.95) brightness(1); }
+  25% { transform: rotate(1deg) skewY(2deg) scaleX(0.98); filter: saturate(1.05) brightness(1.04); }
+  50% { transform: rotate(-3deg) skewY(-2deg) scaleX(1.02); filter: saturate(1.1) brightness(1.08); }
+  75% { transform: rotate(2deg) skewY(1deg) scaleX(0.99); filter: saturate(1) brightness(1.02); }
+}
+
+.warroom-spark {
+  animation: warroom-spark 3s ease-out infinite;
 }
 
 /* ============================================================

@@ -24,8 +24,9 @@ const PADDING = 12
  * The dim overlay has pointer-events: none so the spotlit element
  * stays clickable.
  *
- * Tracks the element via getBoundingClientRect with a ResizeObserver
- * + window resize/scroll listener for liveness.
+ * Tracks the element via getBoundingClientRect with animation-frame
+ * scheduling and window resize/scroll listeners for liveness. Avoids
+ * ResizeObserver feedback loops from animated layout changes.
  */
 export function NarratorSpotlight({ targetElementId }: NarratorSpotlightProps) {
   const [rect, setRect] = useState<Rect | null>(null)
@@ -42,7 +43,9 @@ export function NarratorSpotlight({ targetElementId }: NarratorSpotlightProps) {
       return
     }
 
-    const update = () => {
+    let frame = 0
+    const measure = () => {
+      frame = 0
       const el = document.getElementById(targetElementId)
       if (!el) {
         setRect(null)
@@ -56,15 +59,11 @@ export function NarratorSpotlight({ targetElementId }: NarratorSpotlightProps) {
         height: r.height + PADDING * 2,
       })
     }
+    const update = () => {
+      if (frame === 0) frame = requestAnimationFrame(measure)
+    }
 
     update()
-
-    const el = document.getElementById(targetElementId)
-    let ro: ResizeObserver | null = null
-    if (el && typeof ResizeObserver !== 'undefined') {
-      ro = new ResizeObserver(update)
-      ro.observe(el)
-    }
 
     window.addEventListener('resize', update, { passive: true })
     window.addEventListener('scroll', update, { passive: true, capture: true })
@@ -72,6 +71,7 @@ export function NarratorSpotlight({ targetElementId }: NarratorSpotlightProps) {
     return () => {
       window.removeEventListener('resize', update)
       window.removeEventListener('scroll', update, { capture: true } as never)
+      if (frame) cancelAnimationFrame(frame)
       if (ro) ro.disconnect()
     }
   }, [targetElementId, mounted])

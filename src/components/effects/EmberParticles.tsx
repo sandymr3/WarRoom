@@ -122,11 +122,21 @@ export function EmberParticles({
     populate()
     raf = requestAnimationFrame(frame)
 
-    const ro = new ResizeObserver(() => { resize(); populate() })
+    let resizeFrame = 0
+    const scheduleResize = () => {
+      if (resizeFrame !== 0) return
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = 0
+        resize()
+        populate()
+      })
+    }
+    const ro = new ResizeObserver(scheduleResize)
     if (canvas.parentElement) ro.observe(canvas.parentElement)
 
     return () => {
       cancelAnimationFrame(raf)
+      if (resizeFrame) cancelAnimationFrame(resizeFrame)
       ro.disconnect()
     }
   }, [density, speed])

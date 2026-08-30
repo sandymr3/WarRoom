@@ -75,8 +75,8 @@ export function RouteBackground({ bg, brightness = 0.35 }: RouteBackgroundProps)
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-20"
         style={{
-          backgroundColor: '#0d0d0d',
-          backgroundImage: 'conic-gradient(#141414 25%, #0d0d0d 0 50%, #141414 0 75%, #0d0d0d 0)',
+          backgroundColor: 'var(--background)',
+          backgroundImage: 'conic-gradient(color-mix(in srgb, var(--card) 70%, transparent) 25%, var(--background) 0 50%, color-mix(in srgb, var(--card) 70%, transparent) 0 75%, var(--background) 0)',
           backgroundSize: '160px 160px',
         }}
       />
@@ -88,7 +88,7 @@ export function RouteBackground({ bg, brightness = 0.35 }: RouteBackgroundProps)
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          filter: `brightness(${currentBrightness})`,
+          filter: `brightness(${currentBrightness}) saturate(${mounted && resolvedTheme === 'light' ? 0.72 : 1})`,
         }}
       />
       {/* Cinematic vignette — CSS radial gradient from transparent center to black edges */}
