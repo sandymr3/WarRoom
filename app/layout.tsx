@@ -8,7 +8,6 @@ import { Toaster } from '@/components/ui/toaster'
 import { NarratorOrb } from '@/src/components/narrator/NarratorOrb'
 import { GlobalControls } from '@/src/components/GlobalControls'
 import dynamic from 'next/dynamic'
-const CustomCursor = dynamic(() => import('@/src/components/effects/CustomCursor').then(mod => mod.CustomCursor))
 const EmberParticles = dynamic(() => import('@/src/components/effects/EmberParticles').then(mod => mod.EmberParticles))
 const AudioSettingsLoader = dynamic(() => import('@/src/components/AudioSettingsLoader').then(mod => mod.AudioSettingsLoader))
 import './globals.css'
@@ -55,6 +54,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
+          forcedTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
@@ -64,7 +64,6 @@ export default function RootLayout({
               <GlobalControls />
               {children}
               <NarratorOrb />
-              <CustomCursor />
               <EmberParticles density={20} />
               <Toaster />
             </MotionConfig>

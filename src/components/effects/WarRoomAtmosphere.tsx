@@ -24,11 +24,6 @@ export function WarRoomAtmosphere({ className }: { className?: string }) {
           style={{ left: spark.left, bottom: spark.bottom, width: spark.size, height: spark.size, animationDelay: spark.delay, animationDuration: spark.duration }}
         />
       ))}
-      <img
-        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-aTbWSr33r3mT0KFMXrYJa9PfHEalfR.png"
-        alt=""
-        className="warroom-cloth-flag absolute left-0 top-[4%] z-[1] h-[58%] w-[30%] origin-top-left object-cover object-left-top opacity-70 mix-blend-multiply motion-safe:animate-[warroom-flag_5s_ease-in-out_infinite]"
-      />
       <div className="absolute bottom-0 left-1/2 h-40 w-72 -translate-x-1/2 rounded-full bg-orange-600/20 blur-3xl motion-safe:animate-[warroom-flicker_2.2s_ease-in-out_infinite]" />
     </div>
   )

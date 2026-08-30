@@ -10,13 +10,13 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen text-[color:var(--color-chessboard-ivory)] relative overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden text-[color:var(--color-chessboard-ivory)]">
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          background:
-            'radial-gradient(ellipse 60% 40% at 50% 20%, rgba(200,168,74,0.04) 0%, transparent 70%)',
+          backgroundImage:
+            'linear-gradient(rgba(18, 8, 5, 0.52), rgba(18, 8, 5, 0.52)), url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Stone_rook_pieces_clashing_2K_202608302003-jDYCH3REiJWx8JS7zCeNjd9CY9alne.jpeg")',
         }}
       />
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-12">

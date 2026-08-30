@@ -52,7 +52,7 @@
 
   /* Chess surface tokens — light */
   --wr-void: #FFFFFF;
-  --wr-black: #FFFFFF;
+  --wr-black: #0D0D0D;
   --wr-obsidian: #FAFAFA;
   --wr-rampart: #FFFFFF;
   --wr-stone: #FFFFFF;
@@ -61,7 +61,7 @@
   --wr-smoke: #71717A;
   --wr-ivory: #09090B;
   --wr-ghost: #18181B;
-  --wr-electrum: #A67C00;
+  --wr-electrum: #C2410C;
   --wr-parchment: #18181B;         /* readable dark ink — text sits on adaptive light panels */
   --wr-ink: #000000;
   --wr-button-ink: #f4f4f4;        /* theme-invariant: chess CTA buttons stay dark in both modes */
@@ -70,10 +70,10 @@
      legible regardless of site theme — defined once here, not re-declared in
      .dark since the value doesn't change. */
   --wr-ivory-wash: linear-gradient(160deg, rgba(10,8,4,0.82) 0%, rgba(10,8,4,0.60) 55%, rgba(10,8,4,0.78) 100%);
-  --wr-gold: #B8860B;
-  --wr-gold-bright: #A67C00;
+  --wr-gold: #EA580C;
+  --wr-gold-bright: #F97316;
   --wr-silver: #71717A;
-  --wr-ember: #A67C00;
+  --wr-ember: #EA580C;
   --wr-gold-glow: transparent;
   --wr-dragonglass: #FAFAFA;
   --wr-shadow-gold: 4px 4px 0px #E4E4E7;
@@ -81,13 +81,13 @@
   --wr-shadow-deep: 4px 4px 0px #E4E4E7;
   --wr-glow-ember: 0 0 0px transparent;
   --wr-page-grad-end: #FAFAFA;
-  --wr-header-bg: rgba(255, 255, 255, 0.96);
-  --wr-panel-bg: #FFFFFF;
-  --wr-panel-bg-heavy: #FFFFFF;
-  --wr-panel-bg-darker: #FAFAFA;
-  --wr-offer-portrait-bg: #FAFAFA;
-  --wr-parchment-wash: #FFFFFF;
-  --wr-overlay-bg: rgba(255, 255, 255, 0.85);
+  --wr-header-bg: transparent;
+  --wr-panel-bg: transparent;
+  --wr-panel-bg-heavy: transparent;
+  --wr-panel-bg-darker: transparent;
+  --wr-offer-portrait-bg: transparent;
+  --wr-parchment-wash: transparent;
+  --wr-overlay-bg: transparent;
   --wr-vignette: transparent;
   --wr-checker-1: transparent;
   --wr-checker-2: rgba(0, 0, 0, 0.02);
@@ -442,8 +442,8 @@
 
   /* Chess Panel — premium dark surface */
   .got-stone-card {
-    background: #FFFFFF;
-    border: 1px solid var(--color-chessboard-ash);
+    background: rgba(18, 8, 5, 0.24);
+    border: 1px solid rgba(255, 220, 190, 0.32);
     border-radius: 4px;
     position: relative;
     overflow: hidden;
@@ -502,12 +502,6 @@
   50% { opacity: 0.8; transform: scaleY(1.08) skewX(5deg); }
 }
 
-@keyframes warroom-flag {
-  0%, 100% { transform: rotate(-2deg) skewY(0deg) scaleX(1); filter: saturate(0.95) brightness(1); }
-  25% { transform: rotate(1deg) skewY(2deg) scaleX(0.98); filter: saturate(1.05) brightness(1.04); }
-  50% { transform: rotate(-3deg) skewY(-2deg) scaleX(1.02); filter: saturate(1.1) brightness(1.08); }
-  75% { transform: rotate(2deg) skewY(1deg) scaleX(0.99); filter: saturate(1) brightness(1.02); }
-}
 
 .warroom-spark {
   animation: warroom-spark 3s ease-out infinite;
