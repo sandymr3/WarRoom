@@ -39,7 +39,14 @@ import {
   writeStoredHouse,
 } from '@/src/lib/progressionMock';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+// Keep local development pointed at the local Go service, but never let a
+// production build silently call localhost. The deployed frontend uses the
+// shared Cloud Run backend when NEXT_PUBLIC_API_URL is not injected at build time.
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'https://warroom-backend-git-262374983592.us-central1.run.app/api'
+    : 'http://localhost:8080/api');
 
 // Progression: flip to live by setting NEXT_PUBLIC_PROGRESSION_API=live once the
 // backend ships /progression/*. Until then we derive from existing endpoints.

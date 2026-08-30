@@ -124,14 +124,8 @@ export default function RegisterPage() {
           initial={prefersReducedMotion ? false : { y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.25, duration: 0.45, ease: easeDramatic }}
-          className="text-2xl font-semibold tracking-[0.04em]"
-          style={{
-            fontFamily: 'var(--font-display)',
-            background:
-              'linear-gradient(135deg, var(--color-chessboard-gold), var(--color-chessboard-gold-bright))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
+          className="text-2xl font-black uppercase tracking-[0.14em] text-white"
+          style={{ fontFamily: 'var(--font-display)' }}
         >
           Claim Your Seat
         </motion.h1>
