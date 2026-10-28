@@ -299,7 +299,7 @@ export function SnapshotDashboard({ show, revenue, previousRevenue, leaderboardE
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[65] bg-background/95 backdrop-blur-xl flex items-center justify-center overflow-y-auto p-4"
+          className="fixed inset-0 z-[65] bg-background/50 backdrop-blur-xl flex items-center justify-center overflow-y-auto p-4"
         >
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.97 }}

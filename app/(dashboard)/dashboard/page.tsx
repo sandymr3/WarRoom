@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { LeaderboardPanel } from '@/src/components/LeaderboardPanel'
-import { StartSimulationDialog } from '@/src/components/StartSimulationDialog'
 import { useLeaderboard } from '@/src/hooks/useLeaderboard'
 import {
   ArrowRight,
@@ -84,7 +83,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const [simulations, setSimulations] = useState<AssessmentWithRevenue[]>([])
   const [loading, setLoading] = useState(true)
-  const [startDialogOpen, setStartDialogOpen] = useState(false)
   const [user, setUser] = useState<{
     name: string
     email: string
@@ -162,11 +160,6 @@ export default function DashboardPage() {
       .catch(() => setSimulations([]))
       .finally(() => setLoading(false))
   }, [router])
-
-  const handleSimulationCreated = (assessmentId: string) => {
-    setStartDialogOpen(false)
-    router.push(`/assessment/${assessmentId}`)
-  }
 
   const handleLogout = async () => {
     await signOutUser()
@@ -256,7 +249,7 @@ export default function DashboardPage() {
     if (currentSim) {
       router.push(`/assessment/${currentSim.id}`)
     } else {
-      setStartDialogOpen(true)
+      router.push('/assessment/new')
     }
   }
 
@@ -277,7 +270,7 @@ export default function DashboardPage() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="sticky top-0 z-40 border-b backdrop-blur-md bg-[color:var(--color-chessboard-black)]/80 border-[color:var(--color-chessboard-silver)]/15"
+        className="sticky top-0 z-40 border-b backdrop-blur-md bg-[color:var(--color-chessboard-void)]/90 border-[color:var(--color-chessboard-ash)]/60"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -389,7 +382,7 @@ export default function DashboardPage() {
                   <span
                     style={{
                       background:
-                        'linear-gradient(135deg, #c8a84a, #f0c040, #c8a84a)',
+                        'linear-gradient(135deg, var(--color-chessboard-gold), var(--color-chessboard-gold-bright), var(--color-chessboard-gold))',
                       WebkitBackgroundClip: 'text',
                       backgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
@@ -695,7 +688,7 @@ export default function DashboardPage() {
                     variant="primary"
                     icon={Plus}
                     sfxKey="nav.door-open"
-                    onClick={() => setStartDialogOpen(true)}
+                    onClick={() => router.push('/assessment/new')}
                   >
                     Start Your First Trial
                   </ChessboardCTA>
@@ -790,12 +783,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      <StartSimulationDialog
-        open={startDialogOpen}
-        onOpenChange={setStartDialogOpen}
-        onCreated={handleSimulationCreated}
-      />
 
       {newSigils.length > 0 && (
         <SigilUnlockOverlay sigils={newSigils} onClose={acknowledgeSigils} />

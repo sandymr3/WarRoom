@@ -35,7 +35,7 @@ export function GoldDivider({ variant = 'sword', width, className }: GoldDivider
 
   return (
     <div
-      className={cn('flex items-center gap-4 mx-auto', isClassWidth ? width : undefined, className)}
+      className={cn('flex items-center gap-4 mx-auto min-w-0', isClassWidth ? width : undefined, className)}
       style={!isClassWidth && width ? { maxWidth: width } : undefined}
     >
       <svg role="presentation" aria-hidden className="flex-1 h-[1px] overflow-visible" viewBox="0 0 100 1" preserveAspectRatio="none">
@@ -49,6 +49,7 @@ export function GoldDivider({ variant = 'sword', width, className }: GoldDivider
       </svg>
       {glyph && (
         <motion.span
+          aria-hidden
           className="text-[color:var(--color-chessboard-silver)]/60 text-base leading-none select-none"
           style={{ fontFamily: 'var(--font-display)' }}
           initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.85 }}

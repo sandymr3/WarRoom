@@ -58,7 +58,7 @@
   --wr-stone: #FFFFFF;
   --wr-slate: #FAFAFA;
   --wr-ash: #E4E4E7;
-  --wr-smoke: #71717A;
+  --wr-smoke: #52525B;            /* zinc-600 — secondary text; #71717A fell to ~2.8:1 on backdrop panels */
   --wr-ivory: #09090B;
   --wr-ghost: #18181B;
   --wr-electrum: #C2410C;
@@ -70,9 +70,9 @@
      legible regardless of site theme — defined once here, not re-declared in
      .dark since the value doesn't change. */
   --wr-ivory-wash: linear-gradient(160deg, rgba(10,8,4,0.82) 0%, rgba(10,8,4,0.60) 55%, rgba(10,8,4,0.78) 100%);
-  --wr-gold: #EA580C;
-  --wr-gold-bright: #F97316;
-  --wr-silver: #71717A;
+  --wr-gold: #B23C0B;             /* burnt orange — 5.9:1 on white, ≥4.9:1 on the light card/backdrop panels; #EA580C was 3.6:1 as text */
+  --wr-gold-bright: #C2410C;      /* gradient highlight on large display text / hovers — keeps ≥3:1 on the backdrop */
+  --wr-silver: #52525B;
   --wr-ember: #EA580C;
   --wr-gold-glow: transparent;
   --wr-dragonglass: #FAFAFA;
@@ -441,9 +441,13 @@
   }
 
   /* Chess Panel — premium dark surface */
+  /* Light: frosted near-white panel. It was a 24% dark tint, which over the
+     route backdrop turned into mid grey (~#C6C4C3) behind dark text tokens and
+     dropped body copy to ~2.8:1. */
   .got-stone-card {
-    background: rgba(18, 8, 5, 0.24);
-    border: 1px solid rgba(255, 220, 190, 0.32);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(24, 24, 27, 0.12);
     border-radius: 4px;
     position: relative;
     overflow: hidden;
@@ -1833,4 +1837,33 @@
   .dynamic-scenario-border::before {
     animation: none !important;
   }
+}
+
+/* ── Dark surface scope ──────────────────────────────────────────────────
+   The app is forced to the light theme, but /login and /register sit on a
+   dark battlefield video. Without this, the light-theme text tokens
+   (near-black ivory, zinc smoke) rendered dark-on-dark there. Re-point the
+   text + surface tokens at their on-dark values for anything inside. */
+.wr-on-dark {
+  --color-chessboard-ivory: #F5F1EA;
+  --color-chessboard-parchment: #F5F1EA;
+  --color-chessboard-ghost: #F5F1EA;
+  --color-chessboard-smoke: #D6CFC6;
+  --color-chessboard-silver: #D6CFC6;
+  --color-chessboard-gold: #FDBA74;
+  --color-chessboard-gold-bright: #FED7AA;
+  --color-chessboard-ash: rgba(255, 255, 255, 0.3);
+  --foreground: #F5F1EA;
+  --muted-foreground: #D6CFC6;
+  --card: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.22);
+  --input: rgba(255, 255, 255, 0.22);
+  --primary-foreground: #1C1006;
+  color: var(--color-chessboard-ivory);
+}
+
+.wr-on-dark .got-stone-card {
+  background: rgba(14, 8, 5, 0.62);
+  border-color: rgba(255, 220, 190, 0.28);
+  backdrop-filter: blur(8px);
 }

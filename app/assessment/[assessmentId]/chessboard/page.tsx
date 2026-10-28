@@ -17,7 +17,6 @@ import type {
 } from '@/src/types'
 import { Volume2, VolumeX } from 'lucide-react'
 import { ChessboardEntrance } from '@/src/components/chessboard/ChessboardEntrance'
-import { RouteBackground } from '@/src/components/effects/RouteBackground'
 import { AmbientAudioManager } from '@/src/components/chessboard/AmbientAudioManager'
 import { AudioControls } from '@/src/components/chessboard/AudioControls'
 import { isVoiceLineMuted, getVoiceLineVolume } from '@/src/state/audioStore'

@@ -1,7 +1,7 @@
 /**
  * assetRegistry — typed paths for all expected media.
  *
- * Files don't exist on disk today; the `useAsset` hook reports
+ * Missing files are handled gracefully: the `useAsset` hook reports
  * `hasFailed: true` so components render CSS placeholder fallbacks.
  *
  * Investor- and mentor-specific assets are owned by
@@ -19,12 +19,22 @@ export const ASSET_REGISTRY = {
     whispering:  '/assets/images/narrator/narrator-whispering.webp',
   },
 
+  // Served from public/assets/images/bg. Previously hotlinked to the v0 blob
+  // host, which put every page's backdrop behind a third-party domain we do
+  // not control.
+  //
+  // The chess-* plates are stills from the same stone-chess-battlefield shot
+  // that plays behind /login and /register, taken at five points in its
+  // push-in so each route reads differently while the app stays one world.
+  // The older hall/chamber plates are still in the folder if you want them
+  // back — note chessboard-throne.webp is unusable, it is a stock photo of
+  // three men on a clifftop with a lexica.art watermark burned in.
   backgrounds: {
-    landing:    'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-uPIq1QYtYyk7dGOLhU6AhXOq6jGQ5m.png',
-    dashboard:  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wI7IQgt44XI7Tnz7l6PC5KWQgLtcob.png',
-    simulation: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-yOgZyRBJNY0iECvKTLjC4siQx4C1sa.png',
-    chessboard: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-RSRu9o1FG9r7HgQUB0v0Mbxd9rQPSv.png',
-    verdict:    'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7dZmJREIntjPKO2gDxXbtvhc5n3Ymq.png',
+    landing:    '/assets/images/bg/chess-landing.webp',
+    dashboard:  '/assets/images/bg/chess-dashboard.webp',
+    simulation: '/assets/images/bg/chess-simulation.webp',
+    chessboard: '/assets/images/bg/chess-warroom.webp',
+    verdict:    '/assets/images/bg/chess-verdict.webp',
   },
 
   textures: {

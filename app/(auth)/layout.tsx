@@ -11,7 +11,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="relative min-h-screen overflow-hidden text-[color:var(--color-chessboard-ivory)]">
+    <div className="wr-on-dark relative min-h-screen overflow-hidden text-[color:var(--color-chessboard-ivory)]">
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[color:var(--color-chessboard-charcoal)]">
         <video
           className="h-full w-full object-cover"
@@ -26,7 +26,7 @@ export default function AuthLayout({
             type="video/mp4"
           />
         </video>
-        <div className="absolute inset-0 bg-[rgba(18,8,5,0.52)]" />
+        <div className="absolute inset-0 bg-[rgba(18,8,5,0.64)]" />
       </div>
       <WarRoomAtmosphere className="fixed z-[1]" />
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-12">

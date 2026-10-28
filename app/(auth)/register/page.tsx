@@ -466,6 +466,7 @@ export default function RegisterPage() {
                     ) : (
                       <motion.span
                         key="seal-glyph"
+                        aria-hidden
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}

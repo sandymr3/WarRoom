@@ -7,6 +7,7 @@ import { AuthProvider } from '@/src/context/AuthContext'
 import { Toaster } from '@/components/ui/toaster'
 import { NarratorOrb } from '@/src/components/narrator/NarratorOrb'
 import { GlobalControls } from '@/src/components/GlobalControls'
+import { RouteBackground } from '@/src/components/effects/RouteBackground'
 import dynamic from 'next/dynamic'
 const EmberParticles = dynamic(() => import('@/src/components/effects/EmberParticles').then(mod => mod.EmberParticles))
 const AudioSettingsLoader = dynamic(() => import('@/src/components/AudioSettingsLoader').then(mod => mod.AudioSettingsLoader))
@@ -61,6 +62,10 @@ export default function RootLayout({
           <AuthProvider>
             <MotionConfig reducedMotion="user">
               <AudioSettingsLoader />
+              {/* One backdrop for the whole app — picks its plate from the
+                  current route. Without this every page fell back to bare
+                  white. */}
+              <RouteBackground />
               <GlobalControls />
               {children}
               <NarratorOrb />

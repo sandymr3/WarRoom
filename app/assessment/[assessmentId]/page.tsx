@@ -20,7 +20,6 @@ import { STAGE_THEMES, STAGE_NARRATIVES, STAGE_ORDER, STAGE_MENTOR_TIPS, NARRATI
 import { formatRevenue, getAllocatableCapital, stageLabel } from '@/src/lib/helpers'
 import { useNarratorOnboarding } from '@/src/hooks/useNarratorOnboarding'
 import { narratorPhaseForStage } from '@/lib/narrator/scripts'
-import { RouteBackground } from '@/src/components/effects/RouteBackground'
 import type { StageName } from '@/src/types'
 
 export default function SimulationPage() {

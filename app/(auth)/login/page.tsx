@@ -146,7 +146,7 @@ function LoginContent() {
         initial={prefersReducedMotion ? false : { y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.4, ease: easeDramatic }}
-        className="flex rounded-[3px] border border-border bg-card p-1 mb-5"
+        className="flex rounded-[3px] border border-border bg-[rgba(14,8,5,0.62)] backdrop-blur-[8px] p-1 mb-5"
       >
         {(['Participant', 'Admin'] as const).map((label) => {
           const active = label === 'Participant' ? !isAdmin : isAdmin
